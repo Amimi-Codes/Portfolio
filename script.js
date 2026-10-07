@@ -149,10 +149,12 @@ if(scrollBook){
   }else if("IntersectionObserver" in window){
     const bookObserver=new IntersectionObserver((entries)=>{
       if(entries.some(entry=>entry.isIntersecting)){
-        scrollBook.classList.add("is-opened");
         bookObserver.unobserve(scrollBook);
+        requestAnimationFrame(()=>{
+          requestAnimationFrame(()=>scrollBook.classList.add("is-opened"));
+        });
       }
-    },{threshold:.28});
+    },{threshold:.12,rootMargin:"0px 0px -12% 0px"});
     bookObserver.observe(scrollBook);
   }else{
     scrollBook.classList.add("is-opened");
