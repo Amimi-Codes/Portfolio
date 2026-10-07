@@ -142,50 +142,11 @@ if (story) {
   update();
 }
 
-// Pixel-art jellyfish: bell drawn from a map, tentacles + oral arms generated, one path per colour.
 const heroJelly = document.querySelector(".hero-jelly");
 if (heroJelly) {
-  const bell = [
-    ".......oooooooooo.......",
-    ".....oowwccccccccoo.....",
-    "....owwccPPPPPPPccco....",
-    "...owccPPPPPPPPPPPcco...",
-    "..owccPPPpppppppPPPcco..",
-    "..ocPPPppppppppppPPPco..",
-    ".owcPPpppPPPPPPpppPPcco.",
-    ".ocPPppPPwwPPPPPPppPPco.",
-    ".ocPPpPPwwPPppPPPppPPco.",
-    "occPPppPPPPppppPPpppPcco",
-    "ocPPpppppppppppppppPPPco",
-    "ocPPppppppppppppppppPPco",
-    "occPPPppppppppppppPPPcco",
-    "ooccPPPPPPPPPPPPPPPPccoo",
-    ".ooccccccccccccccccccoo.",
-    "..o.oo.oo.oo.oo.oo.o.o..",
-  ];
-  const colors = { o: "#8ff8ff", w: "#f4ffff", c: "#3fc6ee", P: "#ffc4ef", p: "#ff86d8", t: "#7ff3ff", a: "#ff9fe4", A: "#ffd9f5" };
-  const px = {};
-  const put = (x, y, k) => (px[k] = px[k] || []).push(`M${x} ${y}h1v1h-1z`);
-  bell.forEach((row, y) => [...row].forEach((k, x) => k !== "." && put(x, y, k)));
-  const tentacles = [];
-  for (let y = 16; y < 54; y++) {
-    // thin outer tentacles drift sideways like the reference
-    [2, 6, 17, 21].forEach((base, i) => {
-      if (y < 46 + i * 2) tentacles.push([base + Math.round(Math.sin(y * 0.3 + i) * 1.3 + (y - 16) * 0.1), y, "t"]);
-    });
-    // frilly oral arms down the middle, tapering
-    const w = Math.max(1, Math.round(4 - (y - 16) / 9)), cx = 11 + Math.round(Math.sin(y * 0.22) * 1.6 + (y - 16) * 0.08);
-    if (y < 48) for (let x = cx - w; x <= cx + w; x++) tentacles.push([x, y, x === cx - w || x === cx + w ? "t" : (x + y) % 3 ? "a" : "A"]);
-  }
-  const paths = (list) => Object.entries(list).map(([k, d]) => `<path fill="${colors[k]}" d="${d.join("")}"/>`).join("");
-  const tpx = {};
-  tentacles.forEach(([x, y, k]) => (tpx[k] = tpx[k] || []).push(`M${x} ${y}h1v1h-1z`));
-  heroJelly.querySelector(".jelly-body").innerHTML =
-    `<svg viewBox="-2 -2 28 58" shape-rendering="crispEdges"><g class="jelly-tentacles">${paths(tpx)}</g><g>${paths(px)}</g>` +
-    `<g class="jelly-bolts" fill="none" stroke="#fff59a" stroke-width=".8" shape-rendering="auto"><path d="M-1 4l3 2-2 2 3 2"/><path d="M25 3l-3 3 2 1-3 3"/><path d="M4 20l-3 3 2 1-2 3"/><path d="M20 21l3 3-2 1 3 3"/></g></svg>`;
-
   const hero = heroJelly.parentElement;
-  let x = hero.clientWidth * 0.7, y = hero.clientHeight * 0.3, vx = 0, angle = 0;
+  let x = hero.clientWidth * 0.7, y = hero.clientHeight * 0.3, angle = 0, last = 0;
+  const SPEED = 70; // px per second, same whether drifting or following the cursor
   const pointer = { x: 0, y: 0, inside: false };
   const place = () => (heroJelly.style.transform = `translate(${x}px,${y}px) rotate(${angle}deg)`);
   place();
@@ -211,12 +172,15 @@ if (heroJelly) {
       // follow the cursor (bell centred just behind it), otherwise wander a slow loop around the banner
       const tx = pointer.inside ? pointer.x - size / 2 : w * (0.5 + 0.38 * Math.sin(t / 7000)) - size / 2;
       const ty = pointer.inside ? pointer.y - size * 0.3 : h * (0.45 + 0.3 * Math.sin(t / 4300 + 1)) - size;
-      const ease = pointer.inside ? 0.05 : 0.02;
-      const nx = x + (tx - x) * ease;
-      vx = nx - x;
-      x = nx;
-      y += (ty - y) * ease;
-      angle += (Math.max(-25, Math.min(25, vx * 3)) - angle) * 0.08;
+      const dx = tx - x, dy = ty - y, dist = Math.hypot(dx, dy);
+      const step = Math.min(dist, (SPEED * Math.min(t - last, 50)) / 1000);
+      last = t;
+      if (dist > 0) {
+        x += (dx / dist) * step;
+        y += (dy / dist) * step;
+      }
+      // lean into the direction of travel
+      angle += ((dist > 2 ? (dx / dist) * 15 : 0) - angle) * 0.05;
       place();
       requestAnimationFrame(swim);
     })(0);
