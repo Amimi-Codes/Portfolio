@@ -1118,3 +1118,135 @@ button {
   .storybook .falling-page{display:none}
   .storybook .book-page-art{opacity:1;transform:none}
 }
+
+/* Project book — warm paper pages + right-side closed opening */
+.book-scene{
+  overflow:visible;
+  background:#fff9e9 url("assets/paper-texture.svg") repeat;
+  background-size:360px 360px;
+}
+.book-left,
+.book-right{
+  background-color:#fff9e9;
+  background-image:url("assets/paper-texture.svg");
+  background-repeat:repeat;
+  background-size:360px 360px;
+}
+.book-left{
+  overflow:visible;
+}
+.book-left:before{
+  display:none;
+}
+.book-right:before{
+  background:linear-gradient(90deg,#b9894418,transparent 9%);
+}
+.storybook{
+  overflow:visible;
+}
+.book-shell{
+  overflow:visible;
+}
+.storybook:not(.is-opened) .book-spread{
+  transform-origin:100% 50%;
+  transform:perspective(1800px) translateX(25%) scaleX(.52) rotateY(-5deg);
+}
+.storybook.is-opened .book-spread{
+  animation:book-spread-open 1.35s cubic-bezier(.12,.82,.2,1) forwards;
+}
+@keyframes book-spread-open{
+  0%{
+    transform-origin:100% 50%;
+    transform:perspective(1800px) translateX(25%) scaleX(.52) rotateY(-5deg);
+  }
+  55%{
+    transform-origin:100% 50%;
+    transform:perspective(1800px) translateX(8%) scaleX(.78) rotateY(-2deg);
+  }
+  100%{
+    transform-origin:100% 50%;
+    transform:none;
+  }
+}
+/* A single closed cover sits on the right and swings open to the left. */
+.book-shell:before{
+  left:50%;
+  right:auto;
+  width:50%;
+  transform-origin:0 50%;
+  border-radius:.35rem 1.3rem 1.3rem .45rem;
+  z-index:14;
+}
+.book-shell:after{
+  display:none;
+}
+.storybook.is-opened .book-shell:before{
+  animation:book-cover-open-left 1.25s cubic-bezier(.12,.82,.2,1) forwards;
+}
+@keyframes book-cover-open-left{
+  0%{
+    transform:perspective(1500px) rotateY(0);
+    opacity:1;
+  }
+  62%{
+    transform:perspective(1500px) rotateY(-120deg);
+    opacity:.9;
+  }
+  100%{
+    transform:perspective(1500px) rotateY(-168deg);
+    opacity:0;
+  }
+}
+/* Popup artwork deliberately breaks out of the left page bounds. */
+.book-page-art{
+  z-index:20;
+  inset:-10% -12% -10% -8%;
+  padding:0;
+  overflow:visible;
+  opacity:0;
+  transform:translateY(22px) scale(.78);
+  transition:none;
+}
+.book-page-art img{
+  width:124%;
+  max-width:none;
+  height:auto;
+  max-height:none;
+  object-fit:contain;
+  border-radius:0;
+  filter:drop-shadow(0 24px 20px #173e4840);
+}
+.storybook.is-opened .book-page-art{
+  animation:book-popup-in 1.35s cubic-bezier(.16,.78,.2,1) 1.45s both;
+}
+@keyframes book-popup-in{
+  0%{opacity:0;transform:translateY(28px) scale(.72)}
+  45%{opacity:.45}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+/* Arrow navigation gets the same slow reveal every time a new case is selected. */
+.book-scene.is-revealing .book-page-art{
+  animation:book-popup-in 1.25s cubic-bezier(.16,.78,.2,1) .12s both;
+}
+@media(max-width:850px){
+  .storybook:not(.is-opened) .book-spread{
+    transform:perspective(1400px) translateX(18%) scaleX(.68) rotateY(-4deg);
+  }
+  .book-page-art{
+    inset:-8% -10% -8% -6%;
+  }
+  .book-page-art img{
+    width:120%;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .storybook:not(.is-opened) .book-spread{transform:none}
+  .storybook.is-opened .book-spread{animation:none}
+  .book-shell:before{display:none}
+  .storybook.is-opened .book-page-art,
+  .book-scene.is-revealing .book-page-art{
+    animation:none;
+    opacity:1;
+    transform:none;
+  }
+}
