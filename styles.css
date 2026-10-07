@@ -998,7 +998,7 @@ button {
 }
 
 /* Pixel jellyfish and pop-up storybook */
-.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;grid-template-columns:1fr 2.5fr 1fr;align-items:end;gap:2rem;margin-bottom:4rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 4.8rem 3.6rem}.book-shell{perspective:2000px}.book-spread{height:min(37rem,55vw);min-height:430px;position:relative;border-radius:1.2rem 1.2rem 2rem 2rem;filter:drop-shadow(0 38px 25px #1b4f542e)}.book-spread:after{content:"";position:absolute;inset:0 50% 0 auto;width:4px;background:linear-gradient(90deg,#866b43,#fbeabb,#9a7949);z-index:4;box-shadow:0 0 18px #54422255}.book-scene{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;background:#fff6dd;border:12px solid #b88742;border-radius:1.2rem 1.2rem 2rem 2rem;opacity:0;pointer-events:none;transform:rotateY(-10deg) translateX(-3%);transition:opacity .45s,transform .62s cubic-bezier(.2,.75,.2,1)}.book-scene.is-active{opacity:1;pointer-events:auto;transform:none}.book-left{position:relative;background:linear-gradient(145deg,#c7fff4,#77d7d0 55%,#489bb1);overflow:hidden}.book-left:before{content:"";position:absolute;inset:8% 7%;border:4px solid #fbf0c4;border-radius:45% 50% 38% 42%;transform:rotate(-7deg);box-shadow:0 24px 0 #326a7970}.book-right{background:#fff9e9;padding:clamp(2rem,4vw,5rem);display:flex;flex-direction:column;align-items:flex-start;position:relative}.book-right:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#b9894420,transparent 7%);pointer-events:none}.book-index{font:.7rem 'DM Sans',sans-serif;letter-spacing:.16em;font-weight:800;color:#4c8c8a}.book-right h3{font:700 clamp(2.8rem,5.7vw,6rem)/.92 Manrope,sans-serif;letter-spacing:-.09em;color:#184a55;margin:1.2rem 0}.book-right p{max-width:430px;line-height:1.7;color:#4d6467}.book-tags{display:flex;gap:.45rem;flex-wrap:wrap;margin:1.1rem 0 2rem}.book-tags b{font-size:.65rem;padding:.5rem .7rem;border-radius:99px;background:#daf4eb;color:#235b64}.book-right a{margin-top:auto;display:flex;gap:2rem;font-weight:800;color:#155866;border-bottom:2px solid #83b7ad;padding-bottom:.6rem}.island{position:absolute;z-index:1;inset:17% 12%;border:7px solid #477d70;border-radius:45% 48% 37% 43%;transform:rotate(-6deg) skew(-4deg);background:linear-gradient(145deg,#cff2a3,#a2dd84 56%,#519b70);box-shadow:0 20px 0 #315f67,0 36px 0 #184a58,22px 35px 30px #153b5366}.island:before{content:"";position:absolute;inset:13%;border-radius:40%;border:13px solid #e8ce83;border-right-color:#9e7941;transform:rotate(8deg)}.island-tree{position:absolute;width:12%;aspect-ratio:1;border-radius:50% 50% 40% 40%;background:#7bc691;box-shadow:0 17px 0 -5px #5e6b43}.tree-a{left:22%;top:23%}.tree-b{right:21%;bottom:25%;background:#81c1bb}.island-river{position:absolute;width:22%;height:115%;left:47%;top:-7%;background:#6ee7ef;border-radius:50%;transform:rotate(28deg);opacity:.9}.island-card{position:absolute;z-index:2;display:grid;place-items:center;width:25%;aspect-ratio:1;left:39%;top:34%;border:5px solid #fff2bc;background:#ffd67e;border-radius:11px;box-shadow:8px 11px 0 #845d45;font:800 clamp(2rem,5vw,5rem) Manrope,sans-serif;color:#345b67;transform:rotate(8deg)}.island-path{position:absolute;z-index:3;width:60%;height:22%;left:18%;top:53%;border:8px dotted #f7e3a5;border-left:0;border-bottom:0;border-radius:50%;transform:rotate(-18deg)}.island-dnd{background:linear-gradient(145deg,#cfc2f7,#9983c8 54%,#5d5995)}.island-dnd .island-card{background:#f1dcff;color:#57417a}.island-soon{background:linear-gradient(145deg,#c5e6e1,#82babd 54%,#507489)}.island-soon .island-card{background:#dff5ef;color:#3d7580}.book-arrow{position:absolute;z-index:10;top:50%;width:3.7rem;aspect-ratio:1;border:0;border-radius:50%;background:#2c7375;color:#fff8de;font:500 2rem/1 Manrope,sans-serif;cursor:pointer;box-shadow:0 11px 0 #154e58,0 18px 22px #174b5444;transform:translateY(-50%);transition:transform .2s,background .2s}.book-arrow:hover{background:#50a99f;transform:translateY(-55%) scale(1.07)}.book-arrow-prev{left:0}.book-arrow-next{right:0}.book-pagination{position:absolute;bottom:0;left:50%;transform:translateX(-50%);margin:0;font-size:.68rem;font-weight:800;letter-spacing:.18em;color:#477772}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-spread{height:650px}.book-scene{grid-template-columns:1fr;grid-template-rows:1fr 1fr}.book-spread:after{inset:50% 0 auto;width:auto;height:4px;background:linear-gradient(180deg,#866b43,#fbeabb,#9a7949)}.book-right{padding:2rem}.island{inset:12% 26%}.book-stories{padding-block:5rem}}@media(max-width:560px){.storybook{padding-inline:2.4rem}.book-arrow{width:3rem;font-size:1.5rem}.book-spread{height:590px;min-height:0}.book-right h3{font-size:3rem}.island{inset:17% 18%}.book-right p{font-size:.9rem}}
+.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;grid-template-columns:1fr 2.5fr 1fr;align-items:end;gap:2rem;margin-bottom:4rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 4.8rem 3.6rem}.book-arrow{position:absolute;z-index:10;top:50%;width:3.7rem;aspect-ratio:1;border:0;border-radius:50%;background:#2c7375;color:#fff8de;font:500 2rem/1 Manrope,sans-serif;cursor:pointer;box-shadow:0 11px 0 #154e58,0 18px 22px #174b5444;transform:translateY(-50%);transition:transform .2s,background .2s}.book-arrow:hover{background:#50a99f;transform:translateY(-55%) scale(1.07)}.book-arrow-prev{left:0}.book-arrow-next{right:0}.book-pagination{position:absolute;bottom:0;left:50%;transform:translateX(-50%);margin:0;font-size:.68rem;font-weight:800;letter-spacing:.18em;color:#477772}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}@media(max-width:560px){.storybook{padding-inline:2.4rem}.book-arrow{width:3rem;font-size:1.5rem}}
 
 
 /* Scrollable scrapbook journey */
@@ -1027,221 +1027,16 @@ button {
   .resume-airplane{width:190px;height:130px}
   .resume-flight-hint{left:0}
 }
-/* Scroll-open storybook */
-.storybook[data-storybook]{--book-open-ease:cubic-bezier(.16,.84,.22,1)}
-.storybook:not(.is-opened) .book-spread{
-  transform:perspective(1800px) rotateX(16deg) scale(.92,.58) translateY(13%);
-  transform-origin:50% 100%;
-}
-.storybook:not(.is-opened) .book-scene.is-active{
-  opacity:0;
-  transform:rotateY(-72deg) scale(.96);
-}
-.book-shell{position:relative;transform-style:preserve-3d}
-.book-shell:before,.book-shell:after{
-  content:"";
-  position:absolute;
-  z-index:8;
-  top:0;
-  bottom:0;
-  width:50%;
-  background:linear-gradient(145deg,#315f67,#174a57 48%,#0e3743);
-  border:10px solid #b88742;
-  box-shadow:inset 0 0 0 2px #f2d995,0 22px 30px #174b5433;
-  pointer-events:none;
-  transform-style:preserve-3d;
-  backface-visibility:hidden;
-}
-.book-shell:before{left:0;border-radius:1.3rem .35rem .45rem 1.3rem;transform-origin:100% 50%}
-.book-shell:after{right:0;border-radius:.35rem 1.3rem 1.3rem .45rem;transform-origin:0 50%}
-.storybook.is-opened .book-shell:before{animation:book-cover-left 1.15s var(--book-open-ease) forwards}
-.storybook.is-opened .book-shell:after{animation:book-cover-right 1.15s var(--book-open-ease) forwards}
-.storybook.is-opened .book-spread{animation:book-spread-open 1.15s var(--book-open-ease) forwards}
-.storybook.is-opened .book-scene.is-active{opacity:1;transform:none;transition-delay:.55s}
-@keyframes book-cover-left{
-  from{transform:perspective(1500px) rotateY(0);opacity:1}
-  to{transform:perspective(1500px) rotateY(-88deg);opacity:0}
-}
-@keyframes book-cover-right{
-  from{transform:perspective(1500px) rotateY(0);opacity:1}
-  to{transform:perspective(1500px) rotateY(88deg);opacity:0}
-}
-@keyframes book-spread-open{
-  from{transform:perspective(1800px) rotateX(16deg) scale(.92,.58) translateY(13%)}
-  to{transform:none}
-}
-.book-page-art{
-  position:absolute;z-index:5;inset:0;display:grid;place-items:center;padding:8%;
-  opacity:0;transform:translateY(-18px) scale(.9) rotate(-2deg);
-  transition:opacity .5s ease 1.7s,transform .75s var(--book-open-ease) 1.7s
-}
-.book-page-art img{
-  display:block;width:min(72%,420px);height:auto;max-height:72%;object-fit:contain;border-radius:8px;
-  filter:drop-shadow(0 18px 16px #173e4830)
-}
-.storybook.is-opened .book-page-art{opacity:1;transform:none}
-.book-page-placeholder{width:100%;height:100%;pointer-events:none}
-@media(max-width:850px){
-  .storybook:not(.is-opened) .book-spread{transform:perspective(1400px) rotateX(11deg) scale(.94,.72) translateY(7%)}
-  .book-shell:before,.book-shell:after{border-width:7px}
-  .book-page-art{padding:10% 8%}
-  .book-page-art img{width:min(78%,360px);max-height:70%}
-}
-@media(prefers-reduced-motion:reduce){
-  .storybook:not(.is-opened) .book-spread{transform:none}
-  .book-shell:before,.book-shell:after{display:none}
-  .storybook:not(.is-opened) .book-scene.is-active{opacity:1;transform:none}
-  .storybook .book-page-art{opacity:1;transform:none}
-}
-
-/* Project book — warm paper pages + right-side closed opening */
-.book-scene{
-  overflow:visible;
-  background:#fff9e9 url("assets/paper-texture.svg") repeat;
-  background-size:360px 360px;
-}
-.book-left,
-.book-right{
-  background-color:#fff9e9;
-  background-image:url("assets/paper-texture.svg");
-  background-repeat:repeat;
-  background-size:360px 360px;
-}
-.book-left{
-  overflow:visible;
-}
-.book-left:before{
-  display:none;
-}
-.book-right:before{
-  background:linear-gradient(90deg,#b9894418,transparent 9%);
-}
-.storybook{
-  overflow:visible;
-}
-.book-shell{
-  overflow:visible;
-}
-.storybook:not(.is-opened) .book-spread{
-  transform-origin:100% 50%;
-  transform:perspective(1800px) translateX(25%) scaleX(.52) rotateY(-5deg);
-}
-.storybook.is-opened .book-spread{
-  animation:book-spread-open 1.35s cubic-bezier(.12,.82,.2,1) forwards;
-}
-@keyframes book-spread-open{
-  0%{
-    transform-origin:100% 50%;
-    transform:perspective(1800px) translateX(25%) scaleX(.52) rotateY(-5deg);
-  }
-  55%{
-    transform-origin:100% 50%;
-    transform:perspective(1800px) translateX(8%) scaleX(.78) rotateY(-2deg);
-  }
-  100%{
-    transform-origin:100% 50%;
-    transform:none;
-  }
-}
-/* A single closed cover sits on the right and swings open to the left. */
-.book-shell:before{
-  left:50%;
-  right:auto;
-  width:50%;
-  transform-origin:0 50%;
-  border-radius:.35rem 1.3rem 1.3rem .45rem;
-  z-index:14;
-}
-.book-shell:after{
-  display:none;
-}
-.storybook.is-opened .book-shell:before{
-  animation:book-cover-open-left 1.25s cubic-bezier(.12,.82,.2,1) forwards;
-}
-@keyframes book-cover-open-left{
-  0%{
-    transform:perspective(1500px) rotateY(0);
-    opacity:1;
-  }
-  62%{
-    transform:perspective(1500px) rotateY(-120deg);
-    opacity:.9;
-  }
-  100%{
-    transform:perspective(1500px) rotateY(-168deg);
-    opacity:0;
-  }
-}
-/* Popup artwork: three phones pop up out of the page in the habitu-popup formation.
-   Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
-.book-page-art{
-  z-index:20;
-  inset:0;
-  padding:0;
-  overflow:visible;
-  opacity:0;
-  transition:none;
-}
-.storybook.is-opened .book-page-art,
-.book-scene.is-revealing .book-page-art{opacity:1}
-.book-popup{
-  position:absolute;
-  left:-24%;
-  top:50%;
-  width:134%;
-  aspect-ratio:819/555;
-  translate:0 -58%;
-}
-.book-popup img{
-  position:absolute;
-  height:auto;
-  max-width:none;
-  max-height:none;
-  border-radius:0;
-  opacity:0;
-  transform-origin:50% 100%;
-  filter:drop-shadow(0 30px 24px #173e4855) drop-shadow(0 8px 6px #173e4830);
-}
-.book-popup .popup-phone-1{left:0;top:24.14%;width:57.8%;--d:0s}
-.book-popup .popup-phone-2{left:25.37%;top:0;width:51.16%;--d:.15s}
-.book-popup .popup-phone-3{left:46.52%;top:13.35%;width:53.52%;--d:.3s}
-.storybook.is-opened .book-popup img{animation:book-phone-pop .9s cubic-bezier(.3,1.35,.5,1) calc(1.3s + var(--d)) both}
-.book-scene.is-revealing .book-popup img{animation:book-phone-pop .8s cubic-bezier(.3,1.35,.5,1) calc(.1s + var(--d)) both}
-/* each phone rises straight up out of the page */
-@keyframes book-phone-pop{
-  0%{opacity:0;transform:translateY(35%) scale(.45)}
-  40%{opacity:1}
-  100%{opacity:1;transform:none}
-}
-@media(max-width:850px){
-  .storybook:not(.is-opened) .book-spread{
-    transform:perspective(1400px) translateX(18%) scaleX(.68) rotateY(-4deg);
-  }
-  .book-popup{left:-4%;width:108%}
-  /* stacked pages: keep the art page tall enough for the phones */
-  .book-scene{grid-template-rows:minmax(240px,40%) 1fr}
-  .book-spread:after{top:40%}
-}
-@media(prefers-reduced-motion:reduce){
-  .storybook:not(.is-opened) .book-spread{transform:none}
-  .storybook.is-opened .book-spread{animation:none}
-  .book-shell:before{display:none}
-  .book-page-art,
-  .book-popup img{
-    animation:none!important;
-    opacity:1;
-  }
-}
-
 /* Eyebrow sparkle: metallic gradient with a sweeping shine (gradient animates inside the SVG) */
 .sparkle{width:1.6rem;height:1.6rem;flex:none;overflow:visible;filter:drop-shadow(0 0 6px #ffd98a88);animation:sparkle-twinkle 2.6s ease-in-out infinite}
 .sparkle .s-small{transform-box:fill-box;transform-origin:center;animation:sparkle-twinkle 1.8s ease-in-out infinite reverse}
 @keyframes sparkle-twinkle{50%{transform:scale(.82) rotate(12deg)}}
 
 /* Hero jellyfish: JS moves .hero-jelly (wander / follow cursor), CSS handles bob + shock */
-.hero-jelly{position:absolute;z-index:3;left:0;top:0;width:clamp(4.5rem,6.5vw,6.5rem);pointer-events:none;will-change:transform;transform:translate(70vw,30vh)}
-.jelly-body{position:relative;animation:jelly-bob 2.4s ease-in-out infinite;filter:drop-shadow(0 0 10px #3cc8ff88)}
-.jelly-body img{display:block;width:100%;height:auto}
+/* 1ex in the h1 font = the height of the "m" in Amy */
+.hero-jelly{position:absolute;z-index:3;left:0;top:0;font:600 clamp(8rem,20vw,21rem) Manrope,sans-serif;height:1.04ex;pointer-events:none;will-change:transform;transform:translate(70vw,30vh)}
+.jelly-body{position:relative;height:100%;animation:jelly-bob 2.4s ease-in-out infinite;filter:drop-shadow(0 0 10px #3cc8ff88)}
+.jelly-body img{display:block;height:100%;width:auto}
 .jelly-bolts{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .jelly-bolts{opacity:0}
 @keyframes jelly-bob{0%,100%{transform:translateY(0) scaleY(1)}35%{transform:translateY(-6px) scaleY(.92)}}
@@ -1253,17 +1048,139 @@ button {
   100%{filter:brightness(1.5) saturate(2) hue-rotate(-150deg) drop-shadow(0 0 16px #fff36b)}
 }
 @keyframes jelly-bolts{0%{opacity:1}100%{opacity:.15;transform:scale(1.08)}}
-@media(max-width:560px){.book-spread{height:880px}}
 
-/* 3D open book: cover board behind curved, stacked page blocks with a shaded gutter */
-@media(min-width:851px){
-  .book-scene{background:#b88742;border:0;padding:14px 20px 24px;border-radius:1.1rem 1.1rem 1.4rem 1.4rem;box-shadow:inset 0 -7px 0 #9a6f35,inset 0 2px 0 #d3a865}
-  .book-left,.book-right{position:relative}
-  /* outer top corners curl down; inner edges dip into the spine */
-  .book-left{border-radius:42% 2% 0 8px/7% 1.5% 0 8px;box-shadow:-2px 2px 0 #e3d1a8,-3px 4px 0 #fff9e9,-5px 6px 0 #e3d1a8,-6px 8px 0 #fff9e9,-8px 10px 0 #e3d1a8,-9px 12px 0 #fff9e9,-10px 14px 0 #d8c296}
-  .book-right{border-radius:2% 42% 8px 0/1.5% 7% 8px 0;box-shadow:2px 2px 0 #e3d1a8,3px 4px 0 #fff9e9,5px 6px 0 #e3d1a8,6px 8px 0 #fff9e9,8px 10px 0 #e3d1a8,9px 12px 0 #fff9e9,10px 14px 0 #d8c296}
-  .book-left:after,.book-right:before{content:"";display:block;position:absolute;inset:0;border-radius:inherit;pointer-events:none}
-  .book-left:after{background:linear-gradient(90deg,#fff6 0,#fff0 7%,#fff0 80%,#a0784018 90%,#7a5a2c40 100%)}
-  .book-right:before{background:linear-gradient(90deg,#7a5a2c40 0,#a0784018 10%,#fff0 20%,#fff0 93%,#fff6 100%)}
-  .book-spread:after{top:14px;bottom:24px;width:2px;transform:translateX(1px);background:linear-gradient(#7a5a2c30,#7a5a2c80 50%,#7a5a2c30);box-shadow:none}
+/* Pixel storybook: CodePen sprite page flip driven by the carousel's scroll, plus a cover-and-pages opening */
+@font-face{font-family:PixelText;src:url(https://assets.codepen.io/36869/Grand9KPixel_1.ttf);font-display:swap}
+@property --sprite-fs{syntax:"<integer>";initial-value:0;inherits:true}
+.storybook{padding:1rem 4.8rem 3.6rem}
+.pixel-book{
+  /* book.webp is 9600x3000: 5 columns x 2 rows of 1920x1500 frames, 7 frames per page turn.
+     --sprite-th is the rendered frame height in px; script.js shrinks it to fit narrow screens. */
+  --sprite-image:url(https://assets.codepen.io/36869/book.webp);
+  --sprite-c:5;--sprite-h:3000;--sprite-w:9600;--sprite-f:7;--sprite-fr:12;--sprite-sh:1500;
+  --sprite-as:calc(var(--sprite-f) / var(--sprite-fr) * 1s);
+  --sprite-th:750;
+  --sprite-ar:calc(var(--sprite-th) / var(--sprite-sh));
+  --sprite-uh:calc(var(--sprite-h) * var(--sprite-ar));
+  --sprite-uw:calc(var(--sprite-w) * var(--sprite-ar));
+  --sprite-tw:calc(var(--sprite-uw) / var(--sprite-c));
+  --slides:3;
+  position:relative;isolation:isolate;margin:0 auto;timeline-scope:--book-timeline;
+  /* the page area inside each frame */
+  width:calc(1px * var(--sprite-tw) * .7042);
+  height:calc(1px * var(--sprite-th) * .6107);
+  font:calc(var(--sprite-th) / 750 * 15px)/1.45 PixelText,monospace;
+  color:#333;
+}
+.book-sprite{
+  position:absolute;z-index:0;left:50%;top:50%;translate:-50% -50%;pointer-events:none;
+  width:calc(1px * var(--sprite-tw));height:calc(1px * var(--sprite-th));
+  background:var(--sprite-image) no-repeat;
+  /* gradient-map the sprite onto the site book colours: cover #b88742, pages #fff9e9 */
+  filter:url(#book-recolor);
+  background-size:calc(1px * var(--sprite-uw)) calc(1px * var(--sprite-uh));
+  --sprite-fe:calc(var(--sprite-f) * (var(--slides) - 1));
+  --sprite-fs-n:mod(var(--sprite-fs), var(--sprite-f));
+  --row:calc(round(down, calc(var(--sprite-tw) * var(--sprite-fs-n) / var(--sprite-uw)), 1) * var(--sprite-th));
+  --col:mod(calc(var(--sprite-tw) * var(--sprite-fs-n)), var(--sprite-uw));
+  background-position:calc(-1px * var(--col)) calc(-1px * var(--row));
+}
+.book-carousel{
+  position:relative;z-index:1;display:grid;grid:1fr / auto-flow 100%;width:100%;height:100%;
+  overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+  scroll-behavior:smooth;scrollbar-width:none;outline:none
+}
+.book-carousel::-webkit-scrollbar{display:none}
+.book-scene{position:relative;scroll-snap-align:start;scroll-snap-stop:always}
+.page-container{display:flex;gap:3em;height:100%}
+.book-left,.book-right{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:1.4em 0 2.6em 1.4em}
+.book-right{padding:1.4em 1.4em 2.6em 0}
+.page-no{position:absolute;bottom:.8em;color:#8a6430}
+.book-left .page-no{left:1.4em}
+.book-right .page-no{right:1.4em}
+.book-page-placeholder{flex:1;width:100%}
+.book-index{font-size:.75em;letter-spacing:.08em;color:#4c8c8a}
+.book-right h3{font:inherit;font-size:2.3em;line-height:1.05;margin:.35em 0 .4em;color:#184a55}
+.book-right p{margin:0;text-align:justify;hyphens:auto}
+.book-tags{display:flex;flex-wrap:wrap;gap:.4em;margin:1em 0}
+.book-tags b{font-weight:400;font-size:.8em;padding:.25em .5em;background:#daf4eb;color:#235b64}
+.book-right a{margin-top:auto;display:flex;gap:1.2em;color:#155866;border-bottom:2px solid #83b7ad;padding-bottom:.2em}
+.book-right a:hover{color:#50a99f}
+@supports (animation-timeline:scroll()){
+  .book-carousel{scroll-timeline:--book-timeline x}
+  .book-sprite{animation:sprite-frame var(--sprite-as) linear both;animation-timeline:--book-timeline}
+  .page-container{animation:stay-centered linear both;animation-timeline:view(x)}
+}
+@keyframes sprite-frame{to{--sprite-fs:var(--sprite-fe)}}
+/* keep the spread still while the sprite turns the page, fading the old spread out and the new one in */
+@keyframes stay-centered{
+  entry 0%{opacity:0;translate:-100%}
+  entry 75%{opacity:0;translate:-25%}
+  entry 100%{opacity:1;translate:0%}
+  exit 0%{opacity:1;translate:0%}
+  exit 50%{opacity:0;translate:50%}
+  exit 100%{opacity:0;translate:100%}
+}
+
+/* Opening: the closed book sits on the right; its cover and pages swing over to the left */
+.book-intro{position:absolute;z-index:2;inset:-9% -5%;perspective:70em;pointer-events:none}
+.book-intro i,.intro-cover{position:absolute;left:50%;transform-origin:0 50%;border-radius:0 5px 5px 0;box-shadow:inset -3px 0 20px #0003,0 0 15px #0002}
+.book-intro i{top:1.5%;width:48.5%;height:97%;background:#fff9e9}
+.intro-cover{top:0;width:50%;height:100%;background:#b88742;border:.45em solid #9a6f35;box-shadow:inset 0 0 0 .3em #f2d99555,0 12px 24px #0003}
+.storybook.is-opened .intro-cover{animation:intro-cover 1.6s forwards}
+.storybook.is-opened .book-intro i{animation:intro-page 1.6s forwards}
+.storybook.is-opened .book-intro i:nth-of-type(1){animation-delay:.05s}
+.storybook.is-opened .book-intro i:nth-of-type(2){animation-delay:.22s}
+.storybook.is-opened .book-intro i:nth-of-type(3){animation-delay:.44s}
+.storybook.is-opened .book-intro i:nth-of-type(4){animation-name:intro-page-150;animation-delay:.66s}
+.storybook.is-opened .book-intro i:nth-of-type(5){animation-name:intro-page-30;animation-delay:.8s}
+.storybook.is-opened .book-intro i:nth-of-type(6){animation-name:intro-page-55;animation-delay:.84s}
+.storybook.is-opened .book-intro{animation:book-fade-out .45s 2.15s forwards}
+@keyframes intro-cover{30%{z-index:999}100%{transform:rotateY(-180deg);z-index:1}}
+@keyframes intro-page{30%{z-index:999}100%{transform:rotateY(-180deg);z-index:999}}
+@keyframes intro-page-150{30%{z-index:999}100%{transform:rotateY(-150deg);z-index:999}}
+@keyframes intro-page-30{50%{z-index:999}100%{transform:rotateY(-30deg);z-index:999}}
+@keyframes intro-page-55{30%{z-index:999}100%{transform:rotateY(-55deg);z-index:999}}
+@keyframes book-fade-out{to{opacity:0;visibility:hidden}}
+@keyframes book-fade-in{from{opacity:0}}
+.storybook:not(.is-opened) :is(.book-sprite,.book-carousel,.book-arrow,.book-pagination){opacity:0}
+.storybook.is-opened :is(.book-carousel,.book-arrow,.book-pagination){animation:book-fade-in .5s 1.9s both}
+/* the sprite's animation slot is taken by the page flip, so it fades in with a transition */
+.storybook.is-opened .book-sprite{transition:opacity .5s 1.9s}
+
+/* Popup phones: sit over the first spread's left page and pop out of it after the book has opened.
+   Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
+.book-popup{position:absolute;z-index:3;left:-9%;top:50%;width:64%;aspect-ratio:819/555;translate:0 -54%;pointer-events:none;transition:opacity .2s}
+.book-popup.is-hidden{opacity:0}
+.book-popup img{position:absolute;height:auto;max-width:none;opacity:0;transform-origin:50% 100%;filter:drop-shadow(0 30px 24px #173e4855) drop-shadow(0 8px 6px #173e4830)}
+.book-popup .popup-phone-1{left:0;top:24.14%;width:57.8%;--d:0s}
+.book-popup .popup-phone-2{left:25.37%;top:0;width:51.16%;--d:.15s}
+.book-popup .popup-phone-3{left:46.52%;top:13.35%;width:53.52%;--d:.3s}
+/* short pause after the book finishes opening (~2.6s) before the phones rise */
+.storybook.is-opened .book-popup img{animation:book-phone-pop .9s cubic-bezier(.3,1.35,.5,1) calc(3s + var(--d)) both}
+.storybook .book-popup.is-revealing img{animation:book-phone-pop .8s cubic-bezier(.3,1.35,.5,1) calc(.15s + var(--d)) both}
+@keyframes book-phone-pop{
+  0%{opacity:0;transform:translateY(35%) scale(.45)}
+  40%{opacity:1}
+  100%{opacity:1;transform:none}
+}
+
+/* Phones: one page per card instead of the sprite spread */
+@media(max-width:700px){
+  .storybook{padding:0 0 5rem}
+  .pixel-book{width:100%;height:auto;font-size:15px}
+  .book-sprite,.book-intro{display:none}
+  .book-carousel{height:auto}
+  .page-container{flex-direction:column;gap:0;height:100%;background:#fff9e9;border:8px solid #b88742;border-radius:8px;animation:none!important}
+  .book-left{min-height:250px;padding:1rem}
+  .book-right{padding:0 1rem 2.6rem}
+  .book-popup{left:-2%;top:6px;width:104%;translate:none}
+  .book-arrow{top:auto;bottom:0;transform:none}
+  .book-arrow:hover{transform:scale(1.07)}
+  .book-pagination{bottom:1.3rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .book-intro{display:none}
+  .storybook :is(.book-sprite,.book-carousel,.book-arrow,.book-pagination),.book-popup img{opacity:1!important;transition:none}
+  .storybook :is(.book-carousel,.book-arrow,.book-pagination),.book-popup img{animation:none!important}
 }

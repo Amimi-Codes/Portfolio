@@ -205,7 +205,42 @@ if(scrollBook){
   }
 }
 
-const storybook=document.querySelector("[data-storybook]");if(storybook){const scenes=[...storybook.querySelectorAll(".book-scene")],status=storybook.querySelector(".book-pagination");let current=0;const show=next=>{scenes[current].classList.remove("is-active","is-revealing");current=(next+scenes.length)%scenes.length;scenes[current].classList.add("is-active");status.textContent=String(current+1).padStart(2,"0")+" / "+String(scenes.length).padStart(2,"0");if(!reducedMotion){void scenes[current].offsetWidth;scenes[current].classList.add("is-revealing");setTimeout(()=>scenes[current].classList.remove("is-revealing"),1450)}};storybook.querySelector(".book-arrow-next").addEventListener("click",()=>show(current+1));storybook.querySelector(".book-arrow-prev").addEventListener("click",()=>show(current-1))}
+const storybook = document.querySelector("[data-storybook]");
+if (storybook) {
+  const book = storybook.querySelector(".pixel-book"),
+    carousel = storybook.querySelector(".book-carousel"),
+    popup = storybook.querySelector(".book-popup"),
+    status = storybook.querySelector(".book-pagination"),
+    total = carousel.children.length;
+  // render the 1920x1500 sprite frame as tall as fits the section width (max 750px)
+  const fit = () => {
+    const pad = parseFloat(getComputedStyle(storybook).paddingLeft) * 2;
+    book.style.setProperty("--sprite-th", Math.min(750, (storybook.clientWidth - pad) / 1.28));
+  };
+  fit();
+  addEventListener("resize", fit, { passive: true });
+  let current = 0;
+  carousel.addEventListener(
+    "scroll",
+    () => {
+      popup.classList.toggle("is-hidden", carousel.scrollLeft > 8);
+      const next = Math.round(carousel.scrollLeft / carousel.clientWidth);
+      if (next === current) return;
+      current = next;
+      status.textContent = String(current + 1).padStart(2, "0") + " / " + String(total).padStart(2, "0");
+      // the phones pop out of the HabitU page again each time it comes back
+      if (current === 0 && !reducedMotion) {
+        popup.classList.remove("is-revealing");
+        void popup.offsetWidth;
+        popup.classList.add("is-revealing");
+      }
+    },
+    { passive: true },
+  );
+  const turn = (dir) => carousel.scrollBy({ left: dir * carousel.clientWidth });
+  storybook.querySelector(".book-arrow-next").addEventListener("click", () => turn(1));
+  storybook.querySelector(".book-arrow-prev").addEventListener("click", () => turn(-1));
+}
 
 const scrapbook=document.querySelector(".scrapbook");if(scrapbook&&!reducedMotion){const memories=[...scrapbook.querySelectorAll(".scrap-memory")];const tilt=()=>{const y=scrollY;memories.forEach((memory,index)=>memory.style.setProperty("--scrap-y",((y*.012+index*3)%8-4)+"px"));requestAnimationFrame(tilt)};tilt()}
 
