@@ -212,10 +212,11 @@ if (storybook) {
     popup = storybook.querySelector(".book-popup"),
     status = storybook.querySelector(".book-pagination"),
     total = carousel.children.length;
-  // render the 1920x1500 sprite frame as tall as fits the section width (max 750px)
+  // original book size: up to 37rem (592px) / 55vw tall, never wider than the space between the arrows
   const fit = () => {
     const pad = parseFloat(getComputedStyle(storybook).paddingLeft) * 2;
-    book.style.setProperty("--sprite-th", Math.min(750, (storybook.clientWidth - pad) / 1.28));
+    const coverH = Math.min(592, innerWidth * 0.55, ((storybook.clientWidth - pad) * 225) / 336);
+    book.style.setProperty("--s", coverH / 225);
   };
   fit();
   addEventListener("resize", fit, { passive: true });
