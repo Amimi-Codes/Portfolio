@@ -7,6 +7,8 @@ const mime = {
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".avif": "image/avif",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
 };
 http
   .createServer((req, res) => {

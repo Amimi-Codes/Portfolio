@@ -142,7 +142,87 @@ if (story) {
   update();
 }
 
-const heroJelly=document.querySelector(".hero-jelly");if(heroJelly&&!reducedMotion){let tx=0,ty=0,jx=0,jy=0;addEventListener("pointermove",e=>{tx=(e.clientX/innerWidth-.5)*24;ty=(e.clientY/innerHeight-.5)*18},{passive:true});(function followJelly(){jx+=(tx-jx)*.045;jy+=(ty-jy)*.045;heroJelly.style.setProperty("--jx",jx+"px");heroJelly.style.setProperty("--jy",jy+"px");requestAnimationFrame(followJelly)})()}const scrollBook=document.querySelector("[data-storybook]");
+// Pixel-art jellyfish: bell drawn from a map, tentacles + oral arms generated, one path per colour.
+const heroJelly = document.querySelector(".hero-jelly");
+if (heroJelly) {
+  const bell = [
+    ".......oooooooooo.......",
+    ".....oowwccccccccoo.....",
+    "....owwccPPPPPPPccco....",
+    "...owccPPPPPPPPPPPcco...",
+    "..owccPPPpppppppPPPcco..",
+    "..ocPPPppppppppppPPPco..",
+    ".owcPPpppPPPPPPpppPPcco.",
+    ".ocPPppPPwwPPPPPPppPPco.",
+    ".ocPPpPPwwPPppPPPppPPco.",
+    "occPPppPPPPppppPPpppPcco",
+    "ocPPpppppppppppppppPPPco",
+    "ocPPppppppppppppppppPPco",
+    "occPPPppppppppppppPPPcco",
+    "ooccPPPPPPPPPPPPPPPPccoo",
+    ".ooccccccccccccccccccoo.",
+    "..o.oo.oo.oo.oo.oo.o.o..",
+  ];
+  const colors = { o: "#8ff8ff", w: "#f4ffff", c: "#3fc6ee", P: "#ffc4ef", p: "#ff86d8", t: "#7ff3ff", a: "#ff9fe4", A: "#ffd9f5" };
+  const px = {};
+  const put = (x, y, k) => (px[k] = px[k] || []).push(`M${x} ${y}h1v1h-1z`);
+  bell.forEach((row, y) => [...row].forEach((k, x) => k !== "." && put(x, y, k)));
+  const tentacles = [];
+  for (let y = 16; y < 54; y++) {
+    // thin outer tentacles drift sideways like the reference
+    [2, 6, 17, 21].forEach((base, i) => {
+      if (y < 46 + i * 2) tentacles.push([base + Math.round(Math.sin(y * 0.3 + i) * 1.3 + (y - 16) * 0.1), y, "t"]);
+    });
+    // frilly oral arms down the middle, tapering
+    const w = Math.max(1, Math.round(4 - (y - 16) / 9)), cx = 11 + Math.round(Math.sin(y * 0.22) * 1.6 + (y - 16) * 0.08);
+    if (y < 48) for (let x = cx - w; x <= cx + w; x++) tentacles.push([x, y, x === cx - w || x === cx + w ? "t" : (x + y) % 3 ? "a" : "A"]);
+  }
+  const paths = (list) => Object.entries(list).map(([k, d]) => `<path fill="${colors[k]}" d="${d.join("")}"/>`).join("");
+  const tpx = {};
+  tentacles.forEach(([x, y, k]) => (tpx[k] = tpx[k] || []).push(`M${x} ${y}h1v1h-1z`));
+  heroJelly.querySelector(".jelly-body").innerHTML =
+    `<svg viewBox="-2 -2 28 58" shape-rendering="crispEdges"><g class="jelly-tentacles">${paths(tpx)}</g><g>${paths(px)}</g>` +
+    `<g class="jelly-bolts" fill="none" stroke="#fff59a" stroke-width=".8" shape-rendering="auto"><path d="M-1 4l3 2-2 2 3 2"/><path d="M25 3l-3 3 2 1-3 3"/><path d="M4 20l-3 3 2 1-2 3"/><path d="M20 21l3 3-2 1 3 3"/></g></svg>`;
+
+  const hero = heroJelly.parentElement;
+  let x = hero.clientWidth * 0.7, y = hero.clientHeight * 0.3, vx = 0, angle = 0;
+  const pointer = { x: 0, y: 0, inside: false };
+  const place = () => (heroJelly.style.transform = `translate(${x}px,${y}px) rotate(${angle}deg)`);
+  place();
+  if (!reducedMotion) {
+    hero.addEventListener("pointermove", (e) => {
+      const r = hero.getBoundingClientRect();
+      pointer.x = e.clientX - r.left;
+      pointer.y = e.clientY - r.top;
+      pointer.inside = true;
+    });
+    hero.addEventListener("pointerleave", () => (pointer.inside = false));
+    let shockTimer;
+    hero.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      heroJelly.classList.remove("is-shocked");
+      void heroJelly.offsetWidth;
+      heroJelly.classList.add("is-shocked");
+      clearTimeout(shockTimer);
+      shockTimer = setTimeout(() => heroJelly.classList.remove("is-shocked"), 2000);
+    });
+    (function swim(t) {
+      const w = hero.clientWidth, h = hero.clientHeight, size = heroJelly.offsetWidth;
+      // follow the cursor (bell centred just behind it), otherwise wander a slow loop around the banner
+      const tx = pointer.inside ? pointer.x - size / 2 : w * (0.5 + 0.38 * Math.sin(t / 7000)) - size / 2;
+      const ty = pointer.inside ? pointer.y - size * 0.3 : h * (0.45 + 0.3 * Math.sin(t / 4300 + 1)) - size;
+      const ease = pointer.inside ? 0.05 : 0.02;
+      const nx = x + (tx - x) * ease;
+      vx = nx - x;
+      x = nx;
+      y += (ty - y) * ease;
+      angle += (Math.max(-25, Math.min(25, vx * 3)) - angle) * 0.08;
+      place();
+      requestAnimationFrame(swim);
+    })(0);
+  }
+}
+const scrollBook=document.querySelector("[data-storybook]");
 if(scrollBook){
   if(reducedMotion){
     scrollBook.classList.add("is-opened");
