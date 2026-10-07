@@ -1050,7 +1050,6 @@ button {
 @keyframes jelly-bolts{0%{opacity:1}100%{opacity:.15;transform:scale(1.08)}}
 
 /* Pixel storybook: CodePen sprite page flip driven by the carousel's scroll, plus a cover-and-pages opening */
-@font-face{font-family:PixelText;src:url(https://assets.codepen.io/36869/Grand9KPixel_1.ttf);font-display:swap}
 @property --sprite-fs{syntax:"<integer>";initial-value:0;inherits:true}
 .storybook{padding:1rem 4.8rem 3.6rem}
 .pixel-book{
@@ -1069,7 +1068,7 @@ button {
   /* the page area inside each frame */
   width:calc(1px * var(--sprite-tw) * .7042);
   height:calc(1px * var(--sprite-th) * .6107);
-  font:calc(var(--sprite-th) / 750 * 15px)/1.45 PixelText,monospace;
+  font:calc(var(--sprite-th) / 750 * 15px)/1.6 "DM Sans",sans-serif;
   color:#333;
 }
 .book-sprite{
@@ -1099,12 +1098,12 @@ button {
 .book-left .page-no{left:1.4em}
 .book-right .page-no{right:1.4em}
 .book-page-placeholder{flex:1;width:100%}
-.book-index{font-size:.75em;letter-spacing:.08em;color:#4c8c8a}
-.book-right h3{font:inherit;font-size:2.3em;line-height:1.05;margin:.35em 0 .4em;color:#184a55}
+.book-index{font-size:.7em;font-weight:800;letter-spacing:.16em;color:#4c8c8a}
+.book-right h3{font:700 3.2em/.92 Manrope,sans-serif;letter-spacing:-.09em;margin:.35em 0 .4em;color:#184a55}
 .book-right p{margin:0;text-align:justify;hyphens:auto}
 .book-tags{display:flex;flex-wrap:wrap;gap:.4em;margin:1em 0}
-.book-tags b{font-weight:400;font-size:.8em;padding:.25em .5em;background:#daf4eb;color:#235b64}
-.book-right a{margin-top:auto;display:flex;gap:1.2em;color:#155866;border-bottom:2px solid #83b7ad;padding-bottom:.2em}
+.book-tags b{font-size:.7em;padding:.45em .7em;border-radius:99px;background:#daf4eb;color:#235b64}
+.book-right a{margin-top:auto;display:flex;gap:1.2em;font-weight:800;color:#155866;border-bottom:2px solid #83b7ad;padding-bottom:.2em}
 .book-right a:hover{color:#50a99f}
 @supports (animation-timeline:scroll()){
   .book-carousel{scroll-timeline:--book-timeline x}

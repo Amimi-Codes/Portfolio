@@ -165,7 +165,7 @@ if (heroJelly) {
       void heroJelly.offsetWidth;
       heroJelly.classList.add("is-shocked");
       clearTimeout(shockTimer);
-      shockTimer = setTimeout(() => heroJelly.classList.remove("is-shocked"), 2000);
+      shockTimer = setTimeout(() => heroJelly.classList.remove("is-shocked"), 1000);
     });
     (function swim(t) {
       const w = hero.clientWidth, h = hero.clientHeight, size = heroJelly.offsetWidth;
