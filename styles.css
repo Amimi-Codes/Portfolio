@@ -1053,26 +1053,27 @@ button {
 @property --sprite-fs{syntax:"<integer>";initial-value:0;inherits:true}
 .storybook{padding:1rem 4.8rem 3.6rem}
 .pixel-book{
-  /* assets/book.webp: 5 x 2 grid of 336x266 frames, 7 frames per page turn, the 336x225 cover at y=24 in every frame.
-     The element is the cover; --s (px per sprite px) is set by script.js so the book keeps its original size. */
-  --s:2.63;--slides:3;--sprite-f:7;--sprite-fr:12;
+  /* assets/book.webp: Amy's 7 vector frames rendered at 2x into a 5 x 2 grid of 933x673 frames,
+     the 933x628 cover at y=45 in every frame. The element is the cover; --s (px per frame unit)
+     is set by script.js so the book keeps its original size. */
+  --s:.94;--slides:3;--sprite-f:7;--sprite-fr:12;
   --sprite-as:calc(var(--sprite-f) / var(--sprite-fr) * 1s);
   position:relative;isolation:isolate;margin:0 auto;timeline-scope:--book-timeline;
-  width:calc(336px * var(--s));height:calc(225px * var(--s));
-  font:calc(var(--s) * 5.6px)/1.6 "DM Sans",sans-serif;
+  width:calc(933px * var(--s));height:calc(628px * var(--s));
+  font:calc(var(--s) * 15.6px)/1.6 "DM Sans",sans-serif;
   color:#333;
 }
 .book-sprite{
-  position:absolute;z-index:0;left:0;top:calc(-24px * var(--s));pointer-events:none;
-  width:calc(336px * var(--s));height:calc(266px * var(--s));
+  position:absolute;z-index:0;left:0;top:calc(-45px * var(--s));pointer-events:none;
+  width:calc(933px * var(--s));height:calc(673px * var(--s));
   background:url(assets/book.webp) no-repeat;
-  background-size:calc(1680px * var(--s)) calc(532px * var(--s));
+  background-size:calc(4665px * var(--s)) calc(1346px * var(--s));
   --sprite-fe:calc(var(--sprite-f) * (var(--slides) - 1));
   --n:mod(var(--sprite-fs), var(--sprite-f));
-  background-position:calc(-336px * var(--s) * mod(var(--n), 5)) calc(-266px * var(--s) * round(down, var(--n) / 5, 1));
+  background-position:calc(-933px * var(--s) * mod(var(--n), 5)) calc(-673px * var(--s) * round(down, var(--n) / 5, 1));
 }
 .book-carousel{
-  position:absolute;z-index:1;inset:2.2% 2.7% 1.8%;display:grid;grid:1fr / auto-flow 100%;
+  position:absolute;z-index:1;inset:2.2% 2.4% 2.1% 2.5%;display:grid;grid:1fr / auto-flow 100%;
   overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
   scroll-behavior:smooth;scrollbar-width:none;outline:none
 }
@@ -1112,7 +1113,7 @@ button {
 .book-intro{position:absolute;z-index:2;inset:0;perspective:70em;pointer-events:none}
 .book-intro i,.intro-cover{position:absolute;left:50%;transform-origin:0 50%;border-radius:0 5px 5px 0;box-shadow:inset -3px 0 20px #0003,0 0 15px #0002}
 .book-intro i{top:1.5%;width:48.5%;height:97%;background:#fff9e9}
-.intro-cover{top:0;width:50%;height:100%;background:#b88742;box-shadow:inset 0 0 0 .25em #a97a3a,0 12px 24px #0003}
+.intro-cover{top:0;width:50%;height:100%;background:#b88742;border-radius:0 20px 20px 0;box-shadow:0 12px 24px #0003}
 .storybook.is-opened .intro-cover{animation:intro-cover 1.6s forwards}
 .storybook.is-opened .book-intro i{animation:intro-page 1.6s forwards}
 .storybook.is-opened .book-intro i:nth-of-type(1){animation-delay:.05s}

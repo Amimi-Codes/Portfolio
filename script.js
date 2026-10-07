@@ -215,8 +215,8 @@ if (storybook) {
   // original book size: up to 37rem (592px) / 55vw tall, never wider than the space between the arrows
   const fit = () => {
     const pad = parseFloat(getComputedStyle(storybook).paddingLeft) * 2;
-    const coverH = Math.min(592, innerWidth * 0.55, ((storybook.clientWidth - pad) * 225) / 336);
-    book.style.setProperty("--s", coverH / 225);
+    const coverH = Math.min(592, innerWidth * 0.55, ((storybook.clientWidth - pad) * 628) / 933);
+    book.style.setProperty("--s", coverH / 628);
   };
   fit();
   addEventListener("resize", fit, { passive: true });
