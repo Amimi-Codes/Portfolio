@@ -10,7 +10,7 @@
     />
     <title>HabitU — Case study by Amy Cui</title>
     <link rel="stylesheet" href="styles.css?v=9" />
-    <link rel="stylesheet" href="habitu.css" />
+    <link rel="stylesheet" href="habitu.css?v=3" />
     <link rel="stylesheet" href="case-refresh.css" />
     <script src="script.js?v=9" defer></script>
     <script type="importmap">
@@ -21,7 +21,7 @@
         }
       }
     </script>
-    <script type="module" src="habitu.js"></script>
+    <script type="module" src="habitu.js?v=3"></script>
   </head>
   <body class="case-page">
     <a class="skip-link" href="#story">Skip to story</a>
@@ -185,18 +185,16 @@
                   aria-label="Autoplaying design storyboard"
                 >
                   <div class="film-frame sketch-frame">
-                    <i></i><i></i><i></i><b>SKETCHING</b>
+                    <img src="assets/HabitU%20Assets/paper-sketches.jpg" alt="" loading="lazy" /><b>SKETCHING</b>
                   </div>
                   <div class="film-frame flow-frame">
-                    <i></i><i></i><i></i><b>BUILDING THE FLOW</b>
+                    <img src="assets/HabitU%20Assets/user-flow.webp" alt="" loading="lazy" /><b>USER FLOW</b>
                   </div>
-                  <div class="style-tiles">
-                    <div>FOCUSED<br />MINIMALISM<br /><span>sand · sage · rust</span></div>
-                    <div>GAMIFIED<br />ADVENTURE<br /><span>navy · copper · wine</span></div>
-                    <div>CYBER<br />TRACKING<br /><span>charcoal · teal · cyan</span></div>
+                  <div class="film-frame tiles-frame">
+                    <img src="assets/HabitU%20Assets/style-tile-comparison.webp" alt="" loading="lazy" /><b>STYLE COMPARISON</b>
                   </div>
                 </div>
-                <span>SKETCH → FLOW → STYLE EXPLORATION</span>
+                <span>SKETCH → USER FLOW → STYLE COMPARISON</span>
               </div>
               <div class="stage-test">
                 <b>5</b><span>MODERATED REMOTE SESSIONS</span>
@@ -215,52 +213,40 @@
       <section class="artifacts" aria-labelledby="artifacts-title">
         <div class="wrap artifacts-head">
           <p class="label">THE MAKING / ARTIFACTS</p>
-          <h2 id="artifacts-title">From wireframe<br /><em>to final screens.</em></h2>
+          <h2 id="artifacts-title">From wireframe<br /><em>to style direction.</em></h2>
           <p>Select any piece to see it up close.</p>
         </div>
-        <div class="gallery">
-          <figure class="gallery-slide" style="--stagger: -20vw; --img-w: min(22vw, 330px)">
-            <button class="gallery-frame" type="button" data-index="01" data-title="First digital wireframe" data-desc="Six low fidelity screens (home, community, milestones, rewards shop, progress tracker and goal creation) mapped the core flow before any visual style was applied.">
-              <img src="assets/HabitU%20Assets/digital-wireframe-1.jpg" alt="Grayscale wireframe of six HabitU screens: home, social friends, milestones, shop catalogue, September progress and new habit" width="585" height="782" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>01 · First digital wireframe</figcaption>
-          </figure>
-          <figure class="gallery-slide" style="--stagger: 12vw; --img-w: min(46vw, 680px)">
-            <button class="gallery-frame" type="button" data-index="02" data-title="Style tile #1: Focused Minimalism" data-desc="Sansation type on warm sand and off white, with sage green and rust accents. It leans into the encouraging, rewarding side of gamification with a friendly, approachable feel.">
-              <img src="assets/HabitU%20Assets/style-tile-1-focused-minimalism.webp" alt="Style tile showing Sansation typography, a sand, sage and rust palette, navigation icons, buttons, form fields and two phone previews" width="2000" height="1611" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>02 · Style tile #1: Focused Minimalism</figcaption>
-          </figure>
-          <figure class="gallery-slide" style="--stagger: -14vw; --img-w: min(42vw, 620px)">
-            <button class="gallery-frame" type="button" data-index="03" data-title="Style tile #2: Gamified Adventure" data-desc="Exploration themed visuals and playful game mechanics: deep navy and wine with copper and violet accents, plus parchment and wood textures, so daily habits feel like an adventure.">
-              <img src="assets/HabitU%20Assets/style-tile-2-gamified-adventure.webp" alt="Style tile with dark navy and burgundy colours, copper accents, parchment textured inputs and two phone previews" width="2000" height="1575" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>03 · Style tile #2: Gamified Adventure</figcaption>
-          </figure>
-          <figure class="gallery-slide" style="--stagger: 16vw; --img-w: min(40vw, 600px)">
-            <button class="gallery-frame" type="button" data-index="04" data-title="Style tile #3: Futuristic Cybertracking" data-desc="A sleek, high contrast cyberpunk direction set in Orbitron, with cyan type on charcoal, teal and violet, built to encourage gamification and intrinsic motivation.">
-              <img src="assets/HabitU%20Assets/style-tile-3-futuristic-cybertracking.webp" alt="Style tile with Orbitron typography, charcoal, teal and violet colours, cyan text and two phone previews" width="2000" height="1575" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>04 · Style tile #3: Futuristic Cybertracking</figcaption>
-          </figure>
-          <figure class="gallery-slide" style="--stagger: -22vw; --img-w: min(26vw, 380px)">
-            <button class="gallery-frame" type="button" data-index="05" data-title="Home: today at a glance" data-desc="The final home screen pairs a streak and week strip with today’s progress and a goal list you can start, pause or check off.">
-              <img src="assets/HabitU%20Assets/habitu-phone-2.svg" alt="HabitU home screen with a 14 day streak, a week strip, today’s progress at 35% and a goals list" width="100" height="100" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>05 · Home: today at a glance</figcaption>
-          </figure>
-          <figure class="gallery-slide" style="--stagger: 18vw; --img-w: min(20vw, 300px)">
-            <button class="gallery-frame" type="button" data-index="06" data-title="Progress: the month in colour" data-desc="A calendar heat map shows completed and missed days alongside this week’s habits, so progress reads at a glance.">
-              <img src="assets/HabitU%20Assets/habitu-phone-1.svg" alt="HabitU progress screen with a September calendar heat map, completed and missed day counts and weekly habits" width="100" height="100" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>06 · Progress: the month in colour</figcaption>
-          </figure>
-          <figure class="gallery-slide" style="--stagger: -8vw; --img-w: min(24vw, 360px)">
-            <button class="gallery-frame" type="button" data-index="07" data-title="Create goal: flexible by design" data-desc="Goal creation asks for a name, habit, frequency, difficulty and an accountability partner, with options to pause tracking or stop a goal without penalty.">
-              <img src="assets/HabitU%20Assets/habitu-phone-3.svg" alt="HabitU create goal form with fields for goal name, habit, frequency, difficulty, flexibility and accountability partner" width="100" height="100" loading="lazy" decoding="async" />
-            </button>
-            <figcaption>07 · Create goal: flexible by design</figcaption>
-          </figure>
+        <div class="morph">
+          <div class="morph-pin">
+            <figure class="morph-draft">
+              <button class="gallery-frame" type="button" data-index="01" data-title="First digital wireframe" data-desc="Six low fidelity screens (home, community, milestones, rewards shop, progress tracker and goal creation) mapped the core flow before any visual style was applied.">
+                <span class="morph-shard"><img src="assets/HabitU%20Assets/digital-wireframe-1.jpg" alt="Grayscale wireframe of six HabitU screens: home, social friends, milestones, shop catalogue, September progress and new habit" width="585" height="782" loading="lazy" decoding="async" /></span>
+                <span class="morph-shard"><img src="assets/HabitU%20Assets/digital-wireframe-1.jpg" alt="" width="585" height="782" loading="lazy" decoding="async" /></span>
+                <span class="morph-shard"><img src="assets/HabitU%20Assets/digital-wireframe-1.jpg" alt="" width="585" height="782" loading="lazy" decoding="async" /></span>
+              </button>
+              <figcaption>01 · First digital wireframe</figcaption>
+            </figure>
+            <div class="morph-row">
+              <figure class="morph-tile">
+                <button class="gallery-frame" type="button" data-index="02" data-title="Style tile #1: Focused Minimalism" data-desc="Sansation type on warm sand and off white, with sage green and rust accents. It leans into the encouraging, rewarding side of gamification with a friendly, approachable feel.">
+                  <img src="assets/HabitU%20Assets/style-tile-1-focused-minimalism.webp" alt="Style tile showing Sansation typography, a sand, sage and rust palette, navigation icons, buttons, form fields and two phone previews" width="2000" height="1611" loading="lazy" decoding="async" />
+                </button>
+                <figcaption>02 · Style tile #1: Focused Minimalism</figcaption>
+              </figure>
+              <figure class="morph-tile">
+                <button class="gallery-frame" type="button" data-index="03" data-title="Style tile #2: Gamified Adventure" data-desc="Exploration themed visuals and playful game mechanics: deep navy and wine with copper and violet accents, plus parchment and wood textures, so daily habits feel like an adventure.">
+                  <img src="assets/HabitU%20Assets/style-tile-2-gamified-adventure.webp" alt="Style tile with dark navy and burgundy colours, copper accents, parchment textured inputs and two phone previews" width="2000" height="1575" loading="lazy" decoding="async" />
+                </button>
+                <figcaption>03 · Style tile #2: Gamified Adventure</figcaption>
+              </figure>
+              <figure class="morph-tile">
+                <button class="gallery-frame" type="button" data-index="04" data-title="Style tile #3: Futuristic Cybertracking" data-desc="A sleek, high contrast cyberpunk direction set in Orbitron, with cyan type on charcoal, teal and violet, built to encourage gamification and intrinsic motivation.">
+                  <img src="assets/HabitU%20Assets/style-tile-3-futuristic-cybertracking.webp" alt="Style tile with Orbitron typography, charcoal, teal and violet colours, cyan text and two phone previews" width="2000" height="1575" loading="lazy" decoding="async" />
+                </button>
+                <figcaption>04 · Style tile #3: Futuristic Cybertracking</figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
         <dialog class="artifact-view" aria-labelledby="artifact-title">
           <div class="artifact-view-bg"></div>

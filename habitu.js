@@ -1,78 +1,57 @@
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---------- Artifact gallery: per-slide parallax, reveals, image-to-detail morph ---------- */
-const gallery = document.querySelector(".gallery");
-if (gallery) {
-  // >1 travels faster than the page, <1 slower, like the Codrops gallery
-  const speeds = [1.18, 0.86, 1.12, 0.82, 1.2, 0.88, 1.1];
-  const slides = [...gallery.querySelectorAll(".gallery-slide")].map((el, i) => ({
-    el,
-    frame: el.querySelector(".gallery-frame"),
-    img: el.querySelector("img"),
-    factor: speeds[i % speeds.length] - 1,
-    y: 0,
-  }));
-
-  // Split captions into characters for the type-on reveal; screen readers get the plain text
-  slides.forEach(({ el }) => {
-    const cap = el.querySelector("figcaption"), text = cap.textContent;
-    cap.textContent = "";
-    const plain = document.createElement("span"), chars = document.createElement("span");
-    plain.className = "sr-only";
-    plain.textContent = text;
-    chars.setAttribute("aria-hidden", "true");
-    [...text].forEach((c, i) => {
-      const s = document.createElement("span");
-      s.className = "char";
-      s.style.setProperty("--i", i);
-      s.textContent = c === " " ? " " : c;
-      chars.append(s);
+/* ---------- The making: the first draft splits open into the three style tiles on scroll ---------- */
+const morph = document.querySelector(".morph");
+if (morph) {
+  const pin = morph.querySelector(".morph-pin"),
+    draft = morph.querySelector(".morph-draft"),
+    draftCap = draft.querySelector("figcaption"),
+    shards = [...draft.querySelectorAll(".morph-shard")],
+    tiles = [...morph.querySelectorAll(".morph-tile")];
+  const clamp = (v) => Math.min(1, Math.max(0, v)),
+    smooth = (t) => t * t * (3 - 2 * t),
+    lerp = (a, b, t) => a + (b - a) * t;
+  // layout boxes relative to the pin (offsets ignore the transforms we set)
+  const box = (el) => {
+    let x = 0, y = 0;
+    for (let n = el; n && n !== pin; n = n.offsetParent) {
+      x += n.offsetLeft;
+      y += n.offsetTop;
+    }
+    return { x: x + el.offsetWidth / 2, y: y + el.offsetHeight / 2, w: el.offsetWidth, h: el.offsetHeight };
+  };
+  const update = () => {
+    const r = morph.getBoundingClientRect();
+    const p = clamp((parseFloat(getComputedStyle(pin).top) - r.top) / (r.height - pin.offsetHeight));
+    // 1) the draft splits along its columns and the three parts swing open
+    const open = smooth(clamp(p / 0.3));
+    const spread = draft.offsetWidth * 0.12;
+    draftCap.style.opacity = 1 - open;
+    shards.forEach((shard, i) => {
+      const tile = tiles[i], side = i - 1;
+      // 2) each part travels to its slot in the row and becomes that style tile
+      const e = smooth(clamp((p - 0.3 - i * 0.05) / 0.5));
+      const S = box(shard), T = box(tile);
+      const sx = S.x + side * spread * open, sy = S.y;
+      const tilt = side * 6 * open * (1 - e);
+      shard.style.transform = `translate(${side * spread * open + (T.x - sx) * e}px,${(T.y - sy) * e}px) rotate(${tilt}deg) scale(${lerp(1, T.w / S.w, e)},${lerp(1, T.h / S.h, e)})`;
+      shard.style.opacity = 1 - clamp(e * 2 - 0.6);
+      tile.style.transform = `translate(${(sx - T.x) * (1 - e)}px,${(sy - T.y) * (1 - e)}px) rotate(${tilt}deg) scale(${lerp(S.w / T.w, 1, e)},${lerp(S.h / T.h, 1, e)})`;
+      tile.style.opacity = clamp(e * 2 - 0.2);
+      tile.querySelector("figcaption").style.opacity = clamp((e - 0.85) / 0.15);
+      tile.style.pointerEvents = e > 0.95 ? "" : "none";
     });
-    cap.append(plain, chars);
-  });
+    draft.style.pointerEvents = open < 0.05 ? "" : "none";
+  };
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update);
+  update();
+}
 
-  if (!reducedMotion) {
-    gallery.classList.add("is-live");
-    const reveal = new IntersectionObserver(
-      (entries) => {
-        entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-          .forEach((e, i) => {
-            e.target.style.setProperty("--delay", `${i * 0.12}s`);
-            e.target.classList.add("is-in");
-          });
-        // Reset slides that leave so the reveal replays on the next pass
-        entries.filter((e) => !e.isIntersecting).forEach((e) => e.target.classList.remove("is-in"));
-      },
-      { threshold: 0.12 },
-    );
-    slides.forEach(({ el }) => reveal.observe(el));
-
-    // Parallax only runs while the gallery is on screen
-    let running = false;
-    const tick = () => {
-      if (!running) return;
-      const mid = innerHeight / 2;
-      for (const s of slides) {
-        const r = s.el.getBoundingClientRect(); // the figure itself is never moved vertically
-        const d = r.top + r.height / 2 - mid;
-        s.y += (s.factor * d - s.y) * 0.09; // eased toward target for the scrubbed, inertial feel
-        s.frame.style.transform = `translate3d(0,${s.y.toFixed(2)}px,0)`;
-        s.img.style.transform = `translate3d(0,${((-d / innerHeight) * 2.5).toFixed(2)}%,0) scale(1.06)`;
-      }
-      requestAnimationFrame(tick);
-    };
-    new IntersectionObserver(([e]) => {
-      const was = running;
-      running = e.isIntersecting;
-      if (running && !was) requestAnimationFrame(tick);
-    }).observe(gallery);
-  }
-
-  // Detail view: the clicked image morphs (FLIP) into the fullscreen layout
-  const view = document.querySelector(".artifact-view"),
-    viewImg = view.querySelector(".artifact-view-img"),
+/* ---------- Detail view: a clicked artifact morphs (FLIP) into a fullscreen layout ---------- */
+const view = document.querySelector(".artifact-view");
+if (view) {
+  const viewImg = view.querySelector(".artifact-view-img"),
     viewBg = view.querySelector(".artifact-view-bg"),
     viewText = view.querySelector(".artifact-view-text");
   const ease = "cubic-bezier(0.7, 0, 0.2, 1)";
@@ -83,19 +62,19 @@ if (gallery) {
     return `translate(${a.left - b.left}px,${a.top - b.top}px) scale(${a.width / b.width},${a.height / b.height})`;
   };
 
-  const open = async (slide) => {
+  const open = async (frame) => {
     if (busy || view.open) return;
     busy = true;
-    active = slide;
-    const { frame, img } = slide;
+    active = frame;
+    const img = frame.querySelector("img");
     viewImg.src = img.currentSrc || img.src;
     viewImg.alt = img.alt;
-    view.querySelector(".artifact-index").textContent = `${frame.dataset.index} / 07`;
+    view.querySelector(".artifact-index").textContent = `${frame.dataset.index} / 04`;
     view.querySelector("h2").textContent = frame.dataset.title;
     view.querySelector(".artifact-desc").textContent = frame.dataset.desc;
     await viewImg.decode().catch(() => {});
     view.showModal();
-    slide.el.classList.add("is-open");
+    frame.parentElement.classList.add("is-open");
     if (!reducedMotion) {
       viewImg.animate([{ transform: flipFrom(frame) }, { transform: "none" }], { duration: 900, easing: ease });
       viewBg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out" });
@@ -113,7 +92,7 @@ if (gallery) {
     if (!reducedMotion) {
       viewText.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" });
       viewBg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, delay: 200, fill: "forwards" });
-      await viewImg.animate([{ transform: "none" }, { transform: flipFrom(active.frame) }], {
+      await viewImg.animate([{ transform: "none" }, { transform: flipFrom(active) }], {
         duration: 850,
         easing: ease,
         fill: "forwards",
@@ -121,12 +100,12 @@ if (gallery) {
     }
     view.close();
     view.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-    active.el.classList.remove("is-open");
-    active.frame.focus({ preventScroll: true });
+    active.parentElement.classList.remove("is-open");
+    active.focus({ preventScroll: true });
     busy = false;
   };
 
-  slides.forEach((s) => s.frame.addEventListener("click", () => open(s)));
+  document.querySelectorAll(".artifacts .gallery-frame").forEach((f) => f.addEventListener("click", () => open(f)));
   view.querySelector(".artifact-back").addEventListener("click", close);
   view.addEventListener("cancel", (e) => {
     e.preventDefault(); // play the morph back instead of snapping shut on Escape
@@ -134,7 +113,7 @@ if (gallery) {
   });
 }
 
-/* ---------- 04 / UNDERSTAND: animated 3D survey pie ---------- */
+/* ---------- 04 / UNDERSTAND: 3D survey pie, slices drop in when the section is reached ---------- */
 const chart = document.querySelector(".survey-chart");
 if (chart) {
   // Screening survey: which goals students track
@@ -188,7 +167,8 @@ if (chart) {
     const pie = new THREE.Group();
     scene.add(pie);
     const R = 2, total = data.reduce((t, d) => t + d.value, 0);
-    let start = Math.PI / 2;
+    // fixed layout: Health / Fitness starts at the right edge, the rest follow anticlockwise
+    let start = 0.08;
     const slices = data.map((d, i) => {
       const sweep = (d.value / total) * Math.PI * 2, mid = start + sweep / 2;
       const shape = new THREE.Shape();
@@ -226,24 +206,12 @@ if (chart) {
       labelsHost.append(label);
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path"),
         dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      path.setAttribute("fill", "none"); // never filled, even if the stylesheet is stale
       dot.setAttribute("r", 2.5);
       lines.append(path, dot);
-      label.addEventListener("pointerenter", () => (hovered = i));
-      label.addEventListener("pointerleave", () => (hovered = -1));
-      return { mesh, anchor, label, path, dot, mid, lift: 0, grow: 0 };
+      mesh.position.set(Math.cos(mid) * 0.04, 0, -Math.sin(mid) * 0.04); // hairline gap between slices
+      return { mesh, anchor, label, path, dot };
     });
-
-    // Hover a slice (or its label) to pull it out of the pie
-    let hovered = -1;
-    const ray = new THREE.Raycaster(), pointer = new THREE.Vector2();
-    host.addEventListener("pointermove", (e) => {
-      const r = host.getBoundingClientRect();
-      pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-      ray.setFromCamera(pointer, camera);
-      const hit = ray.intersectObjects(slices.map((s) => s.mesh))[0];
-      hovered = hit ? hit.object.userData.index : -1;
-    });
-    host.addEventListener("pointerleave", () => (hovered = -1));
 
     let w = 0, h = 0, compact = false;
     const v = new THREE.Vector3();
@@ -273,10 +241,12 @@ if (chart) {
       }
       lines.setAttribute("viewBox", `0 0 ${w} ${h}`);
     };
-    new ResizeObserver(resize).observe(host);
+    new ResizeObserver(() => {
+      resize();
+      draw(performance.now());
+    }).observe(host);
     resize();
 
-    const easeOutBack = (t) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
 
     const placeLabels = () => {
       const c = toScreen(centre), rx = pieRadiusPx(), gap = compact ? 10 : 22;
@@ -301,40 +271,39 @@ if (chart) {
       }
     };
 
-    let shownAt = -1, last = performance.now(), spin = 0;
-    const frame = (now) => {
-      requestAnimationFrame(frame);
-      const dt = Math.min(now - last, 50) / 1000;
-      last = now;
-      const visible = stage.dataset.active === "insight";
-      if (!visible) {
-        if (shownAt >= 0) {
-          // reset so the build-in replays next time
-          shownAt = -1;
-          slices.forEach((s) => s.label.classList.remove("is-on"));
-        }
-        return;
-      }
-      if (shownAt < 0) shownAt = now;
-      const t = (now - shownAt) / 1000;
-      if (!reducedMotion && hovered < 0) spin += dt * 0.18;
-      pie.rotation.y = reducedMotion ? 0.4 : -0.9 * Math.max(0, 1 - t / 1.6) ** 3 + 0.4 + spin;
-
+    const DROP = 4, FALL = 0.75, STAGGER = 0.12;
+    const bounce = (t) => (t < 0.73 ? Math.min(1, 1.9 * t * t) : 1 - 0.12 * Math.sin(((t - 0.73) / 0.27) * Math.PI) * (1 - t) * 3.7);
+    let startedAt = -1, raf = 0;
+    const draw = (now) => {
+      const t = startedAt < 0 ? 0 : reducedMotion ? 99 : (now - startedAt) / 1000;
       slices.forEach((s, i) => {
-        const g = reducedMotion ? 1 : Math.min(1, Math.max(0, (t - 0.15 - i * 0.12) / 0.9));
-        s.grow = g === 1 ? 1 : easeOutBack(g);
-        s.lift += ((hovered === i ? 1 : 0) - s.lift) * 0.15;
-        s.mesh.scale.y = Math.max(0.001, s.grow);
-        s.mesh.position.set(Math.cos(s.mid) * (0.04 + s.lift * 0.22), s.lift * 0.12, -Math.sin(s.mid) * (0.04 + s.lift * 0.22));
-        const hot = hovered === i;
-        s.label.classList.toggle("is-hot", hot);
-        s.path.classList.toggle("is-hot", hot);
-        s.label.classList.toggle("is-on", g > 0.6);
-        s.path.style.opacity = s.dot.style.opacity = g > 0.6 ? "" : 0;
+        const k = startedAt < 0 ? 0 : Math.min(1, Math.max(0, (t - i * STAGGER) / FALL));
+        s.mesh.position.y = DROP * (1 - bounce(k));
+        s.mesh.visible = k > 0;
+        const on = k === 1;
+        s.label.classList.toggle("is-on", on);
+        s.path.style.opacity = s.dot.style.opacity = on ? "" : 0;
       });
       renderer.render(scene, camera);
       placeLabels();
+      return t < (slices.length - 1) * STAGGER + FALL;
     };
-    requestAnimationFrame(frame);
+    const loop = () => (raf = draw(performance.now()) ? requestAnimationFrame(loop) : 0);
+    const sync = () => {
+      const visible = stage.dataset.active === "insight";
+      if (visible && startedAt < 0) {
+        startedAt = performance.now();
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(loop);
+      } else if (!visible && startedAt >= 0) {
+        // reset so the drop replays on the next visit
+        startedAt = -1;
+        cancelAnimationFrame(raf);
+        draw(0);
+      }
+    };
+    new MutationObserver(sync).observe(stage, { attributes: true, attributeFilter: ["data-active"] });
+    draw(0);
+    sync();
   }
 }
