@@ -1,6 +1,6 @@
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---------- The making: the first draft splits open into the three style tiles on scroll ---------- */
+/* ---------- The making: once reached, the first draft splits open into the three style tiles by itself ---------- */
 const morph = document.querySelector(".morph");
 if (morph) {
   const pin = morph.querySelector(".morph-pin"),
@@ -20,9 +20,8 @@ if (morph) {
     }
     return { x: x + el.offsetWidth / 2, y: y + el.offsetHeight / 2, w: el.offsetWidth, h: el.offsetHeight };
   };
-  const update = () => {
-    const r = morph.getBoundingClientRect();
-    const p = clamp((parseFloat(getComputedStyle(pin).top) - r.top) / (r.height - pin.offsetHeight));
+  let p = 0, startedAt = -1;
+  const render = () => {
     // 1) the draft splits along its columns and the three parts swing open
     const open = smooth(clamp(p / 0.3));
     const spread = draft.offsetWidth * 0.12;
@@ -43,9 +42,30 @@ if (morph) {
     });
     draft.style.pointerEvents = open < 0.05 ? "" : "none";
   };
-  addEventListener("scroll", update, { passive: true });
-  addEventListener("resize", update);
-  update();
+  const DURATION = 2800;
+  const play = () => {
+    p = clamp((performance.now() - startedAt) / DURATION);
+    render();
+    if (p < 1 && startedAt >= 0) requestAnimationFrame(play);
+  };
+  const check = () => {
+    const r = morph.getBoundingClientRect();
+    if (startedAt < 0 && r.top <= parseFloat(getComputedStyle(pin).top) + 1) {
+      // the pin has caught: play the whole split without needing more scrolling
+      startedAt = performance.now();
+      if (reducedMotion) startedAt -= DURATION;
+      requestAnimationFrame(play);
+    } else if (startedAt >= 0 && r.top > innerHeight) {
+      // scrolled back above the section: reset so it plays again next time
+      startedAt = -1;
+      p = 0;
+      render();
+    }
+  };
+  addEventListener("scroll", check, { passive: true });
+  addEventListener("resize", render);
+  render();
+  check();
 }
 
 /* ---------- Detail view: a clicked artifact morphs (FLIP) into a fullscreen layout ---------- */
@@ -111,6 +131,29 @@ if (view) {
     e.preventDefault(); // play the morph back instead of snapping shut on Escape
     close();
   });
+}
+
+/* ---------- 06 / TEST: cycle the final screens while the section is on stage ---------- */
+const screens = document.querySelector(".test-screens");
+if (screens) {
+  const imgs = [...screens.children];
+  // homepage → goal 1 → goal 2 → homepage → history → shop, then round again
+  const order = [0, 1, 2, 0, 3, 4];
+  const stage = screens.closest(".story-stage");
+  let step = 0, timer = 0;
+  const show = () => imgs.forEach((img, i) => (img.hidden = i !== order[step]));
+  const sync = () => {
+    clearInterval(timer);
+    step = 0;
+    show();
+    if (stage.dataset.active === "test")
+      timer = setInterval(() => {
+        step = (step + 1) % order.length;
+        show();
+      }, 2200);
+  };
+  new MutationObserver(sync).observe(stage, { attributes: true, attributeFilter: ["data-active"] });
+  sync();
 }
 
 /* ---------- 04 / UNDERSTAND: 3D survey pie, slices drop in when the section is reached ---------- */
