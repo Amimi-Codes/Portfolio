@@ -3,19 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#061b27" />
+    <meta name="theme-color" content="#0b0806" />
     <meta
       name="description"
       content="D&amp;D Character Creation, an interactive web case study by Amy Cui."
     />
     <title>D&amp;D Character Creation — Case study by Amy Cui</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=Press+Start+2P&display=swap"
+    />
     <link rel="stylesheet" href="styles.css?v=8" />
-    <link rel="stylesheet" href="habitu.css" />
-    <link rel="stylesheet" href="case-refresh.css" />
+    <link rel="stylesheet" href="dnd.css" />
     <script src="script.js?v=8" defer></script>
+    <!-- 3D dice: github.com/sarahRosannaBusch/dice (MIT) -->
+    <script src="assets/dnd/dice/three.min.js" defer></script>
+    <script src="assets/dnd/dice/cannon.min.js" defer></script>
+    <script src="assets/dnd/dice/teal.js" defer></script>
+    <script src="assets/dnd/dice/dice.js" defer></script>
+    <script src="dnd.js" defer></script>
   </head>
-  <body class="case-page">
+  <body class="dnd-page">
     <a class="skip-link" href="#story">Skip to story</a>
+
+    <div class="intro" id="intro">
+      <div class="intro-dice" id="intro-dice" aria-hidden="true"></div>
+      <p class="intro-result" aria-hidden="true">Natural 20!</p>
+      <button class="intro-skip" type="button">Skip intro ›</button>
+    </div>
+
     <header class="site-nav">
       <div class="wrap nav-inner">
         <a class="logo" href="index.html" aria-label="Amy Cui home"
@@ -30,39 +47,217 @@
         </nav>
       </div>
     </header>
+
     <main>
-      <section class="case-hero" id="top">
-        <div class="case-hero-text wrap">
-          <p class="eyebrow">
-            <span class="pulse"></span> A CASE STUDY IN INTERACTIVE WEB / 02
-          </p>
+      <!-- HERO · tavern -->
+      <section class="scene-sec hero" id="top">
+        <div class="scene" aria-hidden="true">
+          <img src="assets/dnd/tavern-back.svg" alt="" data-depth="0.05" />
+          <img src="assets/dnd/tavern-front.svg" alt="" data-depth="0.16" />
+        </div>
+        <div class="hero-text">
+          <p class="px-label">A case study in interactive web · 02</p>
           <h1>Character<br /><em>Creation</em></h1>
-          <p class="case-deck">
-            A playful D&amp;D character creation experience that turns complex
-            choices into a more welcoming journey.
+          <p class="hero-deck">
+            A D&amp;D character builder that turns a rulebook's worth of choices
+            into an adventure you actually want to start.
           </p>
-          <div class="case-hero-bottom">
-            <div><span>PROJECT</span><strong>D&amp;D Character Builder</strong></div>
-            <div><span>DISCIPLINE</span><strong>Frontend · Interaction Design</strong></div>
-            <a href="#story">SCROLL TO EXPLORE ↓</a>
+        </div>
+        <div class="hero-cta">
+          <a
+            class="px-btn"
+            href="https://amimi-codes.github.io/DndCharacterCreation/"
+            >Start your Adventure Now</a
+          >
+          <a class="scroll-hint" href="#story">Scroll to explore ↓</a>
+        </div>
+      </section>
+
+      <!-- 1 · road -->
+      <section class="scene-sec" id="story" aria-labelledby="s1-title">
+        <div class="scene" aria-hidden="true">
+          <img src="assets/dnd/road-sky.svg" alt="" data-depth="0.04" />
+          <img src="assets/dnd/road-mid.svg" alt="" data-depth="0.12" />
+          <img src="assets/dnd/road-ground.svg" alt="" data-depth="0.2" />
+          <img src="assets/dnd/road-front.svg" alt="" data-depth="0.34" />
+        </div>
+        <div class="sec-body">
+          <article class="px-panel">
+            <p class="px-label">Chapter 01 · The Quest Begins</p>
+            <h2 id="s1-title">Everyone wants to play D&amp;D. Fewer survive making a character.</h2>
+            <p>
+              Almost everyone I know has said "I've always wanted to try D&amp;D"
+              at some point. Then they open the Player's Handbook. Twelve classes,
+              a pile of species, subclasses, backgrounds, ability scores, saving
+              throws, proficiencies, spell slots… and that's all before you've
+              rolled a single die.
+            </p>
+            <p>
+              Beginners don't struggle because the game is boring. They get stuck
+              because every choice seems to need three other rules to understand
+              it, and it's hard to tell which ones matter right now.
+            </p>
+          </article>
+
+          <div class="compare">
+            <article class="px-panel">
+              <p class="px-label">The rulebook way</p>
+              <ul class="overload" aria-label="Terms a new player runs into">
+                <li>Proficiency bonus</li><li>Hit dice</li><li>Cantrips</li
+                ><li>Saving throws</li><li>Subclass</li><li>Spell slots</li
+                ><li>Alignment</li><li>Ability modifiers</li><li>Background</li
+                ><li>Feats</li><li>Armor class</li><li>Sub-species</li
+                ><li>Point buy?</li><li>Darkvision</li><li>Skill proficiencies</li>
+              </ul>
+            </article>
+            <article class="px-panel">
+              <p class="px-label">The BG3 way</p>
+              <ol class="steps">
+                <li><strong>Pick who you are.</strong> Species and class shown, not described.</li>
+                <li><strong>See what it means.</strong> Only the details that matter at that step.</li>
+                <li><strong>Start playing.</strong> The rest unlocks as you go.</li>
+              </ol>
+            </article>
+          </div>
+
+          <article class="px-panel">
+            <p class="px-label">The inspiration</p>
+            <h3>Then Baldur's Gate 3 happened.</h3>
+            <p>
+              BG3 runs on D&amp;D 5e rules, yet friends who had never touched a
+              d20 spent hours in its character creator, and they were having fun.
+              It showed every option visually, explained things only when you
+              needed them, and let you watch your character take shape as you
+              made each choice.
+            </p>
+            <p>
+              That's what I wanted for tabletop: the same depth, with a path
+              through it that doesn't require reading 300 pages first.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 2 · forest -->
+      <section class="scene-sec" id="research" aria-labelledby="s2-title">
+        <div class="scene" aria-hidden="true">
+          <img src="assets/dnd/forest-sky.svg" alt="" data-depth="0.02" />
+          <img src="assets/dnd/forest-far.svg" alt="" data-depth="0.08" />
+          <img src="assets/dnd/forest-mid.svg" alt="" data-depth="0.15" />
+          <img src="assets/dnd/forest-near.svg" alt="" data-depth="0.24" />
+          <img src="assets/dnd/forest-front.svg" alt="" data-depth="0.36" />
+        </div>
+        <div class="sec-body">
+          <article class="px-panel construction">
+            <img
+              class="sprite"
+              src="assets/dnd/under-construction.svg"
+              alt="Pixel construction barrier with a traffic cone and hammer"
+              width="192"
+              height="144"
+            />
+            <p class="px-label">Chapter 02 · Scouting Report</p>
+            <h2 id="s2-title">What adventurers told me</h2>
+            <p>
+              I'm gathering feedback from people who play D&amp;D and people who
+              have only ever wanted to, about where character creation loses
+              them. The results are still being analyzed. Check back soon!
+            </p>
+            <div class="px-progress" role="img" aria-label="Research analysis in progress">
+              <span></span>
+            </div>
+            <p class="px-small">Analyzing research data…</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 3 · campfire -->
+      <section class="scene-sec" id="iterations" aria-labelledby="s3-title">
+        <div class="scene" aria-hidden="true">
+          <img src="assets/dnd/camp-back.svg" alt="" data-depth="0.04" />
+          <img src="assets/dnd/camp-mid.svg" alt="" data-depth="0.12" />
+          <img src="assets/dnd/camp-ground.svg" alt="" data-depth="0.2" />
+          <img src="assets/dnd/camp-front.svg" alt="" data-depth="0.34" />
+        </div>
+        <div class="sec-body">
+          <article class="px-panel">
+            <p class="px-label">Chapter 03 · Tales by the Fire</p>
+            <h2 id="s3-title">Every hero has an origin story. This one has three.</h2>
+          </article>
+
+          <ol class="tales">
+            <li class="px-panel">
+              <p class="px-label">Version 1 · ~2023</p>
+              <h3>The hard-coded era</h3>
+              <p>
+                It started almost three years ago, before 5.5e was even born.
+                Every species, class and stat was typed out by hand, and the
+                design had the raw charm of a level 1 commoner: it worked, and
+                that's about all it did.
+              </p>
+            </li>
+            <li class="px-panel">
+              <p class="px-label">Version 2 · Mimi's D&amp;D Character Builder</p>
+              <h3>Rolling with 5e and BG3</h3>
+              <p>
+                A rebuild around D&amp;D 5e and Baldur's Gate 3 rules: species
+                and sub-species, class selection and a character summary for
+                planning a level 1 hero. Built to be a trusty companion for
+                "our favourite dating sim / dress-up / role-playing game."
+              </p>
+            </li>
+            <li class="px-panel">
+              <p class="px-label">Version 3 · In progress</p>
+              <h3>The next chapter</h3>
+              <p>More notes from the road are on the way.</p>
+            </li>
+          </ol>
+
+          <article class="px-panel board-panel">
+            <p class="px-label">Inspiration board</p>
+            <!-- Swap each .pin-ph div for <img src="assets/dnd/your-image.webp" alt="..." /> -->
+            <ul class="board">
+              <li><div class="pin-ph"></div><span>BG3 character creator</span></li>
+              <li><div class="pin-ph"></div><span>Version 1 screenshot</span></li>
+              <li><div class="pin-ph"></div><span>Colour palette</span></li>
+              <li><div class="pin-ph"></div><span>Pixel art references</span></li>
+              <li><div class="pin-ph"></div><span>Character sheet layouts</span></li>
+              <li><div class="pin-ph"></div><span>Class &amp; species icons</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- 4 · level map -->
+      <section class="map-sec" id="roadmap" aria-labelledby="s4-title">
+        <div class="scene" aria-hidden="true">
+          <img src="assets/dnd/map-terrain.svg" alt="" data-depth="0.06" />
+        </div>
+        <div class="sec-body">
+          <article class="px-panel">
+            <p class="px-label">Chapter 04 · The Road Ahead</p>
+            <h2 id="s4-title">Quest map</h2>
+            <p>
+              Cleared levels earn their stars. Select any level to see what's on
+              it.
+            </p>
+          </article>
+
+          <div class="quest-map">
+            <svg viewBox="0 0 1200 700" role="group" aria-label="Project roadmap levels">
+              <path class="route done" d="M90 560 C40 470 60 400 110 340 S230 330 260 400 S250 560 300 590 S520 560 600 360" />
+              <path class="route todo" d="M600 360 C640 260 660 150 720 110 S860 130 900 190 S990 330 960 410 S860 520 880 590 S1030 640 1090 600 S1180 470 1150 400 S1160 260 1140 200 S1060 90 1020 70" />
+            </svg>
+            <ol class="nodes" id="nodes"></ol>
+            <div class="quest-info px-panel" id="quest-info" aria-live="polite"></div>
           </div>
         </div>
       </section>
-      <!-- Case study content goes here -->
-      <section class="page-content wrap" id="story">
-        <p class="label">COMING SOON</p>
-        <p>The full story of this project is being written.</p>
-        <div class="case-links">
-          <a href="projects.html">Explore other work ↗</a
-          ><a href="https://amimi-codes.github.io/DndCharacterCreation/"
-            >Try the character builder ↗</a
-          >
-        </div>
-      </section>
     </main>
+
     <footer class="footer wrap">
       <span>© <span id="year">2026</span> AMY CUI</span
-      ><span>DESIGNED TO KEEP MOVING</span><a href="#top">BACK TO TOP ↑</a>
+      ><span>ROLL FOR INITIATIVE</span><a href="#top">BACK TO TOP ↑</a>
     </footer>
   </body>
 </html>

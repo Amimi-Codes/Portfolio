@@ -1,0 +1,595 @@
+/* D&D Character Creation case study: pixel scenes + vertical parallax */
+.dnd-page {
+  --night: #0b0806;
+  --parch: #f4ead6;
+  --gold: #e8b45a;
+  --rim: #3a2414;
+  --blood: #b3261e;
+  background: var(--night);
+  color: var(--parch);
+}
+.dnd-page .footer {
+  color: #a08a6a;
+}
+html.intro-lock {
+  overflow: hidden;
+}
+
+/* ---------- intro ---------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  transition: opacity 1.2s ease;
+  /* failsafe if JS never runs */
+  animation: intro-failsafe 0.6s 12s forwards;
+}
+.intro.out {
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes intro-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+.intro-dice,
+.intro-result {
+  transition:
+    opacity 0.8s ease,
+    transform 0.5s ease;
+}
+.intro-dice {
+  position: absolute;
+  inset: 0;
+}
+.intro-result {
+  position: absolute;
+  inset: auto 0 16vh;
+  margin: 0;
+  text-align: center;
+  font: 1.4rem/1.4 "Press Start 2P", monospace;
+  color: var(--gold);
+  text-shadow: 0 0 18px #ff9a3a;
+  opacity: 0;
+  transform: scale(0.8);
+}
+.intro.nat20 .intro-result {
+  opacity: 1;
+  transform: none;
+}
+.intro.dark .intro-dice,
+.intro.dark .intro-result {
+  opacity: 0;
+}
+.intro-skip {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  background: none;
+  border: 0;
+  color: #8a7a66;
+  font: 0.6rem "Press Start 2P", monospace;
+  cursor: pointer;
+  padding: 0.8rem;
+}
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: var(--parch);
+}
+
+/* ---------- parallax scenes ---------- */
+.scene-sec,
+.map-sec {
+  position: relative;
+  overflow: clip;
+}
+.scene {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: -100vh;
+  overflow: hidden;
+}
+.scene img {
+  position: absolute;
+  left: 0;
+  top: -18%;
+  width: 100%;
+  height: 136%;
+  object-fit: cover;
+  object-position: center bottom;
+  will-change: transform;
+}
+.scene-sec + .scene-sec::before,
+.map-sec::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 30vh;
+  background: linear-gradient(var(--night), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+.sec-body {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2rem, 760px);
+  margin-inline: auto;
+  padding: 55vh 0 70vh;
+  display: grid;
+  gap: 22vh;
+}
+
+/* ---------- pixel UI ---------- */
+.px-panel {
+  margin: 4px;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  background: rgb(16 11 8 / 0.88);
+  box-shadow:
+    0 -4px var(--gold),
+    0 4px var(--gold),
+    -4px 0 var(--gold),
+    4px 0 var(--gold),
+    inset 0 0 0 4px var(--rim);
+  line-height: 1.7;
+}
+.px-panel > :last-child {
+  margin-bottom: 0;
+}
+.px-label {
+  margin: 0 0 1rem;
+  font: 0.6rem/1.8 "Press Start 2P", monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.px-small {
+  font: 0.55rem/1.8 "Press Start 2P", monospace;
+  color: #b8a68a;
+}
+.dnd-page h1,
+.dnd-page h2,
+.dnd-page h3 {
+  font-family: "Pixelify Sans", monospace;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+.dnd-page h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+.dnd-page h3 {
+  font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  color: #ffd99a;
+}
+.px-btn {
+  display: inline-block;
+  padding: 1.1rem 1.5rem;
+  font: clamp(0.65rem, 1.6vw, 0.85rem)/1.4 "Press Start 2P", monospace;
+  color: #fff3d6;
+  background: var(--blood);
+  box-shadow:
+    0 -4px #2a0805,
+    0 4px #2a0805,
+    -4px 0 #2a0805,
+    4px 0 #2a0805,
+    inset 0 -6px #7a140e,
+    inset 0 4px #e0513f,
+    0 10px 0 2px #0008;
+  transition: transform 0.1s steps(2);
+}
+.px-btn:hover {
+  transform: translateY(-3px);
+  background: #c83224;
+}
+.px-btn:active {
+  transform: translateY(2px);
+}
+.px-btn:focus-visible,
+.dnd-page :focus-visible {
+  outline: 3px dashed var(--gold);
+  outline-offset: 6px;
+}
+
+/* ---------- hero ---------- */
+.hero {
+  height: calc(100svh - 76px);
+  min-height: 520px;
+}
+.hero .scene {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  margin: 0;
+}
+.hero .scene img {
+  top: -30%; /* show the floor; hero only drifts upward */
+}
+.hero .scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 22%, #000b, transparent 70%),
+    radial-gradient(ellipse at 50% 60%, transparent 55%, #000a);
+}
+.hero-text,
+.hero-cta {
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 2;
+  width: min(100% - 2rem, 760px);
+  text-align: center;
+}
+.hero-text {
+  top: clamp(1.5rem, 7vh, 5rem);
+}
+.hero h1 {
+  font-size: clamp(2.6rem, 8vw, 5.5rem);
+  text-shadow: 5px 5px 0 #3a0a06;
+  margin-bottom: 1rem;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--gold);
+}
+.hero-deck {
+  max-width: 34rem;
+  margin: 0 auto;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  text-shadow: 0 2px 8px #000;
+}
+.hero-cta {
+  bottom: clamp(1.5rem, 8vh, 4.5rem);
+  display: grid;
+  justify-items: center;
+  gap: 1.4rem;
+}
+.scroll-hint {
+  font: 0.55rem "Press Start 2P", monospace;
+  color: var(--parch);
+  text-shadow: 0 2px 4px #000;
+}
+
+/* ---------- section 1 ---------- */
+.compare {
+  display: grid;
+  gap: 2rem;
+}
+@media (min-width: 760px) {
+  .compare {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.overload {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.overload li {
+  padding: 0.2rem 0.5rem;
+  background: #2a1d14;
+  border: 2px solid #5a3e28;
+  font-size: 0.85rem;
+  rotate: -3deg;
+}
+.overload li:nth-child(3n) {
+  rotate: 4deg;
+  font-size: 1rem;
+}
+.overload li:nth-child(4n) {
+  rotate: -6deg;
+  font-size: 0.75rem;
+}
+.overload li:nth-child(5n) {
+  rotate: 2deg;
+  color: #ff9a8a;
+}
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: s;
+  display: grid;
+  gap: 1rem;
+}
+.steps li {
+  counter-increment: s;
+  position: relative;
+  padding-left: 2.9rem;
+}
+.steps li::before {
+  content: counter(s);
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font: 0.7rem "Press Start 2P", monospace;
+  background: var(--blood);
+  color: #fff3d6;
+}
+
+/* ---------- section 2 ---------- */
+.construction {
+  text-align: center;
+}
+.sprite {
+  width: 192px;
+  height: auto;
+  margin: 0 auto 1rem;
+  display: block;
+}
+.px-progress {
+  height: 20px;
+  margin: 1.5rem auto 0.4rem;
+  max-width: 360px;
+  background: #1a1410;
+  box-shadow:
+    0 -3px #5a3e28,
+    0 3px #5a3e28,
+    -3px 0 #5a3e28,
+    3px 0 #5a3e28;
+}
+.px-progress span {
+  display: block;
+  height: 100%;
+  width: 20%;
+  background: repeating-linear-gradient(90deg, #6fcf4a 0 14px, #4a9a32 14px 18px);
+  animation: load 6s steps(12) infinite;
+}
+@keyframes load {
+  to {
+    width: 100%;
+  }
+}
+
+/* ---------- section 3 ---------- */
+.tales {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14vh;
+}
+.board {
+  list-style: none;
+  margin: 0;
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 1.5rem 1.25rem;
+  background:
+    radial-gradient(#0002 1px, transparent 1.5px) 0 0 / 6px 6px,
+    #8a6038;
+  box-shadow: inset 0 0 0 6px #5a3820;
+}
+.board li {
+  position: relative;
+  padding: 0.5rem 0.5rem 0.4rem;
+  background: #efe6d0;
+  color: #3a2a1c;
+  font-size: 0.85rem;
+  text-align: center;
+  rotate: -2deg;
+  box-shadow: 4px 4px 0 #0005;
+}
+.board li:nth-child(even) {
+  rotate: 2.5deg;
+}
+.board li:nth-child(3n) {
+  rotate: -1deg;
+}
+.board li::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: calc(50% - 5px);
+  width: 10px;
+  height: 10px;
+  background: var(--blood);
+  box-shadow: inset -2px -2px #6a0e08;
+}
+.board img,
+.pin-ph {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin-bottom: 0.4rem;
+}
+.pin-ph {
+  display: grid;
+  place-items: center;
+  background: repeating-linear-gradient(45deg, #d8ccb0 0 8px, #cfc2a4 8px 16px);
+}
+.pin-ph::after {
+  content: "+ image";
+  font: 0.5rem "Press Start 2P", monospace;
+  color: #8a7a5e;
+}
+
+/* ---------- section 4: quest map ---------- */
+.map-sec .scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(#0000 calc(100% - 1px), #0006 0) 0 0 / 80px 80px,
+    linear-gradient(90deg, #0000 calc(100% - 1px), #0006 0) 0 0 / 80px 80px,
+    radial-gradient(ellipse at center, #0000 40%, #000c),
+    linear-gradient(#0008, #0008);
+}
+.map-sec .sec-body {
+  width: min(100% - 2rem, 1200px);
+  padding-bottom: 30vh;
+  gap: 8vh;
+}
+.map-sec .sec-body > .px-panel {
+  max-width: 760px;
+  justify-self: center;
+}
+.quest-map {
+  position: relative;
+}
+.quest-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.route {
+  fill: none;
+  stroke-width: 6;
+  stroke-dasharray: 22 16;
+  stroke-linecap: square;
+}
+.route.done {
+  stroke: #b6e35a;
+}
+.route.todo {
+  stroke: #ffd5b8;
+  filter: drop-shadow(0 0 6px #ff5a2a);
+  animation: march 1.6s linear infinite;
+}
+@keyframes march {
+  to {
+    stroke-dashoffset: -38;
+  }
+}
+.nodes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  inset: 0;
+  aspect-ratio: 12 / 7;
+}
+.node {
+  position: absolute;
+  translate: -50% -50%;
+  display: grid;
+  justify-items: center;
+  --hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+.node button {
+  width: clamp(30px, 5vw, 62px);
+  aspect-ratio: 1 / 1.12;
+  border: 0;
+  padding: 0;
+  clip-path: var(--hex);
+  font: 700 clamp(0.8rem, 2vw, 1.5rem) "Pixelify Sans", monospace;
+  cursor: pointer;
+  background: #1c1c1e;
+  color: #a6a6a6;
+  transition: scale 0.15s;
+}
+.node {
+  filter: drop-shadow(0 0 2px #e8c9a0aa);
+}
+.node.done {
+  filter: drop-shadow(0 0 3px #ff9a5a);
+}
+.node.done button {
+  background: linear-gradient(#a01a2a, #6a0e18);
+  color: #fff1d0;
+}
+.node.current button {
+  width: clamp(40px, 7vw, 92px);
+  background: #fff;
+  color: #111;
+  font-size: clamp(1rem, 3vw, 2.2rem);
+}
+.node.current::before,
+.node.current::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  clip-path: var(--hex);
+  background: #ff7a3a55;
+  z-index: -1;
+  animation: pulse 2s ease-out infinite;
+}
+.node.current::after {
+  inset: -18%;
+  background: #ffb07a88;
+  animation-delay: 0.6s;
+}
+@keyframes pulse {
+  0% {
+    scale: 0.8;
+    opacity: 1;
+  }
+  100% {
+    scale: 1.25;
+    opacity: 0;
+  }
+}
+.node.boss button {
+  background: #2a0e0e;
+  color: #ff8a6a;
+}
+.node button:hover,
+.node button[aria-pressed="true"] {
+  scale: 1.15;
+}
+.stars {
+  position: absolute;
+  bottom: 100%;
+  color: #ffd25a;
+  font-size: clamp(0.6rem, 1.4vw, 1rem);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  text-shadow: 0 0 4px #ff7a1a;
+}
+.quest-info {
+  margin-top: 2rem;
+}
+.quest-info h3 {
+  margin-bottom: 0.4rem;
+}
+.quest-info p {
+  margin: 0 0 0.5rem;
+}
+.status-done {
+  color: #b6e35a;
+}
+.status-current {
+  color: #ffb07a;
+}
+@media (min-width: 900px) {
+  .quest-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 340px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .sec-body {
+    padding: 40vh 0 50vh;
+    gap: 14vh;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route.todo,
+  .node.current::before,
+  .node.current::after,
+  .px-progress span {
+    animation: none;
+  }
+  .px-progress span {
+    width: 60%;
+  }
+}
