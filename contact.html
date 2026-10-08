@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Contact — Amy Cui</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles.css?v=8" />
+    <script src="script.js?v=8" defer></script>
   </head>
   <body>
     <header class="site-nav">
@@ -29,11 +29,22 @@
           <p class="label">SAY HELLO</p>
           <h2>Find me<br />where ideas<br />drift</h2>
           <div class="resume-flight" aria-label="Resume">
-            <a class="resume-airplane" href="resume.html" target="_blank" rel="noopener" aria-label="Open Amy Cui's resume" title="Open resume">
+            <a class="resume-airplane" href="assets/resume.pdf" aria-haspopup="dialog" aria-label="Open Amy Cui's resume" title="Open resume">
               <img class="resume-plane-svg" src="assets/resume-plane.svg" alt="" aria-hidden="true" />
             </a>
             <span class="resume-flight-hint">Catch my resume ↗</span>
           </div>
+          <dialog class="resume-dialog" aria-label="Amy Cui resume">
+            <div class="resume-dialog-bar">
+              <strong>Resume</strong>
+              <a href="assets/resume.pdf" download="Amy-Cui-Resume.pdf">Download PDF ↓</a>
+              <form method="dialog"><button type="submit" aria-label="Close resume">✕</button></form>
+            </div>
+            <div class="resume-pages">
+              <img src="assets/resume-1.webp" width="1360" height="1760" loading="lazy" alt="Amy Cui resume, page 1" />
+              <img src="assets/resume-2.webp" width="1360" height="1760" loading="lazy" alt="Amy Cui resume, page 2" />
+            </div>
+          </dialog>
         </div>
         <div>
           <div class="contact-list">

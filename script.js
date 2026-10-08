@@ -209,9 +209,7 @@ const storybook = document.querySelector("[data-storybook]");
 if (storybook) {
   const book = storybook.querySelector(".pixel-book"),
     carousel = storybook.querySelector(".book-carousel"),
-    popup = storybook.querySelector(".book-popup"),
-    status = storybook.querySelector(".book-pagination"),
-    total = carousel.children.length;
+    popup = storybook.querySelector(".book-popup");
   // original book size: up to 37rem (592px) / 55vw tall, never wider than the space between the arrows
   const fit = () => {
     const pad = parseFloat(getComputedStyle(storybook).paddingLeft) * 2;
@@ -228,7 +226,6 @@ if (storybook) {
       const next = Math.round(carousel.scrollLeft / carousel.clientWidth);
       if (next === current) return;
       current = next;
-      status.textContent = String(current + 1).padStart(2, "0") + " / " + String(total).padStart(2, "0");
       // the phones pop out of the HabitU page again each time it comes back
       if (current === 0 && !reducedMotion) {
         popup.classList.remove("is-revealing");
@@ -246,6 +243,12 @@ if (storybook) {
 const scrapbook=document.querySelector(".scrapbook");if(scrapbook&&!reducedMotion){const memories=[...scrapbook.querySelectorAll(".scrap-memory")];const tilt=()=>{const y=scrollY;memories.forEach((memory,index)=>memory.style.setProperty("--scrap-y",((y*.012+index*3)%8-4)+"px"));requestAnimationFrame(tilt)};tilt()}
 
 const resumeAirplane=document.querySelector(".resume-airplane");
-if(resumeAirplane){
-  resumeAirplane.addEventListener("click",()=>resumeAirplane.classList.add("is-launched"));
+const resumeDialog=document.querySelector(".resume-dialog");
+if(resumeAirplane&&resumeDialog){
+  resumeAirplane.addEventListener("click",e=>{
+    e.preventDefault();
+    resumeDialog.showModal();
+  });
+  // click on the dimmed backdrop closes it
+  resumeDialog.addEventListener("click",e=>{if(e.target===resumeDialog)resumeDialog.close()});
 }
