@@ -188,11 +188,13 @@ if (heroJelly) {
 }
 const wordCycle = document.querySelector(".word-cycle");
 if (wordCycle) {
-  const words = [...wordCycle.querySelectorAll("em")];
+  const words = [...wordCycle.querySelectorAll("em")],
+    article = document.querySelector(".word-article");
   let i = 0;
   // the box hugs the current word so "with" sits right after it
   const show = () => {
     wordCycle.style.setProperty("--i", i);
+    article.textContent = words[i].dataset.article || "A"; // "An artist"
     wordCycle.style.width = words[i].offsetWidth + "px";
   };
   document.fonts.ready.then(show);
