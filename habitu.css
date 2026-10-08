@@ -271,7 +271,7 @@
   transform: translate(-50%, -50%) rotate(35deg);
 }
 .story-stage[data-active="insight"] .stage-waves i {
-  width: 120%;
+  width: 95%;
   opacity: 0.25;
 }
 .story-stage[data-active="design"] .stage-waves i {
@@ -910,9 +910,6 @@
 .stage-insight {
   inset: 0;
 }
-.story-stage[data-active="insight"] .stage-insight {
-  pointer-events: auto;
-}
 .survey-chart {
   position: absolute;
   inset: 0;
@@ -928,9 +925,6 @@
 .chart-scene canvas {
   display: block;
 }
-.chart-labels {
-  pointer-events: none;
-}
 .chart-lines {
   pointer-events: none;
   overflow: visible;
@@ -940,13 +934,9 @@
   stroke: #d8f7ec;
   stroke-width: 1;
   opacity: 0.55;
-  transition: opacity 0.3s;
 }
 .chart-lines circle {
   fill: #d8f7ec;
-}
-.chart-lines .is-hot {
-  opacity: 1;
 }
 .chart-title {
   position: absolute;
@@ -973,19 +963,10 @@
   color: #eef5ff;
   white-space: nowrap;
   opacity: 0;
-  pointer-events: auto;
-  transition:
-    opacity 0.45s,
-    border-color 0.25s,
-    background 0.25s;
-  cursor: default;
+  transition: opacity 0.45s;
 }
 .chart-label.is-on {
   opacity: 1;
-}
-.chart-label.is-hot {
-  border-color: var(--c);
-  background: #0a3340f0;
 }
 .chart-label i {
   width: 8px;
@@ -1036,7 +1017,7 @@
 /* THE MAKING — parallax artifact gallery (after Codrops' infinite scroll gallery) */
 .artifacts {
   padding: 8rem 0 14vh;
-  overflow: hidden;
+  overflow-x: clip; /* not hidden: that would break the sticky morph pin */
 }
 .artifacts-head {
   display: grid;
@@ -1092,7 +1073,7 @@
   outline: 2px solid #267987;
   outline-offset: 4px;
 }
-.gallery-slide figcaption {
+.artifacts figcaption {
   margin-top: 0.75rem;
   font: 600 0.72rem "DM Sans", sans-serif;
   letter-spacing: 0.08em;
@@ -1113,8 +1094,48 @@
 .gallery.is-live .is-in figcaption .char {
   opacity: 1;
 }
-.gallery-slide.is-open .gallery-frame {
+.artifacts .is-open .gallery-frame {
   visibility: hidden;
+}
+
+/* First draft → three style tiles, scrubbed by scroll while pinned */
+.morph {
+  position: relative;
+  height: 260vh;
+  margin-top: 6vh;
+}
+.morph-pin {
+  position: sticky;
+  top: 76px;
+  height: calc(100svh - 76px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.morph-draft,
+.morph-row {
+  grid-area: 1 / 1;
+}
+.morph-draft,
+.morph-tile {
+  margin: 0;
+  will-change: transform, opacity;
+}
+.morph-draft {
+  width: min(26vw, 340px, (100svh - 220px) * 0.75);
+}
+.morph-row {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(0.8rem, 2vw, 2rem);
+  width: min(100vw - 6rem, 1420px);
+}
+.morph-tile {
+  flex: 1;
+  min-width: 0;
+}
+.morph .gallery-frame img {
+  transform: none;
 }
 
 /* Fullscreen detail view the clicked image morphs into */
@@ -1207,6 +1228,18 @@ html:has(.artifact-view[open]) {
   }
   .gallery {
     gap: 9vh;
+  }
+  .morph {
+    height: 200vh;
+  }
+  .morph-draft {
+    width: min(58vw, (100svh - 200px) * 0.75);
+  }
+  .morph-row {
+    width: calc(100vw - 2rem);
+  }
+  .morph-tile figcaption {
+    font-size: 0.5rem;
   }
   .gallery-slide {
     width: calc(var(--img-w) * 2.2);

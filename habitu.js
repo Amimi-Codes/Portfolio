@@ -83,11 +83,11 @@ if (gallery) {
     return `translate(${a.left - b.left}px,${a.top - b.top}px) scale(${a.width / b.width},${a.height / b.height})`;
   };
 
-  const open = async (slide) => {
+  const open = async (frame) => {
     if (busy || view.open) return;
     busy = true;
-    active = slide;
-    const { frame, img } = slide;
+    active = frame;
+    const img = frame.querySelector("img");
     viewImg.src = img.currentSrc || img.src;
     viewImg.alt = img.alt;
     view.querySelector(".artifact-index").textContent = `${frame.dataset.index} / 07`;
@@ -95,7 +95,7 @@ if (gallery) {
     view.querySelector(".artifact-desc").textContent = frame.dataset.desc;
     await viewImg.decode().catch(() => {});
     view.showModal();
-    slide.el.classList.add("is-open");
+    frame.parentElement.classList.add("is-open");
     if (!reducedMotion) {
       viewImg.animate([{ transform: flipFrom(frame) }, { transform: "none" }], { duration: 900, easing: ease });
       viewBg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out" });
@@ -113,7 +113,7 @@ if (gallery) {
     if (!reducedMotion) {
       viewText.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" });
       viewBg.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, delay: 200, fill: "forwards" });
-      await viewImg.animate([{ transform: "none" }, { transform: flipFrom(active.frame) }], {
+      await viewImg.animate([{ transform: "none" }, { transform: flipFrom(active) }], {
         duration: 850,
         easing: ease,
         fill: "forwards",
@@ -121,12 +121,12 @@ if (gallery) {
     }
     view.close();
     view.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-    active.el.classList.remove("is-open");
-    active.frame.focus({ preventScroll: true });
+    active.parentElement.classList.remove("is-open");
+    active.focus({ preventScroll: true });
     busy = false;
   };
 
-  slides.forEach((s) => s.frame.addEventListener("click", () => open(s)));
+  document.querySelectorAll(".artifacts .gallery-frame").forEach((f) => f.addEventListener("click", () => open(f)));
   view.querySelector(".artifact-back").addEventListener("click", close);
   view.addEventListener("cancel", (e) => {
     e.preventDefault(); // play the morph back instead of snapping shut on Escape
@@ -134,7 +134,37 @@ if (gallery) {
   });
 }
 
-/* ---------- 04 / UNDERSTAND: animated 3D survey pie ---------- */
+/* ---------- The making: the first draft turns into the three style tiles on scroll ---------- */
+const morph = document.querySelector(".morph");
+if (morph) {
+  const pin = morph.querySelector(".morph-pin"),
+    draft = morph.querySelector(".morph-draft"),
+    tiles = [...morph.querySelectorAll(".morph-tile")];
+  const clamp = (v) => Math.min(1, Math.max(0, v)), smooth = (t) => t * t * (3 - 2 * t);
+  const update = () => {
+    const r = morph.getBoundingClientRect();
+    const p = clamp((parseFloat(getComputedStyle(pin).top) - r.top) / (r.height - pin.offsetHeight));
+    const centre = (el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2];
+    const [dx, dy] = centre(draft);
+    const out = smooth(clamp(p / 0.55));
+    draft.style.transform = `scale(${1 - 0.4 * out})`;
+    draft.style.opacity = 1 - out;
+    tiles.forEach((tile, i) => {
+      // each tile starts stacked inside the draft and slides out to its slot in the row
+      const e = smooth(clamp((p - 0.12 - i * 0.08) / 0.6));
+      const [tx, ty] = centre(tile), s0 = (draft.offsetHeight * 0.55) / tile.offsetHeight;
+      tile.style.transform = `translate(${(dx - tx) * (1 - e)}px,${(dy - ty) * (1 - e)}px) scale(${s0 + (1 - s0) * e})`;
+      tile.style.opacity = clamp(e * 3);
+      tile.style.pointerEvents = e > 0.9 ? "" : "none";
+    });
+    draft.style.pointerEvents = out < 0.1 ? "" : "none";
+  };
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update);
+  update();
+}
+
+/* ---------- 04 / UNDERSTAND: 3D survey pie, slices drop in when the section is reached ---------- */
 const chart = document.querySelector(".survey-chart");
 if (chart) {
   // Screening survey: which goals students track
@@ -226,24 +256,12 @@ if (chart) {
       labelsHost.append(label);
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path"),
         dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      path.setAttribute("fill", "none"); // never filled, even if the stylesheet is stale
       dot.setAttribute("r", 2.5);
       lines.append(path, dot);
-      label.addEventListener("pointerenter", () => (hovered = i));
-      label.addEventListener("pointerleave", () => (hovered = -1));
-      return { mesh, anchor, label, path, dot, mid, lift: 0, grow: 0 };
+      mesh.position.set(Math.cos(mid) * 0.04, 0, -Math.sin(mid) * 0.04); // hairline gap between slices
+      return { mesh, anchor, label, path, dot };
     });
-
-    // Hover a slice (or its label) to pull it out of the pie
-    let hovered = -1;
-    const ray = new THREE.Raycaster(), pointer = new THREE.Vector2();
-    host.addEventListener("pointermove", (e) => {
-      const r = host.getBoundingClientRect();
-      pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
-      ray.setFromCamera(pointer, camera);
-      const hit = ray.intersectObjects(slices.map((s) => s.mesh))[0];
-      hovered = hit ? hit.object.userData.index : -1;
-    });
-    host.addEventListener("pointerleave", () => (hovered = -1));
 
     let w = 0, h = 0, compact = false;
     const v = new THREE.Vector3();
@@ -273,10 +291,12 @@ if (chart) {
       }
       lines.setAttribute("viewBox", `0 0 ${w} ${h}`);
     };
-    new ResizeObserver(resize).observe(host);
+    new ResizeObserver(() => {
+      resize();
+      draw(performance.now());
+    }).observe(host);
     resize();
 
-    const easeOutBack = (t) => 1 + 2.2 * (t - 1) ** 3 + 1.2 * (t - 1) ** 2;
 
     const placeLabels = () => {
       const c = toScreen(centre), rx = pieRadiusPx(), gap = compact ? 10 : 22;
@@ -301,40 +321,41 @@ if (chart) {
       }
     };
 
-    let shownAt = -1, last = performance.now(), spin = 0;
-    const frame = (now) => {
-      requestAnimationFrame(frame);
-      const dt = Math.min(now - last, 50) / 1000;
-      last = now;
-      const visible = stage.dataset.active === "insight";
-      if (!visible) {
-        if (shownAt >= 0) {
-          // reset so the build-in replays next time
-          shownAt = -1;
-          slices.forEach((s) => s.label.classList.remove("is-on"));
-        }
-        return;
-      }
-      if (shownAt < 0) shownAt = now;
-      const t = (now - shownAt) / 1000;
-      if (!reducedMotion && hovered < 0) spin += dt * 0.18;
-      pie.rotation.y = reducedMotion ? 0.4 : -0.9 * Math.max(0, 1 - t / 1.6) ** 3 + 0.4 + spin;
-
+    // fixed angle that spreads the labels evenly either side
+    pie.rotation.y = 0.4;
+    const DROP = 4, FALL = 0.75, STAGGER = 0.12;
+    const bounce = (t) => (t < 0.73 ? Math.min(1, 1.9 * t * t) : 1 - 0.12 * Math.sin(((t - 0.73) / 0.27) * Math.PI) * (1 - t) * 3.7);
+    let startedAt = -1, raf = 0;
+    const draw = (now) => {
+      const t = startedAt < 0 ? 0 : reducedMotion ? 99 : (now - startedAt) / 1000;
       slices.forEach((s, i) => {
-        const g = reducedMotion ? 1 : Math.min(1, Math.max(0, (t - 0.15 - i * 0.12) / 0.9));
-        s.grow = g === 1 ? 1 : easeOutBack(g);
-        s.lift += ((hovered === i ? 1 : 0) - s.lift) * 0.15;
-        s.mesh.scale.y = Math.max(0.001, s.grow);
-        s.mesh.position.set(Math.cos(s.mid) * (0.04 + s.lift * 0.22), s.lift * 0.12, -Math.sin(s.mid) * (0.04 + s.lift * 0.22));
-        const hot = hovered === i;
-        s.label.classList.toggle("is-hot", hot);
-        s.path.classList.toggle("is-hot", hot);
-        s.label.classList.toggle("is-on", g > 0.6);
-        s.path.style.opacity = s.dot.style.opacity = g > 0.6 ? "" : 0;
+        const k = startedAt < 0 ? 0 : Math.min(1, Math.max(0, (t - i * STAGGER) / FALL));
+        s.mesh.position.y = DROP * (1 - bounce(k));
+        s.mesh.visible = k > 0;
+        const on = k === 1;
+        s.label.classList.toggle("is-on", on);
+        s.path.style.opacity = s.dot.style.opacity = on ? "" : 0;
       });
       renderer.render(scene, camera);
       placeLabels();
+      return t < (slices.length - 1) * STAGGER + FALL;
     };
-    requestAnimationFrame(frame);
+    const loop = () => (raf = draw(performance.now()) ? requestAnimationFrame(loop) : 0);
+    const sync = () => {
+      const visible = stage.dataset.active === "insight";
+      if (visible && startedAt < 0) {
+        startedAt = performance.now();
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(loop);
+      } else if (!visible && startedAt >= 0) {
+        // reset so the drop replays on the next visit
+        startedAt = -1;
+        cancelAnimationFrame(raf);
+        draw(0);
+      }
+    };
+    new MutationObserver(sync).observe(stage, { attributes: true, attributeFilter: ["data-active"] });
+    draw(0);
+    sync();
   }
 }
