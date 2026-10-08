@@ -13,6 +13,15 @@
     <link rel="stylesheet" href="habitu.css" />
     <link rel="stylesheet" href="case-refresh.css" />
     <script src="script.js?v=9" defer></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="habitu.js"></script>
   </head>
   <body class="case-page">
     <a class="skip-link" href="#story">Skip to story</a>
@@ -114,6 +123,12 @@
               methods, and fewer disconnected tools. The design direction needed
               to encourage progress without turning a missed day into failure.
             </p>
+            <p class="sr-only">
+              Screening survey, what students track: health and fitness goals
+              28.6%, academic improvement 19%, personal development 14.3%,
+              reducing anxiety or stress 14.3%, time management 9.5%, and 14.3%
+              do not track habits.
+            </p>
           </article>
           <article class="story-step" data-scene="design">
             <span class="case-index">05 / MAKE</span>
@@ -157,20 +172,11 @@
                 ><span>PRIORITIES</span>
               </div>
               <div class="stage-insight">
-                <div class="insight-phone">
-                  <div class="phone-speaker"></div>
-                  <div class="phone-screen">
-                    <small>TODAY</small
-                    ><strong>One small step<br /><em>still counts.</em></strong>
-                    <div class="progress-ring"><b>62%</b></div>
-                    <span>Progress, without the pressure.</span>
-                  </div>
-                </div>
-                <div class="insight-copy">
-                  <b>GENTLE<br />PROGRESS</b
-                  ><span
-                    >Flexible goals · forgiving resets · calm feedback</span
-                  >
+                <div class="survey-chart">
+                  <span class="chart-title">SCREENING SURVEY · WHAT STUDENTS TRACK</span>
+                  <div class="chart-scene"></div>
+                  <svg class="chart-lines"></svg>
+                  <div class="chart-labels"></div>
                 </div>
               </div>
               <div class="stage-design">
@@ -185,9 +191,9 @@
                     <i></i><i></i><i></i><b>BUILDING THE FLOW</b>
                   </div>
                   <div class="style-tiles">
-                    <div>CALM<br /><span>seafoam</span></div>
-                    <div>FOCUS<br /><span>ocean blue</span></div>
-                    <div>GROW<br /><span>soft coral</span></div>
+                    <div>FOCUSED<br />MINIMALISM<br /><span>sand · sage · rust</span></div>
+                    <div>GAMIFIED<br />ADVENTURE<br /><span>navy · copper · wine</span></div>
+                    <div>CYBER<br />TRACKING<br /><span>charcoal · teal · cyan</span></div>
                   </div>
                 </div>
                 <span>SKETCH → FLOW → STYLE EXPLORATION</span>
@@ -206,6 +212,67 @@
           </div>
         </div>
       </section>
+      <section class="artifacts" aria-labelledby="artifacts-title">
+        <div class="wrap artifacts-head">
+          <p class="label">THE MAKING / ARTIFACTS</p>
+          <h2 id="artifacts-title">From wireframe<br /><em>to final screens.</em></h2>
+          <p>Select any piece to see it up close.</p>
+        </div>
+        <div class="gallery">
+          <figure class="gallery-slide" style="--stagger: -20vw; --img-w: min(22vw, 330px)">
+            <button class="gallery-frame" type="button" data-index="01" data-title="First digital wireframe" data-desc="Six low fidelity screens (home, community, milestones, rewards shop, progress tracker and goal creation) mapped the core flow before any visual style was applied.">
+              <img src="assets/HabitU%20Assets/digital-wireframe-1.jpg" alt="Grayscale wireframe of six HabitU screens: home, social friends, milestones, shop catalogue, September progress and new habit" width="585" height="782" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>01 · First digital wireframe</figcaption>
+          </figure>
+          <figure class="gallery-slide" style="--stagger: 12vw; --img-w: min(46vw, 680px)">
+            <button class="gallery-frame" type="button" data-index="02" data-title="Style tile #1: Focused Minimalism" data-desc="Sansation type on warm sand and off white, with sage green and rust accents. It leans into the encouraging, rewarding side of gamification with a friendly, approachable feel.">
+              <img src="assets/HabitU%20Assets/style-tile-1-focused-minimalism.webp" alt="Style tile showing Sansation typography, a sand, sage and rust palette, navigation icons, buttons, form fields and two phone previews" width="2000" height="1611" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>02 · Style tile #1: Focused Minimalism</figcaption>
+          </figure>
+          <figure class="gallery-slide" style="--stagger: -14vw; --img-w: min(42vw, 620px)">
+            <button class="gallery-frame" type="button" data-index="03" data-title="Style tile #2: Gamified Adventure" data-desc="Exploration themed visuals and playful game mechanics: deep navy and wine with copper and violet accents, plus parchment and wood textures, so daily habits feel like an adventure.">
+              <img src="assets/HabitU%20Assets/style-tile-2-gamified-adventure.webp" alt="Style tile with dark navy and burgundy colours, copper accents, parchment textured inputs and two phone previews" width="2000" height="1575" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>03 · Style tile #2: Gamified Adventure</figcaption>
+          </figure>
+          <figure class="gallery-slide" style="--stagger: 16vw; --img-w: min(40vw, 600px)">
+            <button class="gallery-frame" type="button" data-index="04" data-title="Style tile #3: Futuristic Cybertracking" data-desc="A sleek, high contrast cyberpunk direction set in Orbitron, with cyan type on charcoal, teal and violet, built to encourage gamification and intrinsic motivation.">
+              <img src="assets/HabitU%20Assets/style-tile-3-futuristic-cybertracking.webp" alt="Style tile with Orbitron typography, charcoal, teal and violet colours, cyan text and two phone previews" width="2000" height="1575" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>04 · Style tile #3: Futuristic Cybertracking</figcaption>
+          </figure>
+          <figure class="gallery-slide" style="--stagger: -22vw; --img-w: min(26vw, 380px)">
+            <button class="gallery-frame" type="button" data-index="05" data-title="Home: today at a glance" data-desc="The final home screen pairs a streak and week strip with today’s progress and a goal list you can start, pause or check off.">
+              <img src="assets/HabitU%20Assets/habitu-phone-2.svg" alt="HabitU home screen with a 14 day streak, a week strip, today’s progress at 35% and a goals list" width="100" height="100" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>05 · Home: today at a glance</figcaption>
+          </figure>
+          <figure class="gallery-slide" style="--stagger: 18vw; --img-w: min(20vw, 300px)">
+            <button class="gallery-frame" type="button" data-index="06" data-title="Progress: the month in colour" data-desc="A calendar heat map shows completed and missed days alongside this week’s habits, so progress reads at a glance.">
+              <img src="assets/HabitU%20Assets/habitu-phone-1.svg" alt="HabitU progress screen with a September calendar heat map, completed and missed day counts and weekly habits" width="100" height="100" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>06 · Progress: the month in colour</figcaption>
+          </figure>
+          <figure class="gallery-slide" style="--stagger: -8vw; --img-w: min(24vw, 360px)">
+            <button class="gallery-frame" type="button" data-index="07" data-title="Create goal: flexible by design" data-desc="Goal creation asks for a name, habit, frequency, difficulty and an accountability partner, with options to pause tracking or stop a goal without penalty.">
+              <img src="assets/HabitU%20Assets/habitu-phone-3.svg" alt="HabitU create goal form with fields for goal name, habit, frequency, difficulty, flexibility and accountability partner" width="100" height="100" loading="lazy" decoding="async" />
+            </button>
+            <figcaption>07 · Create goal: flexible by design</figcaption>
+          </figure>
+        </div>
+        <dialog class="artifact-view" aria-labelledby="artifact-title">
+          <div class="artifact-view-bg"></div>
+          <img class="artifact-view-img" alt="" />
+          <div class="artifact-view-text">
+            <button class="artifact-back" type="button">← Back to the artifacts</button>
+            <span class="label artifact-index"></span>
+            <h2 id="artifact-title"></h2>
+            <p class="artifact-desc"></p>
+          </div>
+        </dialog>
+      </section>
       <section class="case-results">
         <div class="wrap">
           <div class="results-heading">
@@ -219,7 +286,7 @@
           </div>
           <figure class="results-image">
             <img
-              src="assets/habitu-mockup.jpg"
+              src="assets/HabitU%20Assets/habitu-mockup.jpg"
               alt="HabitU final interface mockups showing a progress calendar, goal planning, and goal creation"
               loading="lazy"
             />
