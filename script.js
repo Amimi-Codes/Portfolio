@@ -186,6 +186,19 @@ if (heroJelly) {
     })(0);
   }
 }
+const wordCycle = document.querySelector(".word-cycle");
+if (wordCycle) {
+  const words = [...wordCycle.querySelectorAll("em")];
+  let i = 0;
+  // the box hugs the current word so "with" sits right after it
+  const show = () => {
+    wordCycle.style.setProperty("--i", i);
+    wordCycle.style.width = words[i].offsetWidth + "px";
+  };
+  document.fonts.ready.then(show);
+  addEventListener("resize", show, { passive: true });
+  if (!reducedMotion) setInterval(() => ((i = (i + 1) % words.length), show()), 2600);
+}
 const scrollBook=document.querySelector("[data-storybook]");
 if(scrollBook){
   if(reducedMotion){

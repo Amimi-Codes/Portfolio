@@ -1185,3 +1185,13 @@ button {
 .resume-dialog-bar button:hover{background:#50a99f}
 .resume-pages{flex:1;overflow-y:auto;padding:1rem;display:grid;gap:1rem;background:#e9e2cf}
 .resume-pages img{display:block;width:100%;height:auto;background:#fff;box-shadow:0 4px 14px #173e4826}
+
+/* About title: "creator / artist / developer" slide in turn (script.js sets --i and the width) */
+.word-cycle{display:inline-block;vertical-align:-.22em;height:1.2em;overflow:hidden;transition:width .45s cubic-bezier(.3,.7,.3,1)}
+.word-cycle>span{display:grid;justify-items:start;transform:translateY(calc(var(--i, 0) * -1.2em));transition:transform .55s cubic-bezier(.5,1.4,.5,1)}
+.word-cycle em{display:block;width:max-content;line-height:1.2em}
+.about-section .word-cycle em:nth-child(2){color:#ffabf9}
+.about-section .word-cycle em:nth-child(3){color:#ffbf5f}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* keep "A developer with" on one line on narrow screens so the cycle never reflows */
+.about-section h2{font-size:min(clamp(3.4rem,6.8vw,7.2rem),11.4vw)}
