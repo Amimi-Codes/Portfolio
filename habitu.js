@@ -1,78 +1,57 @@
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* ---------- Artifact gallery: per-slide parallax, reveals, image-to-detail morph ---------- */
-const gallery = document.querySelector(".gallery");
-if (gallery) {
-  // >1 travels faster than the page, <1 slower, like the Codrops gallery
-  const speeds = [1.18, 0.86, 1.12, 0.82, 1.2, 0.88, 1.1];
-  const slides = [...gallery.querySelectorAll(".gallery-slide")].map((el, i) => ({
-    el,
-    frame: el.querySelector(".gallery-frame"),
-    img: el.querySelector("img"),
-    factor: speeds[i % speeds.length] - 1,
-    y: 0,
-  }));
-
-  // Split captions into characters for the type-on reveal; screen readers get the plain text
-  slides.forEach(({ el }) => {
-    const cap = el.querySelector("figcaption"), text = cap.textContent;
-    cap.textContent = "";
-    const plain = document.createElement("span"), chars = document.createElement("span");
-    plain.className = "sr-only";
-    plain.textContent = text;
-    chars.setAttribute("aria-hidden", "true");
-    [...text].forEach((c, i) => {
-      const s = document.createElement("span");
-      s.className = "char";
-      s.style.setProperty("--i", i);
-      s.textContent = c === " " ? " " : c;
-      chars.append(s);
+/* ---------- The making: the first draft splits open into the three style tiles on scroll ---------- */
+const morph = document.querySelector(".morph");
+if (morph) {
+  const pin = morph.querySelector(".morph-pin"),
+    draft = morph.querySelector(".morph-draft"),
+    draftCap = draft.querySelector("figcaption"),
+    shards = [...draft.querySelectorAll(".morph-shard")],
+    tiles = [...morph.querySelectorAll(".morph-tile")];
+  const clamp = (v) => Math.min(1, Math.max(0, v)),
+    smooth = (t) => t * t * (3 - 2 * t),
+    lerp = (a, b, t) => a + (b - a) * t;
+  // layout boxes relative to the pin (offsets ignore the transforms we set)
+  const box = (el) => {
+    let x = 0, y = 0;
+    for (let n = el; n && n !== pin; n = n.offsetParent) {
+      x += n.offsetLeft;
+      y += n.offsetTop;
+    }
+    return { x: x + el.offsetWidth / 2, y: y + el.offsetHeight / 2, w: el.offsetWidth, h: el.offsetHeight };
+  };
+  const update = () => {
+    const r = morph.getBoundingClientRect();
+    const p = clamp((parseFloat(getComputedStyle(pin).top) - r.top) / (r.height - pin.offsetHeight));
+    // 1) the draft splits along its columns and the three parts swing open
+    const open = smooth(clamp(p / 0.3));
+    const spread = draft.offsetWidth * 0.12;
+    draftCap.style.opacity = 1 - open;
+    shards.forEach((shard, i) => {
+      const tile = tiles[i], side = i - 1;
+      // 2) each part travels to its slot in the row and becomes that style tile
+      const e = smooth(clamp((p - 0.3 - i * 0.05) / 0.5));
+      const S = box(shard), T = box(tile);
+      const sx = S.x + side * spread * open, sy = S.y;
+      const tilt = side * 6 * open * (1 - e);
+      shard.style.transform = `translate(${side * spread * open + (T.x - sx) * e}px,${(T.y - sy) * e}px) rotate(${tilt}deg) scale(${lerp(1, T.w / S.w, e)},${lerp(1, T.h / S.h, e)})`;
+      shard.style.opacity = 1 - clamp(e * 2 - 0.6);
+      tile.style.transform = `translate(${(sx - T.x) * (1 - e)}px,${(sy - T.y) * (1 - e)}px) rotate(${tilt}deg) scale(${lerp(S.w / T.w, 1, e)},${lerp(S.h / T.h, 1, e)})`;
+      tile.style.opacity = clamp(e * 2 - 0.2);
+      tile.querySelector("figcaption").style.opacity = clamp((e - 0.85) / 0.15);
+      tile.style.pointerEvents = e > 0.95 ? "" : "none";
     });
-    cap.append(plain, chars);
-  });
+    draft.style.pointerEvents = open < 0.05 ? "" : "none";
+  };
+  addEventListener("scroll", update, { passive: true });
+  addEventListener("resize", update);
+  update();
+}
 
-  if (!reducedMotion) {
-    gallery.classList.add("is-live");
-    const reveal = new IntersectionObserver(
-      (entries) => {
-        entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-          .forEach((e, i) => {
-            e.target.style.setProperty("--delay", `${i * 0.12}s`);
-            e.target.classList.add("is-in");
-          });
-        // Reset slides that leave so the reveal replays on the next pass
-        entries.filter((e) => !e.isIntersecting).forEach((e) => e.target.classList.remove("is-in"));
-      },
-      { threshold: 0.12 },
-    );
-    slides.forEach(({ el }) => reveal.observe(el));
-
-    // Parallax only runs while the gallery is on screen
-    let running = false;
-    const tick = () => {
-      if (!running) return;
-      const mid = innerHeight / 2;
-      for (const s of slides) {
-        const r = s.el.getBoundingClientRect(); // the figure itself is never moved vertically
-        const d = r.top + r.height / 2 - mid;
-        s.y += (s.factor * d - s.y) * 0.09; // eased toward target for the scrubbed, inertial feel
-        s.frame.style.transform = `translate3d(0,${s.y.toFixed(2)}px,0)`;
-        s.img.style.transform = `translate3d(0,${((-d / innerHeight) * 2.5).toFixed(2)}%,0) scale(1.06)`;
-      }
-      requestAnimationFrame(tick);
-    };
-    new IntersectionObserver(([e]) => {
-      const was = running;
-      running = e.isIntersecting;
-      if (running && !was) requestAnimationFrame(tick);
-    }).observe(gallery);
-  }
-
-  // Detail view: the clicked image morphs (FLIP) into the fullscreen layout
-  const view = document.querySelector(".artifact-view"),
-    viewImg = view.querySelector(".artifact-view-img"),
+/* ---------- Detail view: a clicked artifact morphs (FLIP) into a fullscreen layout ---------- */
+const view = document.querySelector(".artifact-view");
+if (view) {
+  const viewImg = view.querySelector(".artifact-view-img"),
     viewBg = view.querySelector(".artifact-view-bg"),
     viewText = view.querySelector(".artifact-view-text");
   const ease = "cubic-bezier(0.7, 0, 0.2, 1)";
@@ -90,7 +69,7 @@ if (gallery) {
     const img = frame.querySelector("img");
     viewImg.src = img.currentSrc || img.src;
     viewImg.alt = img.alt;
-    view.querySelector(".artifact-index").textContent = `${frame.dataset.index} / 07`;
+    view.querySelector(".artifact-index").textContent = `${frame.dataset.index} / 04`;
     view.querySelector("h2").textContent = frame.dataset.title;
     view.querySelector(".artifact-desc").textContent = frame.dataset.desc;
     await viewImg.decode().catch(() => {});
@@ -132,36 +111,6 @@ if (gallery) {
     e.preventDefault(); // play the morph back instead of snapping shut on Escape
     close();
   });
-}
-
-/* ---------- The making: the first draft turns into the three style tiles on scroll ---------- */
-const morph = document.querySelector(".morph");
-if (morph) {
-  const pin = morph.querySelector(".morph-pin"),
-    draft = morph.querySelector(".morph-draft"),
-    tiles = [...morph.querySelectorAll(".morph-tile")];
-  const clamp = (v) => Math.min(1, Math.max(0, v)), smooth = (t) => t * t * (3 - 2 * t);
-  const update = () => {
-    const r = morph.getBoundingClientRect();
-    const p = clamp((parseFloat(getComputedStyle(pin).top) - r.top) / (r.height - pin.offsetHeight));
-    const centre = (el) => [el.offsetLeft + el.offsetWidth / 2, el.offsetTop + el.offsetHeight / 2];
-    const [dx, dy] = centre(draft);
-    const out = smooth(clamp(p / 0.55));
-    draft.style.transform = `scale(${1 - 0.4 * out})`;
-    draft.style.opacity = 1 - out;
-    tiles.forEach((tile, i) => {
-      // each tile starts stacked inside the draft and slides out to its slot in the row
-      const e = smooth(clamp((p - 0.12 - i * 0.08) / 0.6));
-      const [tx, ty] = centre(tile), s0 = (draft.offsetHeight * 0.55) / tile.offsetHeight;
-      tile.style.transform = `translate(${(dx - tx) * (1 - e)}px,${(dy - ty) * (1 - e)}px) scale(${s0 + (1 - s0) * e})`;
-      tile.style.opacity = clamp(e * 3);
-      tile.style.pointerEvents = e > 0.9 ? "" : "none";
-    });
-    draft.style.pointerEvents = out < 0.1 ? "" : "none";
-  };
-  addEventListener("scroll", update, { passive: true });
-  addEventListener("resize", update);
-  update();
 }
 
 /* ---------- 04 / UNDERSTAND: 3D survey pie, slices drop in when the section is reached ---------- */
@@ -218,7 +167,8 @@ if (chart) {
     const pie = new THREE.Group();
     scene.add(pie);
     const R = 2, total = data.reduce((t, d) => t + d.value, 0);
-    let start = Math.PI / 2;
+    // fixed layout: Health / Fitness starts at the right edge, the rest follow anticlockwise
+    let start = 0.08;
     const slices = data.map((d, i) => {
       const sweep = (d.value / total) * Math.PI * 2, mid = start + sweep / 2;
       const shape = new THREE.Shape();
@@ -321,8 +271,6 @@ if (chart) {
       }
     };
 
-    // fixed angle that spreads the labels evenly either side
-    pie.rotation.y = 0.4;
     const DROP = 4, FALL = 0.75, STAGGER = 0.12;
     const bounce = (t) => (t < 0.73 ? Math.min(1, 1.9 * t * t) : 1 - 0.12 * Math.sin(((t - 0.73) / 0.27) * Math.PI) * (1 - t) * 3.7);
     let startedAt = -1, raf = 0;
