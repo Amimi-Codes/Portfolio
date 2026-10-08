@@ -1098,14 +1098,15 @@ button {
   .page-container{animation:stay-centered linear both;animation-timeline:view(x)}
 }
 @keyframes sprite-frame{to{--sprite-fs:var(--sprite-fe)}}
-/* keep the spread still while the sprite turns the page, fading the old spread out and the new one in */
+/* keep the spread still while the sprite turns the page, fading the old spread out and the new one in.
+   Faded-out spreads overlap the visible one, so they are hidden too, or they would catch its clicks. */
 @keyframes stay-centered{
-  entry 0%{opacity:0;translate:-100%}
-  entry 75%{opacity:0;translate:-25%}
-  entry 100%{opacity:1;translate:0%}
-  exit 0%{opacity:1;translate:0%}
-  exit 50%{opacity:0;translate:50%}
-  exit 100%{opacity:0;translate:100%}
+  entry 0%{opacity:0;translate:-100%;visibility:hidden}
+  entry 75%{opacity:0;translate:-25%;visibility:hidden}
+  entry 100%{opacity:1;translate:0%;visibility:visible}
+  exit 0%{opacity:1;translate:0%;visibility:visible}
+  exit 50%{opacity:0;translate:50%;visibility:hidden}
+  exit 100%{opacity:0;translate:100%;visibility:hidden}
 }
 
 /* Opening: the closed book sits on the right; its cover and pages swing over to the left */
