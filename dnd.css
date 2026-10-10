@@ -1,4 +1,16 @@
-/* D&D Character Creation case study: pixel scenes + vertical parallax */
+/* Origin (D&D character creation) case study: pixel scenes + vertical parallax */
+@font-face {
+  font-family: "PixelPurl";
+  src: url("assets/fonts/PixelPurl.ttf") format("truetype");
+  font-display: swap;
+}
+/* Personal-use licence, see assets/fonts/WindrawAesthetic-LICENSE.txt.
+   Glyphs: letters, digits, comma, period only. */
+@font-face {
+  font-family: "Windraw Aesthetic";
+  src: url("assets/fonts/WindrawAesthetic-Italic.ttf") format("truetype");
+  font-display: swap;
+}
 .dnd-page {
   --night: #0b0806;
   --parch: #f4ead6;
@@ -153,8 +165,9 @@ html.intro-lock {
 .dnd-page h1,
 .dnd-page h2,
 .dnd-page h3 {
-  font-family: "Pixelify Sans", monospace;
-  font-weight: 700;
+  font-family: "PixelPurl", "Pixelify Sans", monospace;
+  font-weight: 400; /* PixelPurl has one weight; faux bold smears the pixels */
+  font-synthesis: none;
   line-height: 1.1;
   margin: 0 0 1rem;
 }
@@ -229,9 +242,16 @@ html.intro-lock {
   top: clamp(1.5rem, 7vh, 5rem);
 }
 .hero h1 {
-  font-size: clamp(2.6rem, 8vw, 5.5rem);
-  text-shadow: 5px 5px 0 #3a0a06;
-  margin-bottom: 1rem;
+  font-size: clamp(4rem, 13vw, 9rem);
+  letter-spacing: 0.04em;
+  text-shadow: 6px 6px 0 #3a0a06;
+  margin-bottom: 0;
+}
+.hero-tag {
+  margin: -0.4rem 0 1.2rem;
+  font: clamp(1.6rem, 4vw, 2.6rem) / 1.2 "Windraw Aesthetic", cursive;
+  color: var(--gold);
+  text-shadow: 0 2px 10px #000;
 }
 .hero h1 em {
   font-style: normal;
@@ -268,10 +288,38 @@ html.intro-lock {
 .overload {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0.6rem;
+  min-height: 15rem;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap-reverse;
+  align-content: flex-start;
   gap: 0.4rem;
+  /* open-top crate */
+  border: 4px solid #6a4428;
+  border-top: 0;
+  background: #1a120c;
+}
+.overload.drop li {
+  animation: fall 0.9s cubic-bezier(0.5, 0, 0.75, 0) backwards;
+  animation-delay: calc(var(--i) * 0.14s);
+}
+@keyframes fall {
+  0% {
+    transform: translateY(-70vh) rotate(-20deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  75% {
+    transform: none;
+  }
+  85% {
+    transform: translateY(-10px);
+  }
+}
+html.js-fall .overload:not(.drop) li {
+  visibility: hidden;
 }
 .overload li {
   padding: 0.2rem 0.5rem;
@@ -320,37 +368,85 @@ html.intro-lock {
 }
 
 /* ---------- section 2 ---------- */
-.construction {
-  text-align: center;
+#research .sec-body {
+  gap: 14vh;
 }
-.sprite {
-  width: 192px;
-  height: auto;
-  margin: 0 auto 1rem;
+.stat-row {
+  list-style: none;
+  margin: 1.5rem 0 1rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.stat-row strong {
   display: block;
+  font: 2rem/1.1 "PixelPurl", "Pixelify Sans", monospace;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
 }
-.px-progress {
-  height: 20px;
-  margin: 1.5rem auto 0.4rem;
-  max-width: 360px;
-  background: #1a1410;
+.bars {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.bars li {
+  display: grid;
+  grid-template-columns: minmax(9rem, 14rem) 1fr;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.9rem;
+}
+.bars b {
+  width: calc(var(--v) / 4 * 100%);
+  min-width: 1.4rem;
+  padding: 0.15rem 0.4rem;
+  font: 0.6rem "Press Start 2P", monospace;
+  color: #2a1d14;
+  background: var(--gold);
+  text-align: right;
+}
+.bars li[style="--v: 0"] b {
+  background: none;
+  color: #8a7a66;
+  text-align: left;
+}
+.px-quote {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1.1rem;
+  background: #efe6d0;
+  color: #2a1d14;
+  font-style: italic;
   box-shadow:
-    0 -3px #5a3e28,
-    0 3px #5a3e28,
-    -3px 0 #5a3e28,
-    3px 0 #5a3e28;
+    0 -3px #efe6d0,
+    0 3px #efe6d0,
+    -3px 0 #efe6d0,
+    3px 0 #efe6d0;
 }
-.px-progress span {
-  display: block;
-  height: 100%;
-  width: 20%;
-  background: repeating-linear-gradient(90deg, #6fcf4a 0 14px, #4a9a32 14px 18px);
-  animation: load 6s steps(12) infinite;
+.loot {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.9rem;
 }
-@keyframes load {
-  to {
-    width: 100%;
-  }
+.loot li {
+  padding-left: 1.6rem;
+  position: relative;
+}
+.loot li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+  box-shadow: inset -3px -3px #a8762e;
 }
 
 /* ---------- section 3 ---------- */
@@ -487,7 +583,7 @@ html.intro-lock {
   border: 0;
   padding: 0;
   clip-path: var(--hex);
-  font: 700 clamp(0.8rem, 2vw, 1.5rem) "Pixelify Sans", monospace;
+  font: clamp(0.8rem, 2vw, 1.5rem) "PixelPurl", "Pixelify Sans", monospace;
   cursor: pointer;
   background: #1c1c1e;
   color: #a6a6a6;
@@ -585,11 +681,7 @@ html.intro-lock {
 @media (prefers-reduced-motion: reduce) {
   .route.todo,
   .node.current::before,
-  .node.current::after,
-  .px-progress span {
+  .node.current::after {
     animation: none;
-  }
-  .px-progress span {
-    width: 60%;
   }
 }

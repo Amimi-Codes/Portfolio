@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#0b0806" />
     <meta
       name="description"
-      content="D&amp;D Character Creation, an interactive web case study by Amy Cui."
+      content="Origin, a D&amp;D character creation tool. An interactive web case study by Amy Cui."
     />
-    <title>D&amp;D Character Creation — Case study by Amy Cui</title>
+    <title>Origin: D&amp;D Character Creation — Case study by Amy Cui</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       rel="stylesheet"
@@ -55,8 +55,9 @@
           <img src="assets/dnd/tavern-back.svg" alt="" data-depth="0.05" />
           <img src="assets/dnd/tavern-front.svg" alt="" data-depth="0.16" />
         </div>
-        <div class="hero-text">          
-          <h1>Character<br /><em>Creation</em></h1>
+        <div class="hero-text">
+          <h1>Origin</h1>
+          <p class="hero-tag">a character creation tool</p>
           <p class="hero-deck">
             A D&amp;D character builder that turns a rulebook's worth of choices
             into an adventure you actually want to start.
@@ -149,21 +150,100 @@
           <img src="assets/dnd/forest-front.svg" alt="" data-depth="0.36" />
         </div>
         <div class="sec-body">
-          <article class="px-panel construction">
-            <img
-              class="sprite"
-              src="assets/dnd/under-construction.svg"
-              alt="Pixel construction barrier with a traffic cone and hammer"
-              width="192"
-              height="144"
-            />
+          <article class="px-panel">
             <p class="px-label">Chapter 02 · Scouting Report</p>
             <h2 id="s2-title">What adventurers told me</h2>
             <p>
-              I've gathering feedback from people who play D&amp;D and people who
+              I've been gathering feedback from people who play D&amp;D and people who
               have wanted to but never quite finished the character creation process, 
-              about where character creation loses them. 
+              about where character creation loses them.
             </p>
+            <ul class="stat-row">
+              <li><strong>4</strong> survey responses so far</li>
+              <li><strong>3 of 4</strong> had played only once or twice</li>
+              <li><strong>2 of 4</strong> stopped or put off creating their character</li>
+              <li><strong>3.25 / 5</strong> average confidence playing the finished character</li>
+            </ul>
+            <p class="px-small">Early read: the survey is still open, so treat these as signals, not statistics.</p>
+          </article>
+
+          <article class="px-panel">
+            <p class="px-label">Finding 01 · The boss isn't where you'd think</p>
+            <h3>Picking a class and species was the easy part</h3>
+            <p>
+              Nobody found choosing a class or species hard. The trouble starts
+              afterwards, with the list-heavy, mechanical steps. When asked what
+              tripped them up most recently, three of four people named spells,
+              equipment and reading the rules.
+            </p>
+            <p class="px-small" id="hard-steps">Rated "difficult" or "I needed help", out of 4 people</p>
+            <ul class="bars" aria-labelledby="hard-steps">
+              <li style="--v: 3"><span>Selecting skills</span><b>3</b></li>
+              <li style="--v: 2"><span>Selecting spells</span><b>2</b></li>
+              <li style="--v: 2"><span>Selecting equipment</span><b>2</b></li>
+              <li style="--v: 2"><span>Filling in the character sheet</span><b>2</b></li>
+              <li style="--v: 1"><span>Choosing a background</span><b>1</b></li>
+              <li style="--v: 1"><span>Assigning ability scores</span><b>1</b></li>
+              <li style="--v: 1"><span>Creating story details</span><b>1</b></li>
+              <li style="--v: 0"><span>Choosing a species</span><b>0</b></li>
+              <li style="--v: 0"><span>Choosing a class</span><b>0</b></li>
+            </ul>
+          </article>
+
+          <article class="px-panel">
+            <p class="px-label">Finding 02 · Party members wanted</p>
+            <h3>The best guide was a person at the table</h3>
+            <p>
+              All four found a friend or another player helpful, and two named a
+              friend as their single most useful source of help. Everyone who
+              tried a pre-made example character found it helpful too. Video
+              tutorials helped nobody.
+            </p>
+            <blockquote class="px-quote">
+              "Having someone actually there tailoring advice to your situation is
+              the best way to learn hands-on."
+            </blockquote>
+          </article>
+
+          <article class="px-panel">
+            <p class="px-label">Finding 03 · Lost in the woods</p>
+            <h3>Half of them stalled</h3>
+            <p>
+              One person never finished their character and another came back to
+              it later. The complaints were time and maths, and that includes BG3:
+              its one player spent four hours in the character creator.
+            </p>
+            <blockquote class="px-quote">"There's so much math…"</blockquote>
+            <blockquote class="px-quote">
+              "There's too many customization options that I spent 4 hours making
+              my character instead of playing the actual game."
+            </blockquote>
+          </article>
+
+          <article class="px-panel">
+            <p class="px-label">Finding 04 · Nobody asked for an edition</p>
+            <h3>Beginners want to know what a choice does</h3>
+            <p>
+              Only one person (the Dungeon Master) had an edition preference; the
+              others didn't care or didn't know what an edition was. What they
+              asked for was explanation: "actual instructions", and what a choice
+              means once the game starts.
+            </p>
+            <blockquote class="px-quote">
+              "Specific explanations on how choices could affect gameplay, such as
+              what spells are useful in which scenarios."
+            </blockquote>
+          </article>
+
+          <article class="px-panel">
+            <p class="px-label">Loot · What this means for Origin</p>
+            <ul class="loot">
+              <li><strong>Spend the help where it hurts.</strong> Keep class and species quick; put guidance and recommended picks into skills, spells and equipment.</li>
+              <li><strong>Be the friend at the table.</strong> Short, in-context answers to "what does this do?" instead of rule text.</li>
+              <li><strong>Start from an example.</strong> Offer ready-made characters people can tweak instead of a blank sheet.</li>
+              <li><strong>Show the payoff.</strong> Explain how each choice plays out in a game, and do the maths for them.</li>
+              <li><strong>Don't lead with the edition.</strong> Default to current rules and keep the setting out of the way.</li>
+            </ul>
           </article>
         </div>
       </section>
@@ -217,7 +297,13 @@
             <p class="px-label">Inspiration board</p>
             <!-- Swap each .pin-ph div for <img src="assets/dnd/your-image.webp" alt="..." /> -->
             <ul class="board">
-              <li><div class="pin-ph"></div><span>BG3 character creator</span></li>
+              <li>
+                <img
+                  src="assets/dnd/bg3-character-creator.webp"
+                  alt="Baldur's Gate 3 race selection screen: a grid of species portraits beside a 3D preview of an elf"
+                  loading="lazy"
+                /><span>BG3 character creator</span>
+              </li>
               <li><div class="pin-ph"></div><span>Version 1 screenshot</span></li>
               <li><div class="pin-ph"></div><span>Colour palette</span></li>
               <li><div class="pin-ph"></div><span>Pixel art references</span></li>

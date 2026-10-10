@@ -31,6 +31,18 @@
     }
   }
 
+  /* ---- Rulebook terms fall into their box when it scrolls into view ---- */
+  const crate = document.querySelector(".overload");
+  if (crate && !reduced && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("js-fall");
+    crate.querySelectorAll("li").forEach((li, i) => li.style.setProperty("--i", i));
+    new IntersectionObserver(([e], io) => {
+      if (!e.isIntersecting) return;
+      crate.classList.add("drop");
+      io.disconnect();
+    }, { threshold: 0.6 }).observe(crate);
+  }
+
   /* ---- Vertical parallax: each layer drifts by its data-depth ---- */
   const scenes = [...document.querySelectorAll(".scene")].map((s) => ({
     sec: s.parentElement,
