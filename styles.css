@@ -1110,7 +1110,10 @@ button {
 }
 
 /* Opening: the closed book sits on the right; its cover and pages swing over to the left */
-.book-intro{position:absolute;z-index:2;inset:0;perspective:70em;pointer-events:none}
+.book-intro{position:absolute;z-index:2;inset:0;perspective:220em;pointer-events:none}
+/* back cover and the page block resting on it stay on the right while the front cover and pages turn left */
+.book-intro:before,.book-intro:after{content:"";position:absolute;z-index:-1;left:50%;top:0;width:50%;height:100%;background:#b88742;border-radius:0 20px 20px 0;box-shadow:0 12px 24px #0003}
+.book-intro:after{top:1.5%;width:48.5%;height:97%;background:#fff9e9;border-radius:0 5px 5px 0;box-shadow:inset -3px 0 20px #0003,3px 0 0 #f1e6cc,5px 0 0 #fff9e9}
 .book-intro i,.intro-cover{position:absolute;left:50%;transform-origin:0 50%;border-radius:0 5px 5px 0;box-shadow:inset -3px 0 20px #0003,0 0 15px #0002}
 .book-intro i{top:1.5%;width:48.5%;height:97%;background:#fff9e9}
 .intro-cover{top:0;width:50%;height:100%;background:#b88742;border-radius:0 20px 20px 0;box-shadow:0 12px 24px #0003}
