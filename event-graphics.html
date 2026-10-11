@@ -3,18 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="theme-color" content="#061b27" />
+    <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Event graphics by Amy Cui, hung in an isometric art gallery."
+      content="Graphic design by Amy Cui: invitations and posters for community events, shown in a 3D carousel."
     />
-    <title>Event Graphics — Amy Cui</title>
+    <title>Graphic Design — Amy Cui</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oranienbaum&display=swap" />
     <link rel="stylesheet" href="styles.css?v=12" />
-    <link rel="stylesheet" href="event-graphics.css?v=3" />
+    <link rel="stylesheet" href="event-graphics.css?v=4" />
     <script src="script.js?v=11" defer></script>
     <script src="event-graphics.js?v=3" defer></script>
   </head>
-  <body>
+  <body class="noir">
     <header class="site-nav">
       <div class="wrap nav-inner">
         <a class="logo" href="index.html" aria-label="Amy Cui home"
@@ -28,17 +31,17 @@
       </div>
     </header>
     <main>
-      <section class="page-hero">
+      <section class="page-hero noir-hero">
         <div class="wrap">
-          <p class="eyebrow"><span class="pulse"></span> 03 / EVENT WORK</p>
-          <h1><em>Event</em> <br />graphics</h1>
-          <p>
-            Invitations and posters for community events. Hover over a poster
-            to stop the carousel, then click (or tap) it to see the full graphic.
+          <p class="noir-kicker">Now showing <span>03 / Event work</span></p>
+          <h1 class="noir-title"><span aria-hidden="true" class="noir-quote">“</span>Graphic<br />Design<span aria-hidden="true" class="noir-quote">”</span></h1>
+          <p class="noir-credits">
+            <em>starring</em> Invitations · Posters · Community events
           </p>
         </div>
       </section>
       <section class="gallery-section">
+        <p class="cta"><span class="neon">Click</span> an image</p>
         <div class="carousel" style="--_n: 5">
           <div class="carousel-control-button left">
             <input type="radio" name="carousel-control-input" aria-label="Spin left" />
