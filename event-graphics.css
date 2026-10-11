@@ -122,20 +122,20 @@
 }
 /* short, short, then on for good */
 @keyframes neon-text {
-  0%, 15%, 23%, 45%, 53%, 75% {
+  0%, 15%, 27%, 45%, 57%, 75% {
     color: #555;
     text-shadow: none;
   }
-  16%, 22%, 46%, 52%, 76%, 100% {
+  16%, 26%, 46%, 56%, 76%, 100% {
     color: #fff;
     text-shadow: 0 0 0.125em var(--neon), 0 0 0.5em var(--neon);
   }
 }
 @keyframes neon-glow {
-  0%, 15%, 23%, 45%, 53%, 75% {
+  0%, 15%, 27%, 45%, 57%, 75% {
     opacity: 0;
   }
-  16%, 22%, 46%, 52%, 76%, 100% {
+  16%, 26%, 46%, 56%, 76%, 100% {
     opacity: 1;
   }
 }
