@@ -1253,7 +1253,7 @@ button {
 .pool-words li:hover::before{bottom:0}
 .pool-words li:hover::after{top:0}
 .pool-words span{position:relative;z-index:1;display:block;overflow:hidden;white-space:nowrap;font:600 calc(.8*var(--u))/1 "DM Sans",sans-serif;letter-spacing:1px;color:#fff;padding:.75em 1.15em;border-radius:30px;
-  background:#ffffff0d;border-top:1px solid #ffffff1a;border-bottom:1px solid #ffffff1a;box-shadow:0 15px 15px #0000004d;
+  background:#ffffff0d;border-top:1px solid #ffffff1a;border-bottom:1px solid #ffffff1a;box-shadow:12px 22px 16px #0000004d;
   -webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px);transition:.5s}
 .pool-words span::before{content:"";position:absolute;inset:0 50% 0 0;background:linear-gradient(to left,#ffffff26,transparent);transform:skewX(45deg);transition:.5s}
 .pool-words li:hover span{letter-spacing:3px}
