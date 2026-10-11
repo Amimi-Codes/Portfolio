@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>About Me — Amy Cui</title>
-    <link rel="stylesheet" href="styles.css?v=19" />
+    <link rel="stylesheet" href="styles.css?v=20" />
     <script src="script.js?v=19" defer></script>
   </head>
   <body class="about-page">
@@ -29,12 +29,58 @@
             Professionally I'm a designer, researcher, frontend developer, and events coordinator.
             Outside of work? I'm collecting as many hobbies and sidequests as possible!
           </p>
-          <div class="hobby-list">
-            <span>Drawing</span><span>Reading manga</span><span>Hosting events</span
-            ><span>Photography</span><span>Musicals</span
-            ><span>D&D</span><span>Boardgames</span><span>Escape Rooms</span>
-            <span>Cosplaying</span><span>Scrapbooking and Journalling</span>
-            <span>Rock Climbing</span>
+          <div class="hobby-pool">
+            <svg class="pool-svg" viewBox="0 0 865.3 659.3" aria-hidden="true">
+  <defs>
+    <!-- tiles: one cell each, sheared onto the face they cover -->
+    <pattern id="pool-floor" width="13.1" height="13.1" patternUnits="userSpaceOnUse" patternTransform="matrix(0.866 -0.5 0.866 0.5 0 0)"><path d="M0 0H13.1M0 0V13.1" fill="none" stroke="#004257" stroke-width=".9"/></pattern>
+    <pattern id="pool-wall-r" width="13.16" height="23.9" patternUnits="userSpaceOnUse" patternTransform="matrix(0.866 0.5 0 1 0 0)"><path d="M0 0H13.16M0 0V23.9" fill="none" stroke="#004257" stroke-width=".9" opacity=".5"/></pattern>
+    <pattern id="pool-wall-l" width="13.16" height="23.9" patternUnits="userSpaceOnUse" patternTransform="matrix(0.866 -0.5 0 1 0 0)"><path d="M0 0H13.16M0 0V23.9" fill="none" stroke="#004257" stroke-width=".9"/></pattern>
+    <pattern id="pool-side-l" width="10.74" height="10.8" patternUnits="userSpaceOnUse" patternTransform="matrix(0.866 0.5 0 1 1 0)"><rect width="8.8" height="8.8" fill="#c6c6c6"/></pattern>
+    <pattern id="pool-side-r" width="10.74" height="10.8" patternUnits="userSpaceOnUse" patternTransform="matrix(0.866 -0.5 0 1 0 0)"><rect width="8.8" height="8.8" fill="#9d9d9c"/></pattern>
+    <!-- caustic light on the pool floor: thin bright veins of turbulence, generated instead of drawn -->
+    <filter id="pool-caustics" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feTurbulence type="turbulence" baseFrequency=".03 .05" numOctaves="2" seed="4"/>
+      <feColorMatrix type="luminanceToAlpha"/>
+      <feComponentTransfer result="veins"><feFuncA type="table" tableValues="1 .35 0 0 0 0 0"/></feComponentTransfer>
+      <feFlood flood-color="#158698"/>
+      <feComposite in2="veins" operator="in"/>
+    </filter>
+    <clipPath id="pool-surface"><path d="M130.4 345.2 411.1 182.9 692.4 345.3 411.5 507.5Z"/></clipPath>
+  </defs>
+  <path fill="#1d1d1b" opacity=".15" d="M865.3 306.3 524 103.2 334 213.5 411.5 638.4 546.7 617.2 865.3 432.1Z"/>
+  <path fill="#f6f6f6" d="M411.5 637.4V551.5L1 314.5v85.9Z"/>
+  <path fill="url(#pool-side-l)" d="M411.5 637.4V551.5L1 314.5v85.9Z"/>
+  <path fill="#b2b2b2" d="M822 400.3V314.5L411.5 551.5v85.8Z"/>
+  <path fill="url(#pool-side-r)" d="M822 400.3V314.5L411.5 551.5v85.8Z"/>
+  <path fill="#878787" d="M821.9 355.6 411.5 592.6v-41.1l410.4-237Z"/>
+  <path fill="#c6c6c6" d="M411.5 592.6 1 355.6v-41.1l410.5 237Z"/>
+  <path fill="#9d9d9c" d="M411.5 551.5 1 314.5l410.5-237 410.5 237Z"/>
+  <path fill="#dadada" d="M411.5 523.4 49.6 314.5l361.9-208.9 361.8 208.9Z"/>
+  <path fill="#95d0d8" d="M411.5 507.5 77.2 314.5l334.3-193 334.3 193Z"/>
+  <path fill="url(#pool-floor)" d="M411.5 507.5 77.2 314.5l334.3-193 334.3 193Z"/>
+  <path fill="#007c95" d="M411.5 121.5V356L280 431.6 77.2 314.5Z"/>
+  <path fill="url(#pool-wall-l)" d="M411.5 121.5V356L280 431.6 77.2 314.5Z"/>
+  <path fill="#00b3c1" d="M411.5 121.5V356l131.1 75.8 203.2-117.3Z"/>
+  <path fill="url(#pool-wall-r)" d="M411.5 121.5V356l131.1 75.8 203.2-117.3Z"/>
+  <path fill="#b2b2b2" d="M411.5 136.6 732.7 322l13.1-7.5-334.3-193Z"/>
+  <g clip-path="url(#pool-surface)">
+    <path fill="#fff" opacity=".35" d="M130.4 345.2 411.1 182.9 692.4 345.3 411.5 507.5Z"/>
+    <rect class="pool-caustics" width="324.5" height="324.5" transform="matrix(0.866 -0.5 0.866 0.5 130.4 345.2)" filter="url(#pool-caustics)" opacity=".3"/>
+    <g class="pool-reflections" transform="translate(-42.7 32.2)" fill="#fff" opacity=".8"><path d="M277.8,255.7s-28.2-.7-24.2,10.7-13.4,29.6,8.3,23.5,21.6-1.4,42.6-16.5S277.8,255.7,277.8,255.7Z"/><path d="M388,201.7c.8,35.1-59.2,21.4-22.5,35.1s24.8.1,41.1-11.2,37.4-40.4,14.9-33.8S387.7,189,388,201.7Z"/><path d="M453.2,223.2c19.1,4.1-.9,48.4,22.7,37s44.5-22.1,22.7-34.7-21.9-27.5-34.1-19.7S435.4,219.3,453.2,223.2Z"/><path d="M431.4,328c-10.7,15.1-28.6,26.3-9.8,29s11.9-22.5,32-13.3,32.8-5.8,22.4-11.8-14.3-19.5-29.4-11.7Z"/><path d="M594.4,287.6c0,16.9-48.5,14-26.7,25.5s21.8-12.4,33.1-5.9,41.3,12.9,45.4,2.3,25.4-30.6-3.9-36.3S594.4,278.4,594.4,287.6Z"/><path d="M434.7,399.5c-2.4,9.5-34.2,28.6-3.3,25.4s23.5,10.6,45.2.4,35.7-16.9,21.7-33.6-23.2-16.6-24.6-3.3-24.3,27.9-24.2,12.6S434.7,399.5,434.7,399.5Z"/><path d="M333.8,287.6s20.4-36,31.8-11,30,4.9,9.3,30.9-6.5,45.5-26.5,28.9-54-25.1-38.7-36.6S333.8,287.6,333.8,287.6Z"/></g>
+  </g>
+  <path fill="none" stroke="#706f6f" stroke-linecap="round" stroke-width="2" d="M821.9 314.5 411.5 551.5"/>
+  <path fill="none" stroke="#706f6f" stroke-linecap="round" stroke-width="2" d="M411.5 77.5 822.5 314.2V400"/>
+  <path fill="#878787" d="M411.5 121.5v15.1L89.7 321.7l-12.5-7.2Z"/>
+  <path fill="none" stroke="#f6f6f6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M411.5 121.5 745.8 314.5 411.5 507.5"/>
+  <path fill="#1d1d1b" opacity=".2" d="M599.6 224 654.6 216.3 642.8 209.3 600.7 215.3ZM552.1 200.7 612.2 191.8 600.3 184.8 553.2 191.9Z"/>
+  <path fill="none" stroke="#dadada" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M411.5 77.5 1 314.5 411.5 551.5"/>
+  <path fill="#ededed" d="M637.4,129c-5.4-3.1-12.2-2.6-19.3,1.5s-11.5,9.2-15.7,15.7V125.5c0-8.2-3-14.4-8.3-17.5s-12.2-2.6-19.3,1.5c-13.3,7.7-23.7,25.7-23.7,41V297.6a4,4,0,1,0,8,0V276.5l35.3,20.4v21.7a4,4,0,1,0,8,0V171.5c0-12.3,9-27.9,19.7-34.1,4.4-2.6,8.6-3.1,11.3-1.5s4.3,5.4,4.3,10.6v41.4a4,4,0,1,0,8,0V146.5C645.7,138.3,642.8,132.1,637.4,129ZM559,198.2l35.3,20.4v18.1L559,216.3Zm35.3,11.2L559,189V171.4l35.3,20.4ZM559,225.6,594.4,246v16.8L559,242.3Zm19.7-109.1c4.4-2.6,8.6-3.1,11.3-1.5s4.3,5.4,4.3,10.6v41.4a4,4,0,0,0,.2,1.1c-.1,1.2-.2,2.3-.2,3.5v11.1L559,162.2V150.6C559,138.3,568.1,122.7,578.7,116.5ZM559,267.2V251.6L594.4,272v15.6Z" transform="translate(-42.7 32.2)"/>
+  <path fill="#007c95" opacity=".8" d="M555,301.6a4,4,0,0,0,4-4V276.5l35.3,20.4v21.7a4,4,0,1,0,8,0V255.9c-.2,3.8-8.2,3.3-8-.5v7.3L559,242.3V230.9c-.1,4.2-8.1,4-8-.2v66.9A4,4,0,0,0,555,301.6Zm4-50.1L594.4,272v15.6L559,267.2Z" transform="translate(-42.7 32.2)"/>
+  <path fill="none" stroke="#9d9d9c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 314.6V398.9l410.5 238.5"/>
+  <g fill="none" stroke="#878787" stroke-linecap="round" stroke-width="1.5" transform="translate(-42.7 32.2)"><path d="M574.7,109.6c-13.3,7.7-23.7,25.7-23.7,41v9.1"/><path d="M643.3,191.5a4,4,0,0,0,2.5-3.7V146.5c0-8.2-3-14.4-8.3-17.5s-12.2-2.6-19.3,1.5-11.5,9.2-15.7,15.7V125.5c0-8.2-3-14.4-8.3-17.5"/><path d="M622.1,137.4a16,16,0,0,1,7.6-2.4"/><path d="M602.4,188.9V171.5c0-12.3,9-27.9,19.7-34.1"/><path d="M594.4,182.6,559,162.2V150.6c0-12.3,9-27.9,19.7-34.1,4.4-2.6,8.6-3.1,11.3-1.5"/></g>
+</svg>
+            <ul class="pool-words" aria-label="Hobbies"><li style="--x:28.7%;--y:47.9%">Drawing</li><li style="--x:42.3%;--y:37.6%">Musicals</li><li style="--x:34.6%;--y:50.9%">Reading manga</li><li style="--x:48.2%;--y:40.6%">D&amp;D</li><li style="--x:38.6%;--y:55.4%">Hosting events</li><li style="--x:52.2%;--y:45.1%">Boardgames</li><li style="--x:44.5%;--y:58.4%">Photography</li><li style="--x:58.1%;--y:48.1%">Escape Rooms</li><li style="--x:48.5%;--y:62.9%">Cosplaying</li><li style="--x:62.1%;--y:52.6%">Rock Climbing</li><li style="--x:60.9%;--y:61.0%">Scrapbooking and Journalling</li></ul>
           </div>
         </div>
       </section>

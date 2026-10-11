@@ -663,18 +663,6 @@ button {
   color: #49666b;
   max-width: 680px;
 }
-.hobby-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.7rem;
-  margin-top: 2rem;
-}
-.hobby-list span {
-  border: 1px solid #83aaa5;
-  border-radius: 100px;
-  padding: 0.65rem 0.9rem;
-  font-weight: 600;
-}
 .journey-section {
   background: #0a303b;
   color: #effdf5;
@@ -1244,3 +1232,20 @@ button {
 .speech-bubble:not(.is-in){opacity:0;transform:translateY(14px) scale(.85)}
 .memory-ux .scrap-photos{align-self:center;width:auto}
 @media(prefers-reduced-motion:reduce){.speech-bubble{opacity:1!important;transform:none!important}}
+
+/* about header pool: hobby words float flat on the water (isometric matrix maps them onto the surface) */
+.hobby-pool{position:relative;container-type:inline-size;max-width:720px;margin-top:1.5rem}
+.pool-svg{display:block;width:100%;height:auto}
+.pool-reflections path{transform-box:fill-box;transform-origin:center;animation:pool-shimmer 3.2s ease-in-out infinite alternate}
+.pool-reflections path:nth-child(2n){animation-duration:4.1s;animation-delay:-1.3s}
+.pool-reflections path:nth-child(3n){animation-duration:3.6s;animation-delay:-2.2s}
+@keyframes pool-shimmer{to{transform:translate(6px,-3px) scale(1.12,.9);opacity:.45}}
+.pool-words{list-style:none;margin:0;padding:0;position:absolute;inset:0;pointer-events:none}
+.pool-words li{position:absolute;left:var(--x);top:var(--y);white-space:nowrap;font:700 max(6.5px,1.6cqw)/1 "DM Sans",sans-serif;color:#0b3a4a;padding:.45em .8em;border-radius:99px;background:#fff;box-shadow:0 0 0 2px #ffffff80,4px 6px 0 #00425740;transform:translate(-50%,-50%) matrix(.866,-.5,.866,.5,0,0);animation:pool-bob 3.4s ease-in-out infinite alternate}
+.pool-words li:nth-child(4n+1){background:#a8e8d6}
+.pool-words li:nth-child(4n+2){background:#ffabf9}
+.pool-words li:nth-child(4n+3){background:#ffbf5f}
+.pool-words li:nth-child(2n){animation-duration:4.2s;animation-delay:-1.6s}
+.pool-words li:nth-child(3n){animation-duration:3.8s;animation-delay:-2.7s}
+@keyframes pool-bob{to{translate:5px -4px}}
+@media(prefers-reduced-motion:reduce){.pool-reflections path,.pool-words li{animation:none}}
