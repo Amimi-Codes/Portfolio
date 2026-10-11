@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#061b27" />
+    <meta
+      name="description"
+      content="Event graphics by Amy Cui, hung in an isometric art gallery."
+    />
+    <title>Event Graphics — Amy Cui</title>
+    <link rel="stylesheet" href="styles.css?v=12" />
+    <link rel="stylesheet" href="event-graphics.css?v=1" />
+    <script src="script.js?v=11" defer></script>
+    <script src="event-graphics.js?v=1" defer></script>
+  </head>
+  <body>
+    <header class="site-nav">
+      <div class="wrap nav-inner">
+        <a class="logo" href="index.html" aria-label="Amy Cui home"
+          >AC<span>✳</span></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="projects.html">Projects</a
+          ><a href="about.html">About Me</a
+          ><a href="contact.html">Contact ↗</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="page-hero">
+        <div class="wrap">
+          <p class="eyebrow"><span class="pulse"></span> 03 / EVENT WORK</p>
+          <h1><em>Event</em> <br />graphics</h1>
+          <p>
+            Invitations and posters for community events. Hover a frame to
+            take a closer look, or click (or tap) one to see the full graphic.
+          </p>
+        </div>
+      </section>
+      <section class="gallery-section">
+        <div class="room">
+          <div class="wall wall-left">
+            <button class="frame" type="button">
+              <img
+                src="assets/Graphic%20Design%20Work/galentines.webp"
+                alt="Pink Galentine's invitation with ribbons and clinking glasses: Friday, Feb 20th, 6 pm. Dessert potluck, Hear Me Out cake, bead crafts, bouquet making and cookie decorating."
+              />
+              <span class="plaque">Galentine's</span>
+            </button>
+            <button class="frame" type="button">
+              <img
+                src="assets/Graphic%20Design%20Work/spooktober-potluck.webp"
+                alt="Black and cream gothic invitation to the Spooktober Potluck with a jack-o'-lantern: Oct 18, 4 to 11 pm. Safety not guaranteed."
+              />
+              <span class="plaque">Spooktober Potluck</span>
+            </button>
+          </div>
+          <div class="wall wall-right">
+            <button class="frame" type="button">
+              <img
+                src="assets/Graphic%20Design%20Work/tea-party.webp"
+                alt="Night-blue invitation to Mimi's Tea Party with watercolour teapot, teacups and wildflowers: 25 July 2026, 12:30 to 8 pm. RSVP through Partiful, 25 spaces available."
+              />
+              <span class="plaque">Tea Party</span>
+            </button>
+            <button class="frame" type="button">
+              <img
+                src="assets/Graphic%20Design%20Work/picnic-in-the-park.webp"
+                alt="Cream arched invitation to a Picnic in the Park framed by yellow blossoms: 4 August, 1 to 4 pm, Christie Pits Park, meet up at the soccer field."
+              />
+              <span class="plaque">Picnic in the Park</span>
+            </button>
+            <button class="frame" type="button">
+              <img
+                src="assets/Graphic%20Design%20Work/potluck-and-drama.webp"
+                alt="Dusty rose invitation to Potluck &amp; Drama with a film reel and bunny teapot: Oct 12th, 3 to 8 pm. Free popcorn and drinks."
+              />
+              <span class="plaque">Potluck &amp; Drama</span>
+            </button>
+          </div>
+          <div class="floor"></div>
+        </div>
+        <div class="magnifying-glass" aria-hidden="true"></div>
+      </section>
+      <dialog class="poster-dialog" aria-label="Full graphic">
+        <img alt="" />
+        <form method="dialog">
+          <button class="dialog-close" aria-label="Close">✕</button>
+        </form>
+      </dialog>
+    </main>
+    <footer class="footer wrap">
+      <span>© <span id="year"></span> AMY CUI</span
+      ><a href="contact.html">LET’S CONNECT ↗</a>
+    </footer>
+  </body>
+</html>
