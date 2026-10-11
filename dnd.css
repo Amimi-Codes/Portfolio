@@ -513,17 +513,6 @@ html.js-fall .overload:not(.drop) li {
   background: var(--blood);
   box-shadow: inset -2px -2px #6a0e08;
 }
-.tale-shot {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin-top: 1.2rem;
-  box-shadow:
-    0 -4px var(--rim),
-    0 4px var(--rim),
-    -4px 0 var(--rim),
-    4px 0 var(--rim);
-}
 .board img,
 .pin-ph {
   display: block;
