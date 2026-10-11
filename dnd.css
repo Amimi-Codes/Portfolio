@@ -718,9 +718,8 @@ html.js-fall .overload:not(.drop) li {
 /* ---------- section nav: plank ladder (desktop) + book menu (mobile) ---------- */
 .ladder {
   position: fixed;
-  left: 1.25rem;
-  top: 50%;
-  translate: 0 -50%;
+  right: 1.25rem;
+  top: calc(76px + 1.25rem); /* just under the site nav */
   z-index: 30;
   display: grid;
   gap: 14px;
@@ -770,7 +769,7 @@ html.js-fall .overload:not(.drop) li {
 }
 .ladder a:hover,
 .ladder a[aria-current="true"] {
-  translate: 6px 0;
+  translate: -6px 0;
   color: #fff6c8;
 }
 .ladder a[aria-current="true"] {
@@ -782,7 +781,7 @@ html.js-fall .overload:not(.drop) li {
   display: none;
   position: fixed;
   right: 1rem;
-  bottom: 1rem;
+  top: calc(76px + 1rem);
   z-index: 30;
   padding: 6px;
   border: 0;
