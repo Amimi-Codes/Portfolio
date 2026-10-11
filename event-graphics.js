@@ -59,41 +59,43 @@ const box = (u0, v0, u1, v1, h0, h1, c) =>
   face([[u0, v1, h0], [u1, v1, h0], [u1, v1, h1], [u0, v1, h1]], c) +
   face([[u1, v0, h0], [u1, v1, h0], [u1, v1, h1], [u1, v0, h1]], shade(c, -0.3));
 
-let sphereId = 0;
-const sphere = (u, v, h, r, c) => {
-  const [x, y] = iso(u, v, h);
-  const id = `s${sphereId++}`;
-  return `<radialGradient id="${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${shade(c, 0.35)}"/><stop offset="1" stop-color="${shade(c, -0.4)}"/></radialGradient>
-    <circle cx="${x}" cy="${y}" r="${r}" fill="url(#${id})"/>`;
+// flat-vector visitor seen from behind, drawn looking up-left (mirrored for the right wall).
+// Local units: feet at 0,0, about 15 tall; the right-hand side of each shape is in shadow.
+const figure = ({ shirt, pants, hair, skin = "#e5b08f", shoes = "#2b2b33", hairStyle, skirt, seated }) => {
+  const dark = (c) => shade(c, -0.22);
+  const legs = seated ? "" : `
+    <path d="M-1.35-6.9C-1.4-4.5-1.05-2.5-.95-.9h.7C-.2-3 0-5 0-6.9Z" fill="${dark(pants)}"/>
+    <path d="M0-6.9C.05-4.8.35-2.6.4-.6h.7c.1-2.2.3-4.2.25-6.3Z" fill="${pants}"/>
+    <path d="M.85-6.9C.9-4.8.95-2.8.85-.6h.25c.1-2.2.3-4.2.25-6.3Z" fill="${dark(pants)}"/>
+    <path d="M-1.1-1h.95q.3.6-.1.75h-.85q-.3-.35 0-.75Z" fill="${dark(shoes)}"/>
+    <path d="M.3-.6h.9q.3.6-.1.75H.25q-.3-.35.05-.75Z" fill="${shoes}"/>
+    ${skirt ? `<path d="M-1.5-7.2h3l.45 3H-1.95Z" fill="${skirt}"/><path d="M.7-7.2h.8l.45 3H.9Z" fill="${dark(skirt)}"/>` : ""}`;
+  const hairPath = hairStyle === "long"
+    ? "M-1.1-13.7q-.05-1.4 1.15-1.4t1.1 1.4l.15 2.7q-1.3.4-2.6 0Z"
+    : "M-1.02-13.6q-.08-1.45 1.07-1.45t1 1.45q-.05.85-.45 1H-.55q-.45-.2-.47-1Z";
+  return `${legs}
+    <g${seated ? ` transform="translate(0 6.4)"` : ""}>
+      <path d="M-1.6-12q-.75.2-.75 1.2l.1 3.1h.7l.1-2.9Z" fill="${dark(shirt)}"/>
+      <ellipse cx="-1.9" cy="-7.45" rx=".36" ry=".42" fill="${dark(skin)}"/>
+      <path d="M-1.75-11.3q0-.9.9-.95h1.7q.9.05.9.95l-.3 4.6q-1.45.3-2.9 0Z" fill="${shirt}"/>
+      <path d="M.75-12.25h.1q.9.05.9.95l-.3 4.6q-.45.1-.85.15.3-2.45.15-5.7Z" fill="${dark(shirt)}"/>
+      <path d="M1.6-12q.75.2.75 1.2l-.1 3.1h-.7l-.1-2.9Z" fill="${dark(shirt)}"/>
+      <ellipse cx="1.9" cy="-7.45" rx=".36" ry=".42" fill="${dark(skin)}"/>
+      <path d="M-.4-12.9h.8v.8h-.8Z" fill="${dark(skin)}"/>
+      <ellipse cx="-1" cy="-13.55" rx=".2" ry=".32" fill="${skin}"/>
+      <ellipse cx="1.08" cy="-13.55" rx=".2" ry=".32" fill="${dark(skin)}"/>
+      <ellipse cx=".05" cy="-13.75" rx="1" ry="1.2" fill="${skin}"/>
+      <path d="${hairPath}" fill="${hair}"/>
+      ${hairStyle === "bun" ? `<circle cx=".1" cy="-15.05" r=".55" fill="${hair}"/>` : ""}
+      <path d="M-.6-14.55q.55-.35 1.1-.15" stroke="${shade(hair, 0.3)}" stroke-width=".18" fill="none" stroke-linecap="round"/>
+    </g>`;
 };
 
-// blocky low-poly visitor seen from behind; faceLeft = looking at the left wall
-const person = ({ u, v, shirt, pants, hair, shoes = "#8ff6ff", longHair, faceLeft, size: s = 1 }) => {
-  const W = 0.05 * s, D = 0.026 * s; // shoulder width, body depth (floor units)
-  // part(across, along, width, depth, h0, h1, colour): across = sideways offset, along = toward the wall
-  const part = (a, b, w, d, h0, h1, c) => {
-    const [cu, cv] = faceLeft ? [u - b, v + a] : [u + a, v - b];
-    const [hu, hv] = faceLeft ? [d / 2, w / 2] : [w / 2, d / 2];
-    return { d: cu + cv, svg: box(cu - hu, cv - hv, cu + hu, cv + hv, h0 * s, h1 * s, c) };
-  };
-  const leg = W * 0.38, arm = W * 0.22;
-  const parts = [
-    part(-W * 0.24, 0, leg, D * 0.8, 0, 0.7, shoes),
-    part(W * 0.24, 0, leg, D * 0.8, 0, 0.7, shoes),
-    part(-W * 0.24, 0, leg, D * 0.75, 0.7, 6.4, pants),
-    part(W * 0.24, 0, leg, D * 0.75, 0.7, 6.4, pants),
-    part(0, 0, W, D, 6.2, 11.6, shirt),
-    part(-(W + arm) / 2, 0, arm, D * 0.8, 6.8, 11.4, shirt),
-    part((W + arm) / 2, 0, arm, D * 0.8, 6.8, 11.4, shirt),
-  ];
-  if (longHair) parts.push(part(0, -D * 0.45, W * 0.6, D * 0.25, 10, 13.6, hair));
-  parts.sort((a, b) => a.d - b.d);
-  const [x, y] = iso(u, v);
-  return { d: u + v, svg: `<g>
-    <ellipse cx="${x}" cy="${y}" rx="${3 * s}" ry="${1.2 * s}" fill="rgba(0 0 0 / .28)"/>
-    ${parts.map((p) => p.svg).join("")}
-    ${box(u - 0.006 * s, v - 0.006 * s, u + 0.006 * s, v + 0.006 * s, 11.4 * s, 12.6 * s, "#e2ad8c")}
-    ${sphere(u, v, 13.7 * s, 1.55 * s, hair)}
+const person = ({ u, v, faceLeft, size: s = 1, d, ...look }) => {
+  const [x, y] = iso(u, v, look.seated ? 3.2 : 0); // seated: origin on the bench top
+  return { d: d ?? u + v, svg: `<g transform="translate(${x} ${y}) scale(${faceLeft ? s : -s} ${s})">
+    ${look.seated ? "" : `<ellipse rx="2.4" ry=".9" fill="rgba(0 0 0 / .25)"/>`}
+    ${figure(look)}
   </g>` };
 };
 
@@ -118,14 +120,15 @@ const pools = [
   pool(0.2, 0.06, 30), pool(0.5, 0.06, 30), pool(0.8, 0.06, 30),
 ];
 const items = [
-  person({ u: 0.15, v: 0.72, shirt: "#e8607a", pants: "#2d3a5a", hair: "#3a2418", longHair: true, faceLeft: true }),
-  person({ u: 0.16, v: 0.27, shirt: "#5bb6a8", pants: "#3b3b46", hair: "#1c1410", faceLeft: true }),
-  person({ u: 0.22, v: 0.37, shirt: "#f2c35b", pants: "#40516e", hair: "#8a5a32", longHair: true, faceLeft: true, size: 0.8 }),
-  person({ u: 0.21, v: 0.15, shirt: "#8f7ad9", pants: "#25252e", hair: "#24170f", longHair: true }),
-  person({ u: 0.55, v: 0.16, shirt: "#f4f1ea", pants: "#3f6f8f", hair: "#4a2e1c", shoes: "#ff7ad9" }),
-  person({ u: 0.78, v: 0.15, shirt: "#d65ca3", pants: "#2f2f3a", hair: "#151010", longHair: true }),
-  person({ u: 0.86, v: 0.2, shirt: "#7fc6e8", pants: "#5a4636", hair: "#c48a4f", size: 0.7 }),
+  person({ u: 0.15, v: 0.72, faceLeft: true, shirt: "#f4f1ea", pants: "#e5b08f", skirt: "#2d2d36", hair: "#4a2a1a", hairStyle: "bun", shoes: "#c9c9d0" }),
+  person({ u: 0.16, v: 0.27, faceLeft: true, shirt: "#5bb6a8", pants: "#2f4a6b", hair: "#1c1410", shoes: "#f4f1ea" }),
+  person({ u: 0.22, v: 0.37, faceLeft: true, size: 0.8, shirt: "#f2c35b", pants: "#40516e", hair: "#8a5a32", hairStyle: "long" }),
+  person({ u: 0.21, v: 0.15, shirt: "#8f7ad9", pants: "#25252e", hair: "#24170f", hairStyle: "long" }),
+  person({ u: 0.55, v: 0.16, shirt: "#e64b4b", pants: "#2b2b33", hair: "#4a2e1c", shoes: "#e64b4b" }),
+  person({ u: 0.78, v: 0.15, shirt: "#7fc6e8", pants: "#e5b08f", skirt: "#d65ca3", hair: "#151010", hairStyle: "long", shoes: "#d65ca3" }),
+  person({ u: 0.86, v: 0.2, size: 0.7, shirt: "#9bd36a", pants: "#5a4636", hair: "#c48a4f" }),
   bench({ u0: 0.38, v0: 0.5, u1: 0.72, v1: 0.6 }),
+  person({ u: 0.56, v: 0.55, d: 1.2, seated: true, shirt: "#f0a35e", pants: "#3f6f8f", hair: "#2a1a12", hairStyle: "bun" }),
   bench({ u0: 0.48, v0: 0.72, u1: 0.58, v1: 0.92 }),
 ];
 // painter's order: things further back (smaller u + v) draw first
