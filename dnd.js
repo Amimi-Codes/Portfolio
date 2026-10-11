@@ -43,6 +43,24 @@
     }, { threshold: 0.6 }).observe(crate);
   }
 
+  /* ---- Section nav: highlight the current section, mobile book menu ---- */
+  const ladder = document.getElementById("ladder");
+  const menu = document.getElementById("book-menu");
+  menu.insertBefore(ladder.cloneNode(true), menu.querySelector(".x-btn")).removeAttribute("id");
+  document.getElementById("book-btn").addEventListener("click", () => menu.showModal());
+  menu.querySelector(".x-btn").addEventListener("click", () => menu.close());
+  menu.addEventListener("click", (e) => e.target.closest("a") && menu.close());
+  if ("IntersectionObserver" in window) {
+    const links = document.querySelectorAll(".ladder a");
+    const spy = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        links.forEach((a) => a.setAttribute("aria-current", a.hash === `#${e.target.id}`));
+      }
+    }, { rootMargin: "-45% 0px -45% 0px" }); // the section crossing the middle of the screen
+    document.querySelectorAll("main > section[id]").forEach((sec) => spy.observe(sec));
+  }
+
   /* ---- Vertical parallax: each layer drifts by its data-depth ---- */
   const scenes = [...document.querySelectorAll(".scene")].map((s) => ({
     sec: s.parentElement,

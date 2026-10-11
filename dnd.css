@@ -387,33 +387,51 @@ html.js-fall .overload:not(.drop) li {
   color: var(--gold);
   margin-bottom: 0.3rem;
 }
-.bars {
-  list-style: none;
-  margin: 0.6rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.45rem;
+.table-scroll {
+  overflow-x: auto;
 }
-.bars li {
-  display: grid;
-  grid-template-columns: minmax(9rem, 14rem) 1fr;
-  align-items: center;
-  gap: 0.8rem;
+.bars {
+  --bar: 7rem;
+  width: 100%;
+  border-collapse: collapse;
   font-size: 0.9rem;
 }
-.bars b {
-  width: calc(var(--v) / 4 * 100%);
-  min-width: 1.4rem;
-  padding: 0.15rem 0.4rem;
-  font: 0.6rem "Press Start 2P", monospace;
-  color: #2a1d14;
-  background: var(--gold);
-  text-align: right;
-}
-.bars li[style="--v: 0"] b {
-  background: none;
-  color: #8a7a66;
+.bars caption {
   text-align: left;
+  margin: 0.4rem 0 0.6rem;
+}
+.bars th,
+.bars td {
+  padding: 0.3rem 0.6rem 0.3rem 0;
+  text-align: left;
+  font-weight: 400;
+  white-space: nowrap;
+}
+.bars thead th {
+  font: 0.55rem/1.6 "Press Start 2P", monospace;
+  color: #b8a68a;
+  white-space: normal;
+  vertical-align: bottom;
+}
+.bars td {
+  font: 0.6rem "Press Start 2P", monospace;
+}
+.bars i {
+  display: inline-block;
+  width: calc(var(--p) * var(--bar));
+  height: 0.9rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  background: var(--gold);
+}
+@media (max-width: 640px) {
+  .bars {
+    --bar: 3.5rem;
+    font-size: 0.8rem;
+  }
+  .bars th[scope="row"] {
+    white-space: normal;
+  }
 }
 .px-quote {
   margin: 1rem 0 0;
@@ -494,6 +512,17 @@ html.js-fall .overload:not(.drop) li {
   height: 10px;
   background: var(--blood);
   box-shadow: inset -2px -2px #6a0e08;
+}
+.tale-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 1.2rem;
+  box-shadow:
+    0 -4px var(--rim),
+    0 4px var(--rim),
+    -4px 0 var(--rim),
+    4px 0 var(--rim);
 }
 .board img,
 .pin-ph {
@@ -662,7 +691,7 @@ html.js-fall .overload:not(.drop) li {
 .status-current {
   color: #ffb07a;
 }
-@media (min-width: 900px) {
+@media (min-width: 1600px) {
   .quest-info {
     position: absolute;
     top: 0;
@@ -683,5 +712,147 @@ html.js-fall .overload:not(.drop) li {
   .node.current::before,
   .node.current::after {
     animation: none;
+  }
+}
+
+/* ---------- section nav: plank ladder (desktop) + book menu (mobile) ---------- */
+.ladder {
+  position: fixed;
+  left: 1.25rem;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 30;
+  display: grid;
+  gap: 14px;
+  width: 9.5rem;
+}
+.ladder a {
+  position: relative;
+  display: block;
+  padding: 0.55rem 0.4rem 0.45rem;
+  text-align: center;
+  font: 1.05rem/1 "PixelPurl", "Pixelify Sans", monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffd23a;
+  text-shadow:
+    2px 0 #3a1a08,
+    -2px 0 #3a1a08,
+    0 2px #3a1a08,
+    0 -2px #3a1a08,
+    2px 2px #3a1a08;
+  background:
+    repeating-linear-gradient(0deg, #0000 0 5px, #a8703a33 5px 6px),
+    linear-gradient(#f0c88e 0 3px, #d9a565 3px calc(100% - 5px), #a86f3a calc(100% - 5px));
+  box-shadow:
+    0 -3px #3a1a08,
+    0 3px #3a1a08,
+    -3px 0 #3a1a08,
+    3px 0 #3a1a08;
+  transition: translate 0.1s steps(2);
+}
+/* rope links between planks */
+.ladder a + a::before,
+.ladder a + a::after {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 3px);
+  width: 6px;
+  height: 14px;
+  background: repeating-linear-gradient(#eae0c8 0 3px, #8a7a5a 3px 5px);
+  box-shadow: 0 0 0 1px #3a1a08;
+}
+.ladder a + a::before {
+  left: 16%;
+}
+.ladder a + a::after {
+  right: 16%;
+}
+.ladder a:hover,
+.ladder a[aria-current="true"] {
+  translate: 6px 0;
+  color: #fff6c8;
+}
+.ladder a[aria-current="true"] {
+  background:
+    repeating-linear-gradient(0deg, #0000 0 5px, #a8703a33 5px 6px),
+    linear-gradient(#ffe0a8 0 3px, #f0bd78 3px calc(100% - 5px), #c08548 calc(100% - 5px));
+}
+.book-btn {
+  display: none;
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 30;
+  padding: 6px;
+  border: 0;
+  background: #1a120cdd;
+  box-shadow:
+    0 -3px var(--gold),
+    0 3px var(--gold),
+    -3px 0 var(--gold),
+    3px 0 var(--gold);
+  cursor: pointer;
+}
+.book-btn img,
+.x-btn img {
+  display: block;
+  image-rendering: pixelated;
+}
+.book-menu {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 5rem 1.5rem 2rem;
+  border: 0;
+  color: var(--parch);
+  background:
+    radial-gradient(ellipse at center, #3a2414 0, #120c08 75%);
+}
+.book-menu[open] {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.5rem;
+}
+.book-menu::backdrop {
+  background: #000c;
+}
+.book-menu .px-label {
+  font-size: 0.9rem;
+  margin: 0;
+}
+.book-menu .ladder {
+  position: static;
+  translate: none;
+  width: min(100%, 18rem);
+  gap: 18px;
+}
+.book-menu .ladder a {
+  font-size: 1.5rem;
+  padding: 0.8rem 0.4rem 0.7rem;
+}
+.x-btn {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  padding: 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+@media (min-width: 1180px) {
+  .map-sec .sec-body {
+    width: min(100% - 26rem, 1200px); /* clear the ladder */
+  }
+}
+@media (max-width: 1179px) {
+  body > .ladder {
+    display: none;
+  }
+  .book-btn {
+    display: block;
   }
 }

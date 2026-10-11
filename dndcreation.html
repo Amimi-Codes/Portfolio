@@ -42,6 +42,23 @@
       </div>
     </header>
 
+    <nav class="ladder" id="ladder" aria-label="Case study sections">
+      <a href="#top">Tavern</a>
+      <a href="#story">The Quest</a>
+      <a href="#research">Scouting</a>
+      <a href="#iterations">Campfire</a>
+      <a href="#roadmap">Quest Map</a>
+    </nav>
+    <button class="book-btn" id="book-btn" type="button" aria-label="Open section menu" aria-haspopup="dialog">
+      <img src="assets/dnd/book.svg" alt="" width="56" height="56" />
+    </button>
+    <dialog class="book-menu" id="book-menu" aria-label="Section menu">
+      <p class="px-label">Quest Log</p>
+      <button class="x-btn" type="button" aria-label="Close menu">
+        <img src="assets/dnd/close-x.svg" alt="" width="40" height="40" />
+      </button>
+    </dialog>
+
     <main>
       <!-- HERO · tavern -->
       <section class="scene-sec hero" id="top">
@@ -130,6 +147,11 @@
               That's what I wanted for tabletop: the same depth, with a path
               through it that doesn't require reading 300 pages across 4 different books first.
             </p>
+            <p class="px-small">
+              BG3 is the model for how Origin feels and flows, not for its rules. The
+              game adapts D&amp;D and changes parts of 5e, so it isn't an official way
+              to build a tabletop character. Origin follows the tabletop rules.
+            </p>
           </article>
         </div>
       </section>
@@ -153,64 +175,80 @@
               about where character creation loses them.
             </p>
             <ul class="stat-row">
-              <li><strong>4</strong> survey responses so far</li>
-              <li><strong>3 of 4</strong> had played only once or twice</li>
-              <li><strong>2 of 4</strong> stopped or put off creating their character</li>
-              <li><strong>3.25 / 5</strong> average confidence playing the finished character</li>
+              <li><strong>10</strong> survey responses: 4 new players and 6 experienced players and DMs</li>
+              <li><strong>2 of 4</strong> new players stopped or put off their character. No experienced player did.</li>
+              <li><strong>3.3 vs 4.8</strong> average confidence out of 5, new players vs experienced</li>
+              <li><strong>7 of 10</strong> don't care which edition they play, or don't know what an edition is</li>
             </ul>
-            <p class="px-small">Early read: the survey is still open, so treat these as signals, not statistics.</p>
+            <p class="px-small">"New players" have played once or twice. With 10 responses, read these as signals, not statistics.</p>
           </article>
 
           <article class="px-panel">
-            <p class="px-label">Finding 01 · The boss isn't where you'd think</p>
-            <h3>Picking a class and species was the easy part</h3>
+            <p class="px-label">Finding 01 · Two different bosses</p>
+            <h3>New players fight the mechanics. Veterans fight the story.</h3>
             <p>
-              Nobody found choosing a class or species hard. The trouble starts
-              afterwards, with the list-heavy, mechanical steps. When asked what
-              tripped them up most recently, three of four people named spells,
-              equipment and reading the rules.
+              Nobody new found choosing a class or species hard. They got stuck on the
+              list-heavy steps that come after: three of four needed help with skills, and
+              three of four named reading the rules as a problem. Experienced players
+              breeze through the mechanics; what's left for them is the creative part,
+              with four of six naming backstory, name or appearance as a sticking point.
             </p>
-            <p class="px-small" id="hard-steps">Rated "difficult" or "I needed help", out of 4 people</p>
-            <ul class="bars" aria-labelledby="hard-steps">
-              <li style="--v: 3"><span>Selecting skills</span><b>3</b></li>
-              <li style="--v: 2"><span>Selecting spells</span><b>2</b></li>
-              <li style="--v: 2"><span>Selecting equipment</span><b>2</b></li>
-              <li style="--v: 2"><span>Filling in the character sheet</span><b>2</b></li>
-              <li style="--v: 1"><span>Choosing a background</span><b>1</b></li>
-              <li style="--v: 1"><span>Assigning ability scores</span><b>1</b></li>
-              <li style="--v: 1"><span>Creating story details</span><b>1</b></li>
-              <li style="--v: 0"><span>Choosing a species</span><b>0</b></li>
-              <li style="--v: 0"><span>Choosing a class</span><b>0</b></li>
-            </ul>
+            <div class="table-scroll">
+              <table class="bars">
+                <caption class="px-small">Rated "difficult" or "I needed help"</caption>
+                <thead>
+                  <tr><th scope="col">Step</th><th scope="col">New players (of 4)</th><th scope="col">Experienced (of 6)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Selecting skills</th><td><i style="--p: 0.75"></i>3</td><td><i style="--p: 0"></i>0</td></tr>
+                  <tr><th scope="row">Selecting spells</th><td><i style="--p: 0.5"></i>2</td><td><i style="--p: 0.167"></i>1</td></tr>
+                  <tr><th scope="row">Selecting equipment</th><td><i style="--p: 0.5"></i>2</td><td><i style="--p: 0"></i>0</td></tr>
+                  <tr><th scope="row">Assigning ability scores</th><td><i style="--p: 0.25"></i>1</td><td><i style="--p: 0"></i>0</td></tr>
+                  <tr><th scope="row">Choosing a background</th><td><i style="--p: 0.25"></i>1</td><td><i style="--p: 0.167"></i>1</td></tr>
+                  <tr><th scope="row">Filling in the character sheet</th><td><i style="--p: 0.25"></i>1</td><td><i style="--p: 0.167"></i>1</td></tr>
+                  <tr><th scope="row">Creating story details</th><td><i style="--p: 0.25"></i>1</td><td><i style="--p: 0.333"></i>2</td></tr>
+                  <tr><th scope="row">Choosing a class</th><td><i style="--p: 0"></i>0</td><td><i style="--p: 0.167"></i>1</td></tr>
+                  <tr><th scope="row">Choosing a species</th><td><i style="--p: 0"></i>0</td><td><i style="--p: 0.167"></i>1</td></tr>
+                </tbody>
+              </table>
+            </div>
           </article>
 
           <article class="px-panel">
             <p class="px-label">Finding 02 · Party members wanted</p>
-            <h3>The best guide was a person at the table</h3>
+            <h3>New players learn from people and examples</h3>
             <p>
-              All four found a friend or another player helpful, and two named a
-              friend as their single most useful source of help. Everyone who
-              tried a pre-made example character found it helpful too. Video
-              tutorials helped nobody.
+              All four new players found a friend helpful, and all four found a
+              pre-made example character helpful. Experienced players lean on what
+              they already know (all six) and on D&amp;D Beyond, which four of them
+              use. Across everyone, half named a person (a friend, the DM or their
+              group) as their most useful source of help.
             </p>
             <blockquote class="px-quote">
               "Having someone actually there tailoring advice to your situation is
               the best way to learn hands-on."
             </blockquote>
+            <blockquote class="px-quote">
+              "Creating with a group&hellip; helped having experienced people there who
+              knew the lore."
+            </blockquote>
           </article>
 
           <article class="px-panel">
             <p class="px-label">Finding 03 · Lost in the woods</p>
-            <h3>Half of them stalled</h3>
+            <h3>Only new players stalled</h3>
             <p>
-              One person never finished their character and another came back to
-              it later. The complaints were time and maths, and that includes BG3:
-              its one player spent four hours in the character creator.
+              One new player never finished their character and another came back to
+              it later. Their complaints were the maths and the time. Even BG3, the
+              friendliest creator in the survey, took one new player four hours. When I
+              followed up, they said that time went into both building the character
+              and customising its looks. The looks are outside Origin's scope; the
+              building part is exactly what it should explain.
             </p>
-            <blockquote class="px-quote">"There's so much math…"</blockquote>
+            <blockquote class="px-quote">"There's so much math&hellip;"</blockquote>
             <blockquote class="px-quote">
-              "There's too many customization options that I spent 4 hours making
-              my character instead of playing the actual game."
+              "It's difficult for novice people to understand the intricacies of
+              classes/species unless they've read thoroughly."
             </blockquote>
           </article>
 
@@ -218,14 +256,35 @@
             <p class="px-label">Finding 04 · Nobody asked for an edition</p>
             <h3>Beginners want to know what a choice does</h3>
             <p>
-              Only one person (the Dungeon Master) had an edition preference; the
-              others didn't care or didn't know what an edition was. What they
-              asked for was explanation: "actual instructions", and what a choice
-              means once the game starts.
+              Every new player either didn't care which edition they played or didn't
+              know what an edition was. What they asked for was explanation: "actual
+              instructions", and what a choice means once the game starts. One
+              experienced player's wish was the opposite of more options: fewer
+              homebrew variants cluttering the app.
             </p>
             <blockquote class="px-quote">
               "Specific explanations on how choices could affect gameplay, such as
               what spells are useful in which scenarios."
+            </blockquote>
+          </article>
+
+          <article class="px-panel">
+            <p class="px-label">Finding 05 · The last boss is the backstory</p>
+            <h3>Even veterans want help with the story and the paperwork</h3>
+            <p>
+              Backstory was the most common recent difficulty overall (4 of 10), and
+              three of those four were experienced players. Wishes included suggestions
+              built from a character concept, help with lore, and help filling in a
+              physical character sheet for in-person games.
+            </p>
+            <blockquote class="px-quote">
+              "A platform to save all my details and AI to suggest things like
+              background based on the character concept. Especially if I didn't have
+              experienced players around."
+            </blockquote>
+            <blockquote class="px-quote">
+              "Something that helps fill out my physical character sheet. That always
+              takes me the longest for in person one shots."
             </blockquote>
           </article>
 
@@ -236,7 +295,9 @@
               <li><strong>Be the friend at the table.</strong> Short, in-context answers to "what does this do?" instead of rule text.</li>
               <li><strong>Start from an example.</strong> Offer ready-made characters people can tweak instead of a blank sheet.</li>
               <li><strong>Show the payoff.</strong> Explain how each choice plays out in a game, and do the maths for them.</li>
-              <li><strong>Don't lead with the edition.</strong> Default to current rules and keep the setting out of the way.</li>
+              <li><strong>Help with the story too.</strong> Backstory prompts and suggestions that build on the character concept.</li>
+              <li><strong>Finish on paper.</strong> Export to a printable character sheet, which is already on the quest map.</li>
+              <li><strong>Keep the rules official.</strong> Default to current rules, skip homebrew clutter and don't make anyone pick an edition first.</li>
             </ul>
           </article>
         </div>
@@ -267,6 +328,14 @@
                 and had the same repeat dialogue for every species and class. 
                 And thus began the tale of Origin.
               </p>
+              <img
+                class="tale-shot"
+                src="assets/dnd/version-1.webp"
+                alt="Version 1 home page: a dark red sidebar with Home, Species, Class, Ability Scores, Prepared Spells and Flavour Text links beside a black welcome panel reading Hello Traveler!"
+                width="1274"
+                height="908"
+                loading="lazy"
+              />
             </li>
             <li class="px-panel">
               <p class="px-label">Version 2 · Mimi's D&amp;D Character Builder</p>
@@ -298,7 +367,6 @@
                   loading="lazy"
                 /><span>BG3 character creator</span>
               </li>
-              <li><div class="pin-ph"></div><span>Version 1 screenshot</span></li>
               <li><div class="pin-ph"></div><span>Colour palette</span></li>
               <li><div class="pin-ph"></div><span>Pixel art references</span></li>
               <li><div class="pin-ph"></div><span>Character sheet layouts</span></li>
