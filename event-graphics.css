@@ -8,7 +8,7 @@
 .room {
   position: relative;
   /* width + margins come from .wrap so the room lines up with the nav */
-  aspect-ratio: 1 / 0.9974; /* wall height 42cqw + floor depth 57.74cqw */
+  aspect-ratio: 1 / 1.0374; /* wall height 42cqw + floor depth 57.74cqw + 4cqw base */
   container-type: inline-size;
   isolation: isolate;
 }

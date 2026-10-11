@@ -72,14 +72,14 @@ const CAT = [
   [-0.2, [2.6, -2], [1.8, -4.5], [0.3, -2.6]],
   [0.2, [-1.9, -3.5], [0.3, -2.6], [0.1, -4.6]],
   [-0.06, [0.3, -2.6], [1.8, -4.5], [0.1, -4.6]],
-  [0.25, [-1.9, -3.5], [0.1, -4.6], [-1.2, -5.8]],
-  [-0.18, [0.1, -4.6], [1.8, -4.5], [1.1, -6]],
-  [0.12, [-1.2, -5.8], [0.1, -4.6], [0, -6.4]],
-  [-0.1, [0.1, -4.6], [1.1, -6], [0, -6.4]],
+  [0.25, [-1.9, -3.5], [0.1, -4.6], [-1.45, -6.4]],
+  [-0.18, [0.1, -4.6], [1.8, -4.5], [1.35, -6.4]],
+  [0.12, [-1.45, -6.4], [0.1, -4.6], [0, -6.7]],
+  [-0.1, [0.1, -4.6], [1.35, -6.4], [0, -6.7]],
   // head
-  [-0.08, [-1.3, -6.5], [1.2, -6.5], [0, -8]],
-  [0.12, [-1.9, -7.6], [-1.3, -6.5], [0, -8]],
-  [-0.28, [1.2, -6.5], [1.8, -7.8], [0, -8]],
+  [-0.08, [-1.3, -6.2], [1.2, -6.2], [0, -8]],
+  [0.12, [-1.9, -7.6], [-1.3, -6.2], [0, -8]],
+  [-0.28, [1.2, -6.2], [1.8, -7.8], [0, -8]],
   [0.3, [-1.9, -7.6], [0, -8], [-1.4, -9.3]],
   [-0.16, [1.8, -7.8], [1.3, -9.4], [0, -8]],
   [0.22, [-1.4, -9.3], [0, -8], [0, -9.6]],
@@ -91,7 +91,8 @@ const CAT = [
   [-0.3, [1.1, -9.5], [1, -11.2], [1.75, -9]],
 ];
 
-const cat = ({ u, v, faceLeft, fur = "#efedea", size: s = 1, seated, d }) => {
+const cat = ({ u, v, faceLeft, fur = "#efedea", size = 1, seated, d }) => {
+  const s = 0.7 * size;
   const [x, y] = iso(u, v, seated ? 3.4 : 0); // seated: origin on the bench top
   return { d: d ?? u + v, svg: `<g transform="translate(${x} ${y}) scale(${faceLeft ? s : -s} ${s})">
     <ellipse cx=".7" cy=".3" rx="3.2" ry="1.1" fill="rgba(0 0 0 / .22)"/>
@@ -108,19 +109,19 @@ const bench = ({ u0, v0, u1, v1 }) => {
     const t = (i + 0.5) / n;
     const [u, v] = alongU ? [u0 + t * (u1 - u0), (v0 + v1) / 2] : [(u0 + u1) / 2, v0 + t * (v1 - v0)];
     const [x, y] = iso(u, v, H);
-    return `<circle cx="${x}" cy="${y}" r=".2" fill="#c96a82"/>`;
+    return `<circle cx="${x}" cy="${y}" r=".2" fill="#bdb5a8"/>`;
   });
   const seams = Array.from({ length: n - 1 }, (_, i) => {
     const t = (i + 1) / n;
     const ends = alongU
       ? [[u0 + t * (u1 - u0), v0, H], [u0 + t * (u1 - u0), v1, H], [u0 + t * (u1 - u0), v1, base]]
       : [[u0, v0 + t * (v1 - v0), H], [u1, v0 + t * (v1 - v0), H], [u1, v0 + t * (v1 - v0), base]];
-    return `<polyline points="${ends.map((p) => iso(...p)).join(" ")}" fill="none" stroke="#d97690" stroke-width=".1"/>`;
+    return `<polyline points="${ends.map((p) => iso(...p)).join(" ")}" fill="none" stroke="#d8d2c8" stroke-width=".1"/>`;
   });
   return { d: (u0 + u1 + v0 + v1) / 2, svg: `<g>
     ${face([[u0 - 0.01, v0 - 0.01, 0], [u1 + 0.02, v0 - 0.01, 0], [u1 + 0.02, v1 + 0.02, 0], [u0 - 0.01, v1 + 0.02, 0]], "rgba(0 0 0 / .18)")}
     ${box(u0 + inset, v0 + inset, u1 - inset, v1 - inset, 0, base, "#d9a877")}
-    ${box(u0, v0, u1, v1, base, H, "#ec8fa5")}
+    ${box(u0, v0, u1, v1, base, H, "#f4f1ec")}
     ${seams.join("")}${tufts.join("")}
   </g>` };
 };
@@ -154,5 +155,9 @@ document.querySelector(".scene").innerHTML = `
   <defs>
     <radialGradient id="pool"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
   </defs>
+  <polygon points="0,70.87 50,99.74 50,100.94 0,72.07" fill="#8f6644"/>
+  <polygon points="50,99.74 100,70.87 100,72.07 50,100.94" fill="#6f4c31"/>
+  <polygon points="0,72.07 50,100.94 50,103.74 0,74.87" fill="#efe6da"/>
+  <polygon points="50,100.94 100,72.07 100,74.87 50,103.74" fill="#d3c6b4"/>
   ${pools.join("")}
   ${items.map((i) => i.svg).join("")}`;
