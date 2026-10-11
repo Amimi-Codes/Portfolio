@@ -276,6 +276,7 @@ if (journeySvg) {
   const line = journeySvg.querySelector(".journey-line"),
     draw = journeySvg.querySelector(".journey-draw"),
     chapters = [...journey.querySelectorAll(".scrap-memory")],
+    bubbles = [...journey.querySelectorAll(".speech-bubble")].map((el) => ({ el, top: 0 })),
     icons = [...journey.querySelectorAll(".journey-icon")];
   let ends = [], samples = [], total = 0, shown = 0;
   const build = () => {
@@ -285,6 +286,7 @@ if (journeySvg) {
     const gx = box.left > 64 ? -40 : 6;
     // one stop at the top of each chapter
     const pts = chapters.map((c) => [gx, c.getBoundingClientRect().top - box.top + 11]);
+    bubbles.forEach((b) => (b.top = b.el.getBoundingClientRect().top - box.top));
     let d = `M${pts[0][0]} ${pts[0][1]}`;
     ends = [0];
     for (let i = 1; i < pts.length; i++) {
@@ -318,6 +320,9 @@ if (journeySvg) {
     });
     // a chapter's photos appear once the path has reached it (and stay)
     chapters.forEach((c, i) => len > ends[i] - 10 && len > 1 && c.classList.add("photos-in"));
+    // speech bubbles pop in, in order, once the icon passes the top of each one
+    const y = line.getPointAtLength(len).y;
+    bubbles.forEach((b, i) => y >= b.top && (i === 0 || bubbles[i - 1].el.classList.contains("is-in")) && b.el.classList.add("is-in"));
   };
   const target = () => {
     if (reducedMotion) return total;
