@@ -40,7 +40,7 @@ dialog.addEventListener("click", (e) => {
   if (e.target === dialog) dialog.close();
 });
 
-// === people, benches and floor light, in floor coords (u along right wall, v along left wall) ===
+// === cats, benches and floor light, in floor coords (u along right wall, v along left wall) ===
 const iso = (u, v, h = 0) => [50 + 50 * (u - v), 42 + 28.87 * (u + v) - h];
 
 // mix a hex colour toward white (k > 0) or black (k < 0)
@@ -59,43 +59,43 @@ const box = (u0, v0, u1, v1, h0, h1, c) =>
   face([[u0, v1, h0], [u1, v1, h0], [u1, v1, h1], [u0, v1, h1]], c) +
   face([[u1, v0, h0], [u1, v1, h0], [u1, v1, h1], [u1, v0, h1]], shade(c, -0.3));
 
-// flat-vector visitor seen from behind, drawn looking up-left (mirrored for the right wall).
-// Local units: feet at 0,0, about 15 tall; the right-hand side of each shape is in shadow.
-const figure = ({ shirt, pants, hair, skin = "#e5b08f", shoes = "#2b2b33", hairStyle, skirt, seated }) => {
-  const dark = (c) => shade(c, -0.22);
-  const legs = seated ? "" : `
-    <path d="M-1.35-6.9C-1.4-4.5-1.05-2.5-.95-.9h.7C-.2-3 0-5 0-6.9Z" fill="${dark(pants)}"/>
-    <path d="M0-6.9C.05-4.8.35-2.6.4-.6h.7c.1-2.2.3-4.2.25-6.3Z" fill="${pants}"/>
-    <path d="M.85-6.9C.9-4.8.95-2.8.85-.6h.25c.1-2.2.3-4.2.25-6.3Z" fill="${dark(pants)}"/>
-    <path d="M-1.1-1h.95q.3.6-.1.75h-.85q-.3-.35 0-.75Z" fill="${dark(shoes)}"/>
-    <path d="M.3-.6h.9q.3.6-.1.75H.25q-.3-.35.05-.75Z" fill="${shoes}"/>
-    ${skirt ? `<path d="M-1.5-7.2h3l.45 3H-1.95Z" fill="${skirt}"/><path d="M.7-7.2h.8l.45 3H.9Z" fill="${dark(skirt)}"/>` : ""}`;
-  const hairPath = hairStyle === "long"
-    ? "M-1.1-13.7q-.05-1.4 1.15-1.4t1.1 1.4l.15 2.7q-1.3.4-2.6 0Z"
-    : "M-1.02-13.6q-.08-1.45 1.07-1.45t1 1.45q-.05.85-.45 1H-.55q-.45-.2-.47-1Z";
-  return `${legs}
-    <g${seated ? ` transform="translate(0 6.4)"` : ""}>
-      <path d="M-1.6-12q-.75.2-.75 1.2l.1 3.1h.7l.1-2.9Z" fill="${dark(shirt)}"/>
-      <ellipse cx="-1.9" cy="-7.45" rx=".36" ry=".42" fill="${dark(skin)}"/>
-      <path d="M-1.75-11.3q0-.9.9-.95h1.7q.9.05.9.95l-.3 4.6q-1.45.3-2.9 0Z" fill="${shirt}"/>
-      <path d="M.75-12.25h.1q.9.05.9.95l-.3 4.6q-.45.1-.85.15.3-2.45.15-5.7Z" fill="${dark(shirt)}"/>
-      <path d="M1.6-12q.75.2.75 1.2l-.1 3.1h-.7l-.1-2.9Z" fill="${dark(shirt)}"/>
-      <ellipse cx="1.9" cy="-7.45" rx=".36" ry=".42" fill="${dark(skin)}"/>
-      <path d="M-.4-12.9h.8v.8h-.8Z" fill="${dark(skin)}"/>
-      <ellipse cx="-1" cy="-13.55" rx=".2" ry=".32" fill="${skin}"/>
-      <ellipse cx="1.08" cy="-13.55" rx=".2" ry=".32" fill="${dark(skin)}"/>
-      <ellipse cx=".05" cy="-13.75" rx="1" ry="1.2" fill="${skin}"/>
-      <path d="${hairPath}" fill="${hair}"/>
-      ${hairStyle === "bun" ? `<circle cx=".1" cy="-15.05" r=".55" fill="${hair}"/>` : ""}
-      <path d="M-.6-14.55q.55-.35 1.1-.15" stroke="${shade(hair, 0.3)}" stroke-width=".18" fill="none" stroke-linecap="round"/>
-    </g>`;
-};
+// low-poly cat sitting with its back to us, looking up-left (mirrored for the right wall).
+// Each facet is [shade, ...points]; local units, paws at 0,0, about 11 tall.
+const CAT = [
+  // tail curled on the floor
+  [-0.05, [1.5, -0.2], [2.9, -0.4], [3.6, 0.3], [1.4, 0.4]],
+  [-0.25, [1.4, 0.4], [3.6, 0.3], [3.2, 0.9], [0, 0.85], [-0.6, 0.6]],
+  // body
+  [0.1, [-2.2, 0], [0.3, -2.6], [-1.9, -3.5]],
+  [-0.12, [-2.2, 0], [2.4, 0], [0.3, -2.6]],
+  [-0.32, [2.4, 0], [2.6, -2], [0.3, -2.6]],
+  [-0.2, [2.6, -2], [1.8, -4.5], [0.3, -2.6]],
+  [0.2, [-1.9, -3.5], [0.3, -2.6], [0.1, -4.6]],
+  [-0.06, [0.3, -2.6], [1.8, -4.5], [0.1, -4.6]],
+  [0.25, [-1.9, -3.5], [0.1, -4.6], [-1.2, -5.8]],
+  [-0.18, [0.1, -4.6], [1.8, -4.5], [1.1, -6]],
+  [0.12, [-1.2, -5.8], [0.1, -4.6], [0, -6.4]],
+  [-0.1, [0.1, -4.6], [1.1, -6], [0, -6.4]],
+  // head
+  [-0.08, [-1.3, -6.5], [1.2, -6.5], [0, -8]],
+  [0.12, [-1.9, -7.6], [-1.3, -6.5], [0, -8]],
+  [-0.28, [1.2, -6.5], [1.8, -7.8], [0, -8]],
+  [0.3, [-1.9, -7.6], [0, -8], [-1.4, -9.3]],
+  [-0.16, [1.8, -7.8], [1.3, -9.4], [0, -8]],
+  [0.22, [-1.4, -9.3], [0, -8], [0, -9.6]],
+  [0, [0, -9.6], [0, -8], [1.3, -9.4]],
+  // ears
+  [0.28, [-1.9, -8.9], [-1.6, -11], [-1.05, -9.4]],
+  [0.02, [-1.05, -9.4], [-1.6, -11], [-0.5, -9.55]],
+  [-0.05, [0.5, -9.6], [1, -11.2], [1.1, -9.5]],
+  [-0.3, [1.1, -9.5], [1, -11.2], [1.75, -9]],
+];
 
-const person = ({ u, v, faceLeft, size: s = 1, d, ...look }) => {
-  const [x, y] = iso(u, v, look.seated ? 3.4 : 0); // seated: origin on the bench top
+const cat = ({ u, v, faceLeft, fur = "#efedea", size: s = 1, seated, d }) => {
+  const [x, y] = iso(u, v, seated ? 3.4 : 0); // seated: origin on the bench top
   return { d: d ?? u + v, svg: `<g transform="translate(${x} ${y}) scale(${faceLeft ? s : -s} ${s})">
-    ${look.seated ? "" : `<ellipse rx="2.4" ry=".9" fill="rgba(0 0 0 / .25)"/>`}
-    ${figure(look)}
+    <ellipse cx=".7" cy=".3" rx="3.2" ry="1.1" fill="rgba(0 0 0 / .22)"/>
+    ${CAT.map(([k, ...pts]) => `<polygon points="${pts.join(" ")}" fill="${shade(fur, k)}" stroke="${shade(fur, k)}" stroke-width=".05" stroke-linejoin="round"/>`).join("")}
   </g>` };
 };
 
@@ -136,15 +136,15 @@ const pools = [
   pool(0.2, 0.06, 30), pool(0.5, 0.06, 30), pool(0.8, 0.06, 30),
 ];
 const items = [
-  person({ u: 0.15, v: 0.72, faceLeft: true, shirt: "#f4f1ea", pants: "#e5b08f", skirt: "#2d2d36", hair: "#4a2a1a", hairStyle: "bun", shoes: "#c9c9d0" }),
-  person({ u: 0.16, v: 0.27, faceLeft: true, shirt: "#5bb6a8", pants: "#2f4a6b", hair: "#1c1410", shoes: "#f4f1ea" }),
-  person({ u: 0.22, v: 0.37, faceLeft: true, size: 0.8, shirt: "#f2c35b", pants: "#40516e", hair: "#8a5a32", hairStyle: "long" }),
-  person({ u: 0.21, v: 0.15, shirt: "#8f7ad9", pants: "#25252e", hair: "#24170f", hairStyle: "long" }),
-  person({ u: 0.55, v: 0.16, shirt: "#e64b4b", pants: "#2b2b33", hair: "#4a2e1c", shoes: "#e64b4b" }),
-  person({ u: 0.78, v: 0.15, shirt: "#7fc6e8", pants: "#e5b08f", skirt: "#d65ca3", hair: "#151010", hairStyle: "long", shoes: "#d65ca3" }),
-  person({ u: 0.86, v: 0.2, size: 0.7, shirt: "#9bd36a", pants: "#5a4636", hair: "#c48a4f" }),
+  cat({ u: 0.13, v: 0.7, faceLeft: true }),
+  cat({ u: 0.14, v: 0.29, faceLeft: true, fur: "#9a9ea6" }),
+  cat({ u: 0.2, v: 0.38, faceLeft: true, fur: "#e39a55", size: 0.65 }),
+  cat({ u: 0.2, v: 0.13, fur: "#3a3a40" }),
+  cat({ u: 0.52, v: 0.14, fur: "#e8d3b0" }),
+  cat({ u: 0.79, v: 0.13 }),
+  cat({ u: 0.86, v: 0.2, fur: "#e39a55", size: 0.6 }),
   bench({ u0: 0.38, v0: 0.5, u1: 0.72, v1: 0.6 }),
-  person({ u: 0.56, v: 0.55, d: 1.2, seated: true, shirt: "#f0a35e", pants: "#3f6f8f", hair: "#2a1a12", hairStyle: "bun" }),
+  cat({ u: 0.56, v: 0.55, d: 1.2, seated: true, fur: "#9a9ea6", size: 0.8 }),
   bench({ u0: 0.48, v0: 0.72, u1: 0.58, v1: 0.92 }),
 ];
 // painter's order: things further back (smaller u + v) draw first
