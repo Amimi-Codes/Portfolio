@@ -1239,8 +1239,8 @@ button {
 .pool-scene{display:block;width:100%;height:auto}
 .pool-water,.pool-water>div{position:absolute;inset:0}
 .pool-plane{position:absolute;transform-origin:0 0;transform:matrix(1,.5,-1,.5,0,0);overflow:hidden}
-.pool-plane i{--t:calc(6*var(--u));position:absolute;inset:calc(-1*var(--t));background:url(assets/about/caustics.webp) 0 0/var(--t) var(--t);opacity:.55;animation:caustic 14s linear infinite;will-change:transform}
-.pool-plane i+i{--t:calc(8.5*var(--u));opacity:.35;animation-duration:21s;animation-direction:reverse}
+.pool-plane i{--t:calc(6*var(--u));position:absolute;inset:calc(-1*var(--t));background:url(assets/about/caustics.webp) 0 0/var(--t) var(--t);opacity:.4;animation:caustic 14s linear infinite;will-change:transform}
+.pool-plane i+i{--t:calc(8.5*var(--u));opacity:.25;animation-duration:21s;animation-direction:reverse}
 @keyframes caustic{to{transform:translate(var(--t),calc(var(--t)*-1))}}
 .pool-words{list-style:none;margin:0;padding:0;position:absolute;inset:0}
 /* glass float: li carries position + flat-on-water squash, ::before/::after are the hover glows, span is the glass */
