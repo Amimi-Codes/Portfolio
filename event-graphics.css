@@ -76,7 +76,7 @@
 
 /* === "Click an image" CTA: 'Click' lights up neon blue once every 10s === */
 .cta {
-  margin: 1rem 0 0;
+  margin: 1rem 0 7rem; /* large gap before the carousel */
   position: relative;
   z-index: 2;
   font: 400 clamp(2rem, 5vw, 3.5rem) / 1 Oranienbaum, serif;
@@ -177,9 +177,9 @@
 }
 
 .carousel {
-  /* ring spans the page margins (same width as .wrap, so the arrows line up with the
-     nav). Posters are 27% of the ring, narrower when there are too many to fit. */
-  --_diameter: min(calc(100vw - 6rem), 1420px);
+  /* ring is 85% of the page width between the margins (full width on phones).
+     Posters are 27% of the ring, narrower when there are too many to fit. */
+  --_diameter: min(calc((100vw - 6rem) * 0.85), 1200px);
   --_radius: calc(var(--_diameter) / 2);
   --_item-width: min(calc(var(--_diameter) * 0.27), calc(var(--_diameter) * 2.38 / var(--_n, 5)));
   --_item-height: calc(var(--_item-width) * 1.4);
@@ -193,7 +193,7 @@
 }
 @media (max-width: 900px) {
   .carousel {
-    --_diameter: calc(100vw - 3rem);
+    --_diameter: calc((100vw - 3rem) * 0.85);
   }
 }
 @media (max-width: 700px) {
