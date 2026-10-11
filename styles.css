@@ -1199,7 +1199,7 @@ button {
 @keyframes icon-bob{50%{transform:translateY(-3px) rotate(-4deg)}}
 @media(max-width:650px){.photo-placeholder.square{width:112px;height:112px}.photo-placeholder.mystery span{font-size:3rem}}
 @media(prefers-reduced-motion:reduce){.photo-placeholder.mystery span,.journey-icon svg{animation:none}}
-@media(max-width:650px){.scrap-memory{padding-left:34px}.journey-icon{width:32px;height:32px;margin:-16px 0 0 -16px}}
+@media(max-width:1000px){.scrap-memory{padding-left:34px}.journey-icon{width:32px;height:32px;margin:-16px 0 0 -16px}}
 
 /* journey: text is always there; each chapter's photos fade in once the path reaches it (script.js adds .photos-in) */
 .scrap-memory:not(.photos-in) .photo-placeholder{opacity:0}
@@ -1218,3 +1218,13 @@ button {
 .scrap-closing u{text-underline-offset:3px}
 @media(max-width:650px){.speech-row{gap:.2rem}.speech-bubble{width:160px;font-size:.85rem;padding:0 24px 30px}.speech-reply{margin-top:3rem}.memory-2025{margin:3rem 0 5rem}}
 @media(prefers-reduced-motion:reduce){.speech-bubble svg{animation:none}.scrap-memory .photo-placeholder{opacity:1}}
+/* journey chapters laid out like the Wix page: photos-first chapters, a right-aligned 2020 */
+.scrap-memory.stack{display:flex;flex-direction:column;align-items:flex-start;gap:1.6rem}
+.scrap-memory.stack .scrap-copy{max-width:560px}
+.scrap-copy.align-right{align-self:flex-end;text-align:right;max-width:360px}
+.memory-2020{margin-left:6%;margin-right:4%}
+.memory-2020 .photo-cluster-two{align-self:center}
+.memory-community{margin-left:0}
+.scrap-copy p+p{margin-top:1rem}
+.scrap-year{font-size:.8rem;letter-spacing:.04em}
+@media(max-width:650px){.scrap-copy.align-right{align-self:flex-start;text-align:left}.memory-2020{margin:3rem 0 5rem}}

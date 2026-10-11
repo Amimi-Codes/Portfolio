@@ -275,25 +275,22 @@ const journeySvg = journey && journey.querySelector(".journey-path");
 if (journeySvg) {
   const line = journeySvg.querySelector(".journey-line"),
     draw = journeySvg.querySelector(".journey-draw"),
-    years = [...journey.querySelectorAll(".scrap-year")],
-    chapters = years.map((y) => y.closest(".scrap-memory")),
+    chapters = [...journey.querySelectorAll(".scrap-memory")],
     icons = [...journey.querySelectorAll(".journey-icon")];
   let ends = [], samples = [], total = 0, shown = 0;
   const build = () => {
     const box = journey.getBoundingClientRect();
-    // anchor: just left of each year label; on phones the path runs down the left margin
-    const narrow = innerWidth <= 650;
-    const pts = years.map((y) => {
-      const r = y.getBoundingClientRect(), cy = r.top - box.top + r.height / 2;
-      return narrow ? [6, cy] : [r.left - box.left - 34, cy];
-    });
+    // the path runs down the margin left of the chapters (inside it when there's no room),
+    // level with each chapter's heading, so it never crosses text or photos
+    const gx = box.left > 64 ? -40 : 6;
+    // one stop at the top of each chapter
+    const pts = chapters.map((c) => [gx, c.getBoundingClientRect().top - box.top + 11]);
     let d = `M${pts[0][0]} ${pts[0][1]}`;
     ends = [0];
     for (let i = 1; i < pts.length; i++) {
       const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], dy = y1 - y0;
-      // tall full-width chapters (2025) keep the path down the margin and cross over at the end
-      const late = !narrow && chapters[i - 1].dataset.sweep === "late";
-      const seg = ` C${x0} ${y0 + dy * (late ? 0.97 : 0.8)} ${x1} ${y1 - dy * (late ? 0.1 : 0.8)} ${x1} ${y1}`;
+      const wave = (gx < 0 ? 26 : 0) * (i % 2 ? 1 : -1); // gentle sway on wide screens
+      const seg = ` C${x0 + wave} ${y0 + dy * 0.45} ${x1 + wave} ${y1 - dy * 0.45} ${x1} ${y1}`;
       d += seg;
       const tmp = document.createElementNS("http://www.w3.org/2000/svg", "path");
       tmp.setAttribute("d", `M${x0} ${y0}` + seg);
