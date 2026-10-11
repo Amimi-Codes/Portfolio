@@ -92,20 +92,36 @@ const figure = ({ shirt, pants, hair, skin = "#e5b08f", shoes = "#2b2b33", hairS
 };
 
 const person = ({ u, v, faceLeft, size: s = 1, d, ...look }) => {
-  const [x, y] = iso(u, v, look.seated ? 3.2 : 0); // seated: origin on the bench top
+  const [x, y] = iso(u, v, look.seated ? 3.4 : 0); // seated: origin on the bench top
   return { d: d ?? u + v, svg: `<g transform="translate(${x} ${y}) scale(${faceLeft ? s : -s} ${s})">
     ${look.seated ? "" : `<ellipse rx="2.4" ry=".9" fill="rgba(0 0 0 / .25)"/>`}
     ${figure(look)}
   </g>` };
 };
 
-// solid gallery bench with a glowing neon base, like the reference render
-const bench = ({ u0, v0, u1, v1, h = 3.2 }) => {
-  const [a, b] = [iso(u0, v1), iso(u1, v1)];
-  const c = iso(u1, v0);
+// upholstered gallery bench: tufted cushion on an inset wooden base
+const bench = ({ u0, v0, u1, v1 }) => {
+  const H = 3.4, base = 1.9, inset = 0.012;
+  const alongU = u1 - u0 > v1 - v0;
+  const n = Math.round((alongU ? u1 - u0 : v1 - v0) / 0.1); // cushion sections
+  const tufts = Array.from({ length: n }, (_, i) => {
+    const t = (i + 0.5) / n;
+    const [u, v] = alongU ? [u0 + t * (u1 - u0), (v0 + v1) / 2] : [(u0 + u1) / 2, v0 + t * (v1 - v0)];
+    const [x, y] = iso(u, v, H);
+    return `<circle cx="${x}" cy="${y}" r=".2" fill="#c96a82"/>`;
+  });
+  const seams = Array.from({ length: n - 1 }, (_, i) => {
+    const t = (i + 1) / n;
+    const ends = alongU
+      ? [[u0 + t * (u1 - u0), v0, H], [u0 + t * (u1 - u0), v1, H], [u0 + t * (u1 - u0), v1, base]]
+      : [[u0, v0 + t * (v1 - v0), H], [u1, v0 + t * (v1 - v0), H], [u1, v0 + t * (v1 - v0), base]];
+    return `<polyline points="${ends.map((p) => iso(...p)).join(" ")}" fill="none" stroke="#d97690" stroke-width=".1"/>`;
+  });
   return { d: (u0 + u1 + v0 + v1) / 2, svg: `<g>
-    ${box(u0, v0, u1, v1, 0, h, "#d6d0e2")}
-    <polyline class="neon" points="${a} ${b} ${c}" fill="none" stroke="#8ff6ff" stroke-width=".5" filter="url(#glow)"/>
+    ${face([[u0 - 0.01, v0 - 0.01, 0], [u1 + 0.02, v0 - 0.01, 0], [u1 + 0.02, v1 + 0.02, 0], [u0 - 0.01, v1 + 0.02, 0]], "rgba(0 0 0 / .18)")}
+    ${box(u0 + inset, v0 + inset, u1 - inset, v1 - inset, 0, base, "#d9a877")}
+    ${box(u0, v0, u1, v1, base, H, "#ec8fa5")}
+    ${seams.join("")}${tufts.join("")}
   </g>` };
 };
 
@@ -136,8 +152,7 @@ items.sort((a, b) => a.d - b.d);
 
 document.querySelector(".scene").innerHTML = `
   <defs>
-    <radialGradient id="pool"><stop offset="0" stop-color="#fff2cf" stop-opacity="1"/><stop offset="1" stop-color="#fff2cf" stop-opacity="0"/></radialGradient>
-    <filter id="glow" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation=".5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="pool"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
   </defs>
   ${pools.join("")}
   ${items.map((i) => i.svg).join("")}`;

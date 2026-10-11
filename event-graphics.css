@@ -24,36 +24,17 @@
   box-sizing: border-box;
   box-shadow: inset 0 -1.4cqw 0 #b3a58f;
 }
-/* neon strip along the top of each wall + the coloured wash it throws */
-.wall::before,
-.wall::after {
+/* white light strip along the top of each wall */
+.wall::before {
   content: "";
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  animation: neon 9s ease-in-out infinite alternate;
-}
-.wall::before {
-  bottom: auto;
+  inset: 0 0 auto;
   height: 0.5cqw;
-  background: #8ff6ff;
+  pointer-events: none;
+  background: #fff;
   box-shadow:
-    0 0 1cqw 0.3cqw #8ff6ff,
-    0 0 4cqw 1cqw rgba(143 246 255 / 0.6);
-}
-.wall::after {
-  z-index: -1;
-  background: linear-gradient(rgba(143 246 255 / 0.28), transparent 55%);
-  mix-blend-mode: multiply;
-}
-.wall-right::before,
-.wall-right::after {
-  animation-delay: -4.5s;
-}
-@keyframes neon {
-  to {
-    filter: hue-rotate(135deg);
-  }
+    0 0 1cqw 0.3cqw #fff,
+    0 0 5cqw 1.5cqw rgba(255 255 255 / 0.55);
 }
 .wall-left {
   left: 0;
@@ -104,7 +85,7 @@
   height: 120%;
   background: radial-gradient(
     ellipse 50% 70% at 50% 100%,
-    rgba(255 244 214 / 0.9),
+    rgba(255 255 255 / 0.95),
     transparent 70%
   );
   opacity: 0.8;
@@ -162,9 +143,6 @@
 .scene .pool:nth-of-type(2n) {
   animation-delay: -3s;
 }
-.scene .neon {
-  animation: neon 9s ease-in-out infinite alternate;
-}
 @keyframes pool {
   from {
     opacity: 0.45;
@@ -174,8 +152,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wall::before,
-  .wall::after,
   .scene * {
     animation: none !important;
   }
