@@ -74,7 +74,7 @@
   margin-right: 0.5rem;
 }
 
-/* === "Click an image" CTA: 'Click' lights up neon blue once every 10s === */
+/* === "Click an image" CTA: when it scrolls into view, 'Click' flickers twice then stays lit === */
 .cta {
   margin: 1rem 0 7rem; /* large gap before the carousel */
   position: relative;
@@ -89,7 +89,6 @@
   position: relative;
   display: inline-block;
   color: #555;
-  animation: neon-text 10s infinite linear;
 }
 /* glow behind the word */
 .neon::before {
@@ -100,7 +99,6 @@
   background: var(--neon);
   filter: blur(2em);
   opacity: 0;
-  animation: neon-glow 10s infinite linear;
   z-index: -1;
 }
 /* reflection on the floor below it */
@@ -113,30 +111,38 @@
   transform: perspective(1em) rotateX(80deg) translateY(100%);
   filter: blur(5px);
   opacity: 0;
-  animation: neon-glow 10s infinite linear;
 }
+/* .visible is added by script.js's reveal observer */
+.cta.visible .neon {
+  animation: neon-text 2.4s 0.4s linear forwards;
+}
+.cta.visible .neon::before,
+.cta.visible .neon::after {
+  animation: neon-glow 2.4s 0.4s linear forwards;
+}
+/* short, short, then on for good */
 @keyframes neon-text {
-  0%, 29%, 41%, 100% {
+  0%, 15%, 23%, 45%, 53%, 75% {
     color: #555;
     text-shadow: none;
   }
-  30%, 40% {
+  16%, 22%, 46%, 52%, 76%, 100% {
     color: #fff;
     text-shadow: 0 0 0.125em var(--neon), 0 0 0.5em var(--neon);
   }
 }
 @keyframes neon-glow {
-  0%, 29%, 41%, 100% {
+  0%, 15%, 23%, 45%, 53%, 75% {
     opacity: 0;
   }
-  30%, 40% {
+  16%, 22%, 46%, 52%, 76%, 100% {
     opacity: 1;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .neon,
-  .neon::before,
-  .neon::after {
+  .cta.visible .neon,
+  .cta.visible .neon::before,
+  .cta.visible .neon::after {
     animation: none;
   }
   .neon {
@@ -168,7 +174,7 @@
   align-items: center;
   padding-block: 2rem;
   background-color: rgb(var(--carousel-bg-color-rgb));
-  overflow: hidden;
+  overflow-x: clip; /* clip the ring sideways only, so the CTA glow isn't cut off */
 }
 @media (prefers-reduced-motion: reduce) {
   .gallery-section {
