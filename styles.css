@@ -692,25 +692,6 @@ button {
   padding: 3rem;
   overflow: hidden;
 }
-.journey-path {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.journey-path path {
-  fill: none;
-  stroke: #a5f1df;
-  stroke-width: 2;
-  stroke-dasharray: 12 12;
-  animation: path-flow 16s linear infinite;
-}
-@keyframes path-flow {
-  to {
-    stroke-dashoffset: -300;
-  }
-}
 .journey-stops {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1198,3 +1179,24 @@ button {
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* keep "A developer with" on one line on narrow screens so the cycle never reflows */
 .about-section h2{font-size:min(clamp(3.4rem,6.8vw,7.2rem),11.4vw)}
+
+/* About journey map: real photos in the scrapbook frames, a path that draws itself as you scroll,
+   and a doodle icon that travels each leg (positions set by script.js) */
+.photo-placeholder.has-photo:after{display:none}
+.photo-placeholder.has-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.photo-placeholder.square{width:150px;height:150px}
+.photo-cluster-many{flex-wrap:wrap;row-gap:.9rem}
+.photo-placeholder.mystery span{font:600 4.2rem/1 Manrope,sans-serif;letter-spacing:0;color:#45585c;transform-origin:50% 85%;animation:mystery-wiggle 1.6s ease-in-out infinite}
+.photo-placeholder.mystery:nth-child(2) span{animation-delay:-.8s}
+@keyframes mystery-wiggle{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg) translateY(-3px)}}
+.journey-path{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
+.journey-line{fill:none;stroke:#183d60;stroke-width:2.2;stroke-dasharray:3 8;stroke-linecap:round;opacity:.85}
+.journey-draw{fill:none;stroke:#fff;stroke-width:8}
+.journey-icon{position:absolute;left:0;top:0;z-index:5;width:46px;height:46px;margin:-23px 0 0 -23px;opacity:0;pointer-events:none;transition:opacity .35s;filter:drop-shadow(0 3px 0 #fff) drop-shadow(0 -2px 0 #fff)}
+.journey-icon.is-on{opacity:1}
+.journey-icon svg{display:block;width:100%;height:100%;overflow:visible;animation:icon-bob 2.2s ease-in-out infinite}
+.journey-icon .tint{fill:currentColor;fill-opacity:.16}
+@keyframes icon-bob{50%{transform:translateY(-3px) rotate(-4deg)}}
+@media(max-width:650px){.photo-placeholder.square{width:112px;height:112px}.photo-placeholder.mystery span{font-size:3rem}}
+@media(prefers-reduced-motion:reduce){.photo-placeholder.mystery span,.journey-icon svg{animation:none}}
+@media(max-width:650px){.scrap-memory{padding-left:34px}.journey-icon{width:32px;height:32px;margin:-16px 0 0 -16px}}

@@ -267,3 +267,68 @@ if(resumeAirplane&&resumeDialog){
   // click on the dimmed backdrop closes it
   resumeDialog.addEventListener("click",e=>{if(e.target===resumeDialog)resumeDialog.close()});
 }
+
+// About journey map: a dashed path through each chapter's year, drawn as you scroll;
+// each leg carries its doodle icon, which then rests beside the chapter it leads to.
+const journey = document.querySelector(".scrapbook");
+const journeySvg = journey && journey.querySelector(".journey-path");
+if (journeySvg) {
+  const line = journeySvg.querySelector(".journey-line"),
+    draw = journeySvg.querySelector(".journey-draw"),
+    years = [...journey.querySelectorAll(".scrap-year")],
+    icons = [...journey.querySelectorAll(".journey-icon")];
+  let ends = [], samples = [], total = 0, shown = 0;
+  const build = () => {
+    const box = journey.getBoundingClientRect();
+    // anchor: just left of each year label; on phones the path runs down the left margin
+    const narrow = innerWidth <= 650;
+    const pts = years.map((y) => {
+      const r = y.getBoundingClientRect(), cy = r.top - box.top + r.height / 2;
+      return narrow ? [6, cy] : [r.left - box.left - 34, cy];
+    });
+    let d = `M${pts[0][0]} ${pts[0][1]}`;
+    ends = [0];
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], k = (y1 - y0) * 0.8;
+      const seg = ` C${x0} ${y0 + k} ${x1} ${y1 - k} ${x1} ${y1}`;
+      d += seg;
+      const tmp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      tmp.setAttribute("d", `M${x0} ${y0}` + seg);
+      journeySvg.appendChild(tmp);
+      ends.push(ends[i - 1] + tmp.getTotalLength());
+      tmp.remove();
+    }
+    line.setAttribute("d", d);
+    draw.setAttribute("d", d);
+    total = line.getTotalLength();
+    draw.style.strokeDasharray = total;
+    samples = [];
+    for (let l = 0; l <= total; l += 6) samples.push([l, line.getPointAtLength(l)]);
+    shown = Math.min(shown, total);
+  };
+  const place = (len) => {
+    draw.style.strokeDashoffset = total - len;
+    icons.forEach((icon, i) => {
+      const start = ends[i], end = ends[i + 1];
+      if (end === undefined) return;
+      const p = line.getPointAtLength(Math.min(Math.max(len, start), end));
+      icon.style.transform = `translate(${p.x}px,${p.y}px)`;
+      icon.classList.toggle("is-on", len > start + 2);
+    });
+  };
+  const target = () => {
+    if (reducedMotion) return total;
+    // how far down the path the middle of the screen has reached
+    const mid = innerHeight * 0.55 - journey.getBoundingClientRect().top;
+    let l = 0;
+    for (const [len, p] of samples) { if (p.y > mid) break; l = len; }
+    return l;
+  };
+  build();
+  new ResizeObserver(build).observe(journey);
+  (function tick() {
+    shown += (target() - shown) * 0.12;
+    place(shown);
+    requestAnimationFrame(tick);
+  })();
+}
