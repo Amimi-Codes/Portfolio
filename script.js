@@ -276,6 +276,7 @@ if (journeySvg) {
   const line = journeySvg.querySelector(".journey-line"),
     draw = journeySvg.querySelector(".journey-draw"),
     years = [...journey.querySelectorAll(".scrap-year")],
+    chapters = years.map((y) => y.closest(".scrap-memory")),
     icons = [...journey.querySelectorAll(".journey-icon")];
   let ends = [], samples = [], total = 0, shown = 0;
   const build = () => {
@@ -289,8 +290,10 @@ if (journeySvg) {
     let d = `M${pts[0][0]} ${pts[0][1]}`;
     ends = [0];
     for (let i = 1; i < pts.length; i++) {
-      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], k = (y1 - y0) * 0.8;
-      const seg = ` C${x0} ${y0 + k} ${x1} ${y1 - k} ${x1} ${y1}`;
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], dy = y1 - y0;
+      // tall full-width chapters (2025) keep the path down the margin and cross over at the end
+      const late = !narrow && chapters[i - 1].dataset.sweep === "late";
+      const seg = ` C${x0} ${y0 + dy * (late ? 0.97 : 0.8)} ${x1} ${y1 - dy * (late ? 0.1 : 0.8)} ${x1} ${y1}`;
       d += seg;
       const tmp = document.createElementNS("http://www.w3.org/2000/svg", "path");
       tmp.setAttribute("d", `M${x0} ${y0}` + seg);
@@ -303,7 +306,8 @@ if (journeySvg) {
     total = line.getTotalLength();
     draw.style.strokeDasharray = total;
     samples = [];
-    for (let l = 0; l <= total; l += 6) samples.push([l, line.getPointAtLength(l)]);
+    for (let l = 0; l < total; l += 6) samples.push([l, line.getPointAtLength(l)]);
+    samples.push([total, line.getPointAtLength(total)]);
     shown = Math.min(shown, total);
   };
   const place = (len) => {
@@ -315,6 +319,8 @@ if (journeySvg) {
       icon.style.transform = `translate(${p.x}px,${p.y}px)`;
       icon.classList.toggle("is-on", len > start + 2);
     });
+    // a chapter's photos appear once the path has reached it (and stay)
+    chapters.forEach((c, i) => len > ends[i] - 10 && len > 1 && c.classList.add("photos-in"));
   };
   const target = () => {
     if (reducedMotion) return total;
