@@ -1228,3 +1228,14 @@ button {
 .scrap-copy p+p{margin-top:1rem}
 .scrap-year{font-size:.8rem;letter-spacing:.04em}
 @media(max-width:650px){.scrap-copy.align-right{align-self:flex-start;text-align:left}.memory-2020{margin:3rem 0 5rem}}
+/* first chapter is shown as-is; every later chapter reveals its text together with its photos */
+.memory-early .photo-placeholder{opacity:1!important;animation:none!important}
+.scrap-memory:not(.memory-early)>:is(.scrap-copy,.speech-row,.scrap-closing){transition:opacity .7s ease,transform .7s ease}
+.scrap-memory:not(.memory-early):not(.photos-in)>:is(.scrap-copy,.speech-row,.scrap-closing){opacity:0;transform:translateY(18px)}
+.photo-break{flex-basis:100%;height:0}
+.memory-ux{margin-left:6%}
+@media(max-width:650px){.memory-nature .photo-placeholder.square{width:100px;height:100px}}
+@media(prefers-reduced-motion:reduce){.scrap-memory>:is(.scrap-copy,.speech-row,.scrap-closing){opacity:1!important;transform:none!important}}
+.memory-early .scrap-photos{margin-top:0}
+.scrap-memory.stack .scrap-copy{order:0}
+@media(max-width:650px){.memory-early .photo-placeholder{width:84px;height:104px}}
