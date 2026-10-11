@@ -156,7 +156,6 @@
   --carousel-item-empty-color-rgb: 255, 255, 255;
   --carousel-item-glow-color-rgb: 255, 255, 255;
   --carousel-item-glow-size: 5rem;
-  --carousel-3d-perspective: 1000px;
   --carousel-3d-perspective-origin: 50% 20%;
   --carousel-control-button-width: 1.25rem;
   --carousel-control-button-height: 4rem;
@@ -178,20 +177,29 @@
 }
 
 .carousel {
-  /* ring grows with the number of posters (--_n, set by event-graphics.js), never
-     smaller than 34rem, and shrinks to fit narrow screens. Posters are at most
-     12.5rem wide and 35% of the ring, and get narrower when the ring is crowded. */
-  --_diameter: min(max(calc(var(--_n, 5) * 5.25rem), 34rem), calc(100vw - 3rem));
+  /* ring spans the page margins (same width as .wrap, so the arrows line up with the
+     nav). Posters are 27% of the ring, narrower when there are too many to fit. */
+  --_diameter: min(calc(100vw - 6rem), 1420px);
   --_radius: calc(var(--_diameter) / 2);
-  --_item-width: min(12.5rem, calc(var(--_diameter) * 0.35), calc(var(--_diameter) * 2.38 / var(--_n, 5)));
+  --_item-width: min(calc(var(--_diameter) * 0.27), calc(var(--_diameter) * 2.38 / var(--_n, 5)));
   --_item-height: calc(var(--_item-width) * 1.4);
   position: relative;
   flex: none;
-  perspective: var(--carousel-3d-perspective);
+  perspective: calc(var(--_diameter) * 1.6);
   perspective-origin: var(--carousel-3d-perspective-origin);
   width: var(--_diameter);
   height: var(--_diameter);
-  margin-block: calc(var(--_diameter) * -0.15) calc(var(--_diameter) * -0.1); /* trim empty space above/below the ring */
+  margin-block: calc(var(--_diameter) * -0.2) calc(var(--_diameter) * -0.17); /* trim empty space above/below the ring */
+}
+@media (max-width: 900px) {
+  .carousel {
+    --_diameter: calc(100vw - 3rem);
+  }
+}
+@media (max-width: 700px) {
+  .carousel {
+    --_diameter: calc(100vw - 2.25rem);
+  }
 }
 
 .carousel .carousel-control-button {
