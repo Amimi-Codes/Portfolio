@@ -1,0 +1,193 @@
+.gallery-section {
+  padding-block: 6rem 7rem;
+  background: radial-gradient(circle at 50% 30%, #0f4a56, #061b27 70%);
+  overflow: hidden;
+}
+
+/* === isometric room: 100cqw = room width, walls skewed 30deg, floor is a rhombus === */
+.room {
+  position: relative;
+  width: min(100% - 2rem, 1100px);
+  aspect-ratio: 1 / 0.9974; /* wall height 42cqw + floor depth 57.74cqw */
+  margin-inline: auto;
+  container-type: inline-size;
+  isolation: isolate;
+}
+.wall {
+  position: absolute;
+  top: 0;
+  width: 50cqw;
+  height: 42cqw;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding-bottom: 4cqw;
+  box-sizing: border-box;
+  box-shadow: inset 0 -1.4cqw 0 #b3a58f;
+}
+.wall-left {
+  left: 0;
+  transform-origin: 100% 0;
+  transform: skewY(-30deg);
+  background: linear-gradient(#f4efe6, #e2d9ca);
+}
+.wall-right {
+  left: 50cqw;
+  transform-origin: 0 0;
+  transform: skewY(30deg);
+  background: linear-gradient(#e2d9ca, #cfc4b2);
+}
+.floor {
+  position: absolute;
+  left: 50cqw;
+  top: 42cqw;
+  width: 57.735cqw;
+  height: 57.735cqw;
+  transform-origin: 0 0;
+  transform: matrix(0.866, 0.5, -0.866, 0.5, 0, 0);
+  background:
+    linear-gradient(135deg, rgba(255 255 255 / 0.12), transparent 60%),
+    repeating-linear-gradient(90deg, #a87c56 0 5.6cqw, #8f6644 5.6cqw 5.77cqw);
+  box-shadow: 0 0 6cqw rgba(0 0 0 / 0.5);
+  z-index: -1;
+}
+
+/* === framed posters === */
+.frame {
+  position: relative;
+  padding: 0.8cqw;
+  border: 0.55cqw solid #2a1f19;
+  background: #fbf8f2;
+  box-shadow:
+    0.4cqw 0.9cqw 1.4cqw rgba(0 0 0 / 0.35),
+    inset 0 0 0.6cqw rgba(0 0 0 / 0.15);
+  cursor: pointer;
+  transition: filter 0.3s;
+}
+.frame img {
+  display: block;
+  width: 11cqw;
+}
+.frame:hover,
+.frame:focus-visible {
+  filter: brightness(1.06);
+}
+.frame:focus-visible {
+  outline: 0.3cqw solid #9aefe2;
+  outline-offset: 0.5cqw;
+}
+.plaque {
+  position: absolute;
+  top: calc(100% + 1.4cqw);
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.35cqw 0.8cqw;
+  background: #fbf8f2;
+  color: #3b2f27;
+  font: 600 clamp(0.45rem, 0.95cqw, 0.75rem) / 1.2 "DM Sans", sans-serif;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  box-shadow: 0.2cqw 0.3cqw 0.6cqw rgba(0 0 0 / 0.2);
+}
+
+@media (max-width: 700px) {
+  .frame img {
+    width: 13.5cqw;
+  }
+  .plaque {
+    display: none;
+  }
+}
+
+/* === magnifying glass (fine pointers only; touch just taps to open) === */
+@media (hover: hover) and (pointer: fine) {
+  .frame img {
+    cursor: none;
+  }
+}
+.magnifying-glass {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  width: 200px;
+  height: 200px;
+  translate: -50% -50%;
+  scale: 0;
+  transition: scale 0.5s ease;
+  pointer-events: none;
+  border-radius: 50%;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 1px 2px 4px 3px rgba(255, 255, 255, 0.3),
+    inset 1px 2px 3px 2px rgba(255, 255, 255, 0.05),
+    inset 0px -40px 47px -18px rgba(0, 0, 0, 0.2),
+    inset -5px 5px 8px 0px rgba(0, 0, 0, 0.7),
+    inset -30px 15px 20px -10px rgba(0, 0, 0, 0.25),
+    inset -10px 10px 30px -5px rgba(0, 0, 0, 0.7),
+    inset -10px 10px 10px -5px rgba(0, 0, 0, 0.3),
+    inset 50px -50px 20px -10px rgba(108, 108, 108, 0.1),
+    1px 3px 8px 1px rgba(0, 0, 0, 0.4),
+    15px 38px 20px -30px rgba(0, 0, 0, 0.5),
+    0px 0px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.magnifying-glass.is-on {
+  scale: 1;
+}
+.magnifying-glass::before,
+.magnifying-glass::after {
+  /* glass gloss */
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 56px;
+  border: 20px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50% 50% 0 0;
+  filter: blur(3px);
+  mix-blend-mode: screen;
+}
+.magnifying-glass::before {
+  top: 33px;
+  left: 6px;
+  transform: rotate(298deg);
+}
+.magnifying-glass::after {
+  top: 53px;
+  right: -3px;
+  border-top-color: rgba(255, 255, 255, 0.4);
+  transform: rotate(85deg);
+}
+
+/* === full graphic popup === */
+.poster-dialog {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+.poster-dialog::backdrop {
+  background: rgba(6 27 39 / 0.85);
+  backdrop-filter: blur(4px);
+}
+.poster-dialog img {
+  display: block;
+  max-width: min(90vw, 900px);
+  max-height: 88vh;
+  box-shadow: 0 1.5rem 4rem rgba(0 0 0 / 0.5);
+}
+.dialog-close {
+  position: absolute;
+  top: -0.75rem;
+  right: -0.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: #a5f1df;
+  color: #062630;
+  font-size: 1rem;
+  cursor: pointer;
+}
