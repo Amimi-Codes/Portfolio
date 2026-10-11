@@ -4,7 +4,10 @@
   overflow: hidden;
 }
 
-/* === isometric room: 100cqw = room width, walls skewed 30deg, floor is a rhombus === */
+/* === isometric room: 100cqw = room width, floor is a rhombus ===
+   Real-world scale: 1cqw ~ 7cm, so the room is about 4.1m square with 3m walls.
+   Walls are laid out in true lengths (57.735cqw wide) and projected with an
+   isometric matrix, so frames keep their real proportions on the wall. */
 .room {
   position: relative;
   /* width + margins come from .wrap so the room lines up with the nav */
@@ -15,12 +18,13 @@
 .wall {
   position: absolute;
   top: 0;
-  width: 50cqw;
+  width: 57.735cqw;
   height: 42cqw;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center; /* hang each wall as one centred group */
+  gap: 6cqw; /* ~45cm between frames */
   align-items: flex-end;
-  padding-bottom: 7cqw;
+  padding-bottom: 12.2cqw; /* puts frame centres at eye level, ~145cm */
   box-sizing: border-box;
   box-shadow: inset 0 -1.4cqw 0 #b3a58f;
 }
@@ -37,15 +41,15 @@
     0 0 5cqw 1.5cqw rgba(255 255 255 / 0.55);
 }
 .wall-left {
-  left: 0;
+  left: -7.735cqw;
   transform-origin: 100% 0;
-  transform: skewY(-30deg);
+  transform: matrix(0.866, -0.5, 0, 1, 0, 0);
   background: linear-gradient(#f4efe6, #e2d9ca);
 }
 .wall-right {
   left: 50cqw;
   transform-origin: 0 0;
-  transform: skewY(30deg);
+  transform: matrix(0.866, 0.5, 0, 1, 0, 0);
   background: linear-gradient(#e2d9ca, #cfc4b2);
 }
 .floor {
@@ -98,7 +102,7 @@
 }
 .frame img {
   display: block;
-  width: 11cqw;
+  width: 9cqw; /* ~64cm print; framed with mat about 85 x 115cm */
 }
 .frame:focus-visible {
   outline: 0.3cqw solid #9aefe2;
@@ -119,15 +123,12 @@
 }
 
 @media (max-width: 700px) {
-  .frame img {
-    width: 13.5cqw;
-  }
   .plaque {
     display: none;
   }
 }
 
-/* === people, benches and floor light (drawn by event-graphics.js) === */
+/* === cats and benches (drawn by event-graphics.js) === */
 .scene {
   position: absolute;
   inset: 0;
@@ -136,27 +137,6 @@
   overflow: visible;
   pointer-events: none;
 }
-.scene .pool {
-  mix-blend-mode: screen;
-  animation: pool 6s ease-in-out infinite alternate;
-}
-.scene .pool:nth-of-type(2n) {
-  animation-delay: -3s;
-}
-@keyframes pool {
-  from {
-    opacity: 0.45;
-  }
-  to {
-    opacity: 0.9;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .scene * {
-    animation: none !important;
-  }
-}
-
 /* === magnifying glass (fine pointers only; touch just taps to open) === */
 @media (hover: hover) and (pointer: fine) {
   .frame img {
