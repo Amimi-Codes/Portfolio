@@ -10,9 +10,9 @@
     />
     <title>Event Graphics — Amy Cui</title>
     <link rel="stylesheet" href="styles.css?v=12" />
-    <link rel="stylesheet" href="event-graphics.css?v=1" />
+    <link rel="stylesheet" href="event-graphics.css?v=2" />
     <script src="script.js?v=11" defer></script>
-    <script src="event-graphics.js?v=1" defer></script>
+    <script src="event-graphics.js?v=2" defer></script>
   </head>
   <body>
     <header class="site-nav">
@@ -33,56 +33,55 @@
           <p class="eyebrow"><span class="pulse"></span> 03 / EVENT WORK</p>
           <h1><em>Event</em> <br />graphics</h1>
           <p>
-            Invitations and posters for community events. Hover a frame to
-            take a closer look, or click (or tap) one to see the full graphic.
+            Invitations and posters for community events. Hover over a poster
+            to stop the carousel, then click (or tap) it to see the full graphic.
           </p>
         </div>
       </section>
       <section class="gallery-section">
-        <div class="room wrap">
-          <div class="wall wall-left">
-            <button class="frame" type="button">
-              <img
-                src="assets/Graphic%20Design%20Work/galentines.webp"
-                alt="Pink Galentine's invitation with ribbons and clinking glasses: Friday, Feb 20th, 6 pm. Dessert potluck, Hear Me Out cake, bead crafts, bouquet making and cookie decorating."
-              />
-              <span class="plaque">Click me</span>
-            </button>
-            <button class="frame" type="button">
-              <img
-                src="assets/Graphic%20Design%20Work/spooktober-potluck.webp"
-                alt="Black and cream gothic invitation to the Spooktober Potluck with a jack-o'-lantern: Oct 18, 4 to 11 pm. Safety not guaranteed."
-              />
-              <span class="plaque">Click me</span>
-            </button>
+        <div class="carousel">
+          <div class="carousel-control-button left">
+            <input type="radio" name="carousel-control-input" aria-label="Spin left" />
           </div>
-          <div class="wall wall-right">
-            <button class="frame" type="button">
-              <img
-                src="assets/Graphic%20Design%20Work/tea-party.webp"
-                alt="Night-blue invitation to Mimi's Tea Party with watercolour teapot, teacups and wildflowers: 25 July 2026, 12:30 to 8 pm. RSVP through Partiful, 25 spaces available."
-              />
-              <span class="plaque">Click me</span>
-            </button>
-            <button class="frame" type="button">
-              <img
-                src="assets/Graphic%20Design%20Work/picnic-in-the-park.webp"
-                alt="Cream arched invitation to a Picnic in the Park framed by yellow blossoms: 4 August, 1 to 4 pm, Christie Pits Park, meet up at the soccer field."
-              />
-              <span class="plaque">Click me</span>
-            </button>
-            <button class="frame" type="button">
-              <img
-                src="assets/Graphic%20Design%20Work/potluck-and-drama.webp"
-                alt="Dusty rose invitation to Potluck &amp; Drama with a film reel and bunny teapot: Oct 12th, 3 to 8 pm. Free popcorn and drinks."
-              />
-              <span class="plaque">Click me</span>
-            </button>
+          <div class="carousel-control-button right">
+            <input type="radio" name="carousel-control-input" aria-label="Spin right" checked />
           </div>
-          <div class="floor"></div>
-          <svg class="scene" viewBox="0 0 100 103.74" aria-hidden="true"></svg>
+          <div class="carousel-rotation-direction">
+            <ul class="carousel-item-wrapper" style="--_num-elements: 10">
+            <li class="carousel-item" style="--_index: 1; --_image-url: url('assets/Graphic%20Design%20Work/galentines.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/galentines.webp" aria-label="Pink Galentine's invitation with ribbons and clinking glasses: Friday, Feb 20th, 6 pm. Dessert potluck, Hear Me Out cake, bead crafts, bouquet making and cookie decorating."></button>
+            </li>
+            <li class="carousel-item" style="--_index: 2; --_image-url: url('assets/Graphic%20Design%20Work/spooktober-potluck.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/spooktober-potluck.webp" aria-label="Black and cream gothic invitation to the Spooktober Potluck with a jack-o'-lantern: Oct 18, 4 to 11 pm. Safety not guaranteed."></button>
+            </li>
+            <li class="carousel-item" style="--_index: 3; --_image-url: url('assets/Graphic%20Design%20Work/tea-party.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/tea-party.webp" aria-label="Night-blue invitation to Mimi's Tea Party with watercolour teapot, teacups and wildflowers: 25 July 2026, 12:30 to 8 pm. RSVP through Partiful, 25 spaces available."></button>
+            </li>
+            <li class="carousel-item" style="--_index: 4; --_image-url: url('assets/Graphic%20Design%20Work/picnic-in-the-park.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/picnic-in-the-park.webp" aria-label="Cream arched invitation to a Picnic in the Park framed by yellow blossoms: 4 August, 1 to 4 pm, Christie Pits Park, meet up at the soccer field."></button>
+            </li>
+            <li class="carousel-item" style="--_index: 5; --_image-url: url('assets/Graphic%20Design%20Work/potluck-and-drama.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/potluck-and-drama.webp" aria-label="Dusty rose invitation to Potluck &amp; Drama with a film reel and bunny teapot: Oct 12th, 3 to 8 pm. Free popcorn and drinks."></button>
+            </li>
+            <li class="carousel-item" style="--_index: 6; --_image-url: url('assets/Graphic%20Design%20Work/galentines.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/galentines.webp" aria-label="Pink Galentine's invitation with ribbons and clinking glasses: Friday, Feb 20th, 6 pm. Dessert potluck, Hear Me Out cake, bead crafts, bouquet making and cookie decorating." tabindex="-1" aria-hidden="true"></button>
+            </li>
+            <li class="carousel-item" style="--_index: 7; --_image-url: url('assets/Graphic%20Design%20Work/spooktober-potluck.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/spooktober-potluck.webp" aria-label="Black and cream gothic invitation to the Spooktober Potluck with a jack-o'-lantern: Oct 18, 4 to 11 pm. Safety not guaranteed." tabindex="-1" aria-hidden="true"></button>
+            </li>
+            <li class="carousel-item" style="--_index: 8; --_image-url: url('assets/Graphic%20Design%20Work/tea-party.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/tea-party.webp" aria-label="Night-blue invitation to Mimi's Tea Party with watercolour teapot, teacups and wildflowers: 25 July 2026, 12:30 to 8 pm. RSVP through Partiful, 25 spaces available." tabindex="-1" aria-hidden="true"></button>
+            </li>
+            <li class="carousel-item" style="--_index: 9; --_image-url: url('assets/Graphic%20Design%20Work/picnic-in-the-park.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/picnic-in-the-park.webp" aria-label="Cream arched invitation to a Picnic in the Park framed by yellow blossoms: 4 August, 1 to 4 pm, Christie Pits Park, meet up at the soccer field." tabindex="-1" aria-hidden="true"></button>
+            </li>
+            <li class="carousel-item" style="--_index: 10; --_image-url: url('assets/Graphic%20Design%20Work/potluck-and-drama.webp')">
+              <button type="button" data-src="assets/Graphic%20Design%20Work/potluck-and-drama.webp" aria-label="Dusty rose invitation to Potluck &amp; Drama with a film reel and bunny teapot: Oct 12th, 3 to 8 pm. Free popcorn and drinks." tabindex="-1" aria-hidden="true"></button>
+            </li>
+              <li class="carousel-ground"></li>
+            </ul>
+          </div>
         </div>
-        <div class="magnifying-glass" aria-hidden="true"></div>
       </section>
       <dialog class="poster-dialog" aria-label="Full graphic">
         <img alt="" />
