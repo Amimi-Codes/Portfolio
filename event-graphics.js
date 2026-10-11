@@ -43,34 +43,66 @@ dialog.addEventListener("click", (e) => {
 // === people, benches and floor light, in floor coords (u along right wall, v along left wall) ===
 const iso = (u, v, h = 0) => [50 + 50 * (u - v), 42 + 28.87 * (u + v) - h];
 
-const person = ({ u, v, shirt, pants, hair, longHair, flip, size = 1 }) => {
-  const [x, y] = iso(u, v);
-  const s = size;
-  return { d: u + v, svg: `<g transform="translate(${x} ${y}) scale(${flip ? -s : s} ${s})">
-    <ellipse rx="2.8" ry="1.1" fill="rgba(0 0 0 / .28)"/>
-    <rect x="-1.6" y="-6.4" width="1.4" height="6.2" rx=".6" fill="${pants}"/>
-    <rect x=".2" y="-6.4" width="1.4" height="6.2" rx=".6" fill="${pants}"/>
-    <rect x="-3.1" y="-11.3" width="1.1" height="4.9" rx=".55" fill="${shirt}"/>
-    <rect x="2" y="-11.3" width="1.1" height="4.9" rx=".55" fill="${shirt}"/>
-    <rect x="-2.3" y="-12" width="4.6" height="6.2" rx="1.1" fill="${shirt}"/>
-    <rect x="-.55" y="-12.9" width="1.1" height="1.2" fill="#e2ad8c"/>
-    <circle cy="-14.3" r="1.75" fill="#e2ad8c"/>
-    <circle cy="-14.5" r="1.8" fill="${hair}"/>
-    ${longHair ? `<rect x="-1.8" y="-14.6" width="3.6" height="4" rx="1.2" fill="${hair}"/>` : ""}
-  </g>` };
-};
+// mix a hex colour toward white (k > 0) or black (k < 0)
+const shade = (hex, k) =>
+  "#" + hex.slice(1).match(/../g).map((c) => {
+    const n = parseInt(c, 16);
+    return Math.round(k > 0 ? n + (255 - n) * k : n * (1 + k)).toString(16).padStart(2, "0");
+  }).join("");
 
 const face = (pts, fill) =>
   `<polygon points="${pts.map((p) => iso(...p).join(",")).join(" ")}" fill="${fill}"/>`;
+
+// iso box from floor rect (u0..u1, v0..v1), heights h0..h1: lit top, mid left face, dark right face
+const box = (u0, v0, u1, v1, h0, h1, c) =>
+  face([[u0, v0, h1], [u1, v0, h1], [u1, v1, h1], [u0, v1, h1]], shade(c, 0.25)) +
+  face([[u0, v1, h0], [u1, v1, h0], [u1, v1, h1], [u0, v1, h1]], c) +
+  face([[u1, v0, h0], [u1, v1, h0], [u1, v1, h1], [u1, v0, h1]], shade(c, -0.3));
+
+let sphereId = 0;
+const sphere = (u, v, h, r, c) => {
+  const [x, y] = iso(u, v, h);
+  const id = `s${sphereId++}`;
+  return `<radialGradient id="${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${shade(c, 0.35)}"/><stop offset="1" stop-color="${shade(c, -0.4)}"/></radialGradient>
+    <circle cx="${x}" cy="${y}" r="${r}" fill="url(#${id})"/>`;
+};
+
+// blocky low-poly visitor seen from behind; faceLeft = looking at the left wall
+const person = ({ u, v, shirt, pants, hair, shoes = "#8ff6ff", longHair, faceLeft, size: s = 1 }) => {
+  const W = 0.05 * s, D = 0.026 * s; // shoulder width, body depth (floor units)
+  // part(across, along, width, depth, h0, h1, colour): across = sideways offset, along = toward the wall
+  const part = (a, b, w, d, h0, h1, c) => {
+    const [cu, cv] = faceLeft ? [u - b, v + a] : [u + a, v - b];
+    const [hu, hv] = faceLeft ? [d / 2, w / 2] : [w / 2, d / 2];
+    return { d: cu + cv, svg: box(cu - hu, cv - hv, cu + hu, cv + hv, h0 * s, h1 * s, c) };
+  };
+  const leg = W * 0.38, arm = W * 0.22;
+  const parts = [
+    part(-W * 0.24, 0, leg, D * 0.8, 0, 0.7, shoes),
+    part(W * 0.24, 0, leg, D * 0.8, 0, 0.7, shoes),
+    part(-W * 0.24, 0, leg, D * 0.75, 0.7, 6.4, pants),
+    part(W * 0.24, 0, leg, D * 0.75, 0.7, 6.4, pants),
+    part(0, 0, W, D, 6.2, 11.6, shirt),
+    part(-(W + arm) / 2, 0, arm, D * 0.8, 6.8, 11.4, shirt),
+    part((W + arm) / 2, 0, arm, D * 0.8, 6.8, 11.4, shirt),
+  ];
+  if (longHair) parts.push(part(0, -D * 0.45, W * 0.6, D * 0.25, 10, 13.6, hair));
+  parts.sort((a, b) => a.d - b.d);
+  const [x, y] = iso(u, v);
+  return { d: u + v, svg: `<g>
+    <ellipse cx="${x}" cy="${y}" rx="${3 * s}" ry="${1.2 * s}" fill="rgba(0 0 0 / .28)"/>
+    ${parts.map((p) => p.svg).join("")}
+    ${box(u - 0.006 * s, v - 0.006 * s, u + 0.006 * s, v + 0.006 * s, 11.4 * s, 12.6 * s, "#e2ad8c")}
+    ${sphere(u, v, 13.7 * s, 1.55 * s, hair)}
+  </g>` };
+};
 
 // solid gallery bench with a glowing neon base, like the reference render
 const bench = ({ u0, v0, u1, v1, h = 3.2 }) => {
   const [a, b] = [iso(u0, v1), iso(u1, v1)];
   const c = iso(u1, v0);
   return { d: (u0 + u1 + v0 + v1) / 2, svg: `<g>
-    ${face([[u0, v0, h], [u1, v0, h], [u1, v1, h], [u0, v1, h]], "#f3f0f7")}
-    ${face([[u0, v1, 0], [u1, v1, 0], [u1, v1, h], [u0, v1, h]], "#c9c3d6")}
-    ${face([[u1, v0, 0], [u1, v1, 0], [u1, v1, h], [u1, v0, h]], "#aaa2bb")}
+    ${box(u0, v0, u1, v1, 0, h, "#d6d0e2")}
     <polyline class="neon" points="${a} ${b} ${c}" fill="none" stroke="#8ff6ff" stroke-width=".5" filter="url(#glow)"/>
   </g>` };
 };
@@ -86,11 +118,11 @@ const pools = [
   pool(0.2, 0.06, 30), pool(0.5, 0.06, 30), pool(0.8, 0.06, 30),
 ];
 const items = [
-  person({ u: 0.15, v: 0.72, shirt: "#e8607a", pants: "#2d3a5a", hair: "#3a2418", longHair: true, flip: true }),
-  person({ u: 0.16, v: 0.27, shirt: "#5bb6a8", pants: "#3b3b46", hair: "#1c1410", flip: true }),
-  person({ u: 0.22, v: 0.37, shirt: "#f2c35b", pants: "#40516e", hair: "#8a5a32", longHair: true, flip: true, size: 0.8 }),
+  person({ u: 0.15, v: 0.72, shirt: "#e8607a", pants: "#2d3a5a", hair: "#3a2418", longHair: true, faceLeft: true }),
+  person({ u: 0.16, v: 0.27, shirt: "#5bb6a8", pants: "#3b3b46", hair: "#1c1410", faceLeft: true }),
+  person({ u: 0.22, v: 0.37, shirt: "#f2c35b", pants: "#40516e", hair: "#8a5a32", longHair: true, faceLeft: true, size: 0.8 }),
   person({ u: 0.21, v: 0.15, shirt: "#8f7ad9", pants: "#25252e", hair: "#24170f", longHair: true }),
-  person({ u: 0.55, v: 0.16, shirt: "#f4f1ea", pants: "#3f6f8f", hair: "#4a2e1c" }),
+  person({ u: 0.55, v: 0.16, shirt: "#f4f1ea", pants: "#3f6f8f", hair: "#4a2e1c", shoes: "#ff7ad9" }),
   person({ u: 0.78, v: 0.15, shirt: "#d65ca3", pants: "#2f2f3a", hair: "#151010", longHair: true }),
   person({ u: 0.86, v: 0.2, shirt: "#7fc6e8", pants: "#5a4636", hair: "#c48a4f", size: 0.7 }),
   bench({ u0: 0.38, v0: 0.5, u1: 0.72, v1: 0.6 }),
