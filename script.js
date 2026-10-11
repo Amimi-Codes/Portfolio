@@ -237,12 +237,13 @@ if (storybook) {
   carousel.addEventListener(
     "scroll",
     () => {
-      popup.classList.toggle("is-hidden", carousel.scrollLeft > 8);
+      // the HabitU phones belong to page 2
+      popup.classList.toggle("is-hidden", Math.abs(carousel.scrollLeft - carousel.clientWidth) > 8);
       const next = Math.round(carousel.scrollLeft / carousel.clientWidth);
       if (next === current) return;
       current = next;
       // the phones pop out of the HabitU page again each time it comes back
-      if (current === 0 && !reducedMotion) {
+      if (current === 1 && !reducedMotion) {
         popup.classList.remove("is-revealing");
         void popup.offsetWidth;
         popup.classList.add("is-revealing");
