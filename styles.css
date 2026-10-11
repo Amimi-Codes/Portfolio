@@ -1233,19 +1233,30 @@ button {
 .memory-ux .scrap-photos{align-self:center;width:auto}
 @media(prefers-reduced-motion:reduce){.speech-bubble{opacity:1!important;transform:none!important}}
 
-/* about header pool: hobby words float flat on the water (isometric matrix maps them onto the surface) */
-.hobby-pool{position:relative;container-type:inline-size;max-width:720px;margin-top:1.5rem}
-.pool-svg{display:block;width:100%;height:auto}
-.pool-reflections path{transform-box:fill-box;transform-origin:center;animation:pool-shimmer 3.2s ease-in-out infinite alternate}
-.pool-reflections path:nth-child(2n){animation-duration:4.1s;animation-delay:-1.3s}
-.pool-reflections path:nth-child(3n){animation-duration:3.6s;animation-delay:-2.2s}
-@keyframes pool-shimmer{to{transform:translate(6px,-3px) scale(1.12,.9);opacity:.45}}
+/* about header pool: static scene + animated caustics + glass word floats.
+   Words lie on the water: in-plane 45deg on the 2:1 dimetric surface is a plain horizontal squash. */
+.hobby-pool{grid-column:1/-1;position:relative;container-type:inline-size;margin-top:-1rem}
+.pool-scene{display:block;width:100%;height:auto}
+.pool-water,.pool-water>div{position:absolute;inset:0}
+.pool-plane{position:absolute;transform-origin:0 0;transform:matrix(1,.5,-1,.5,0,0);overflow:hidden}
+.pool-plane i{--t:calc(6*var(--u));position:absolute;inset:calc(-1*var(--t));background:url(assets/about/caustics.webp) 0 0/var(--t) var(--t);opacity:.55;animation:caustic 14s linear infinite;will-change:transform}
+.pool-plane i+i{--t:calc(8.5*var(--u));opacity:.35;animation-duration:21s;animation-direction:reverse}
+@keyframes caustic{to{transform:translate(var(--t),calc(var(--t)*-1))}}
 .pool-words{list-style:none;margin:0;padding:0;position:absolute;inset:0;pointer-events:none}
-.pool-words li{position:absolute;left:var(--x);top:var(--y);white-space:nowrap;font:700 max(6.5px,1.6cqw)/1 "DM Sans",sans-serif;color:#0b3a4a;padding:.45em .8em;border-radius:99px;background:#fff;box-shadow:0 0 0 2px #ffffff80,4px 6px 0 #00425740;transform:translate(-50%,-50%) matrix(.866,-.5,.866,.5,0,0);animation:pool-bob 3.4s ease-in-out infinite alternate}
-.pool-words li:nth-child(4n+1){background:#a8e8d6}
-.pool-words li:nth-child(4n+2){background:#ffabf9}
-.pool-words li:nth-child(4n+3){background:#ffbf5f}
+.pool-words li{--c:#7fe0c6;position:absolute;left:var(--x);top:var(--y);white-space:nowrap;font:800 calc(.8*var(--u))/1 "DM Sans",sans-serif;color:#063646;padding:.62em 1.05em;border-radius:99px;
+  background:radial-gradient(120% 90% at 30% 0%,#ffffffb0,#ffffff1f 55%),linear-gradient(transparent 40%,color-mix(in srgb,var(--c) 55%,transparent));
+  -webkit-backdrop-filter:blur(5px) saturate(1.3) brightness(1.12);backdrop-filter:blur(5px) saturate(1.3) brightness(1.12);
+  border:1px solid #ffffffe6;
+  box-shadow:inset 0 .3em .3em -.15em #fff,inset 0 -.5em .7em -.3em color-mix(in srgb,var(--c) 80%,#0a6a80),inset .4em 0 .6em -.4em #ffffffb0,
+    0 .3em 0 -.02em color-mix(in srgb,var(--c) 55%,#ffffff80),0 .55em 0 -.06em color-mix(in srgb,var(--c) 60%,#0a5d7088),
+    0 1.4em 1.1em -.3em #02405588;
+  transform:translate(-50%,-50%) scaleY(.6);animation:pool-bob 3.4s ease-in-out infinite alternate}
+.pool-words li::after{content:"";position:absolute;left:10%;top:12%;width:38%;height:26%;border-radius:99px;background:linear-gradient(90deg,#fffffff0,#fff0);z-index:-1}
+.pool-words li:nth-child(4n+2){--c:#ffabf9}
+.pool-words li:nth-child(4n+3){--c:#ffbf5f}
+.pool-words li:nth-child(4n){--c:#9ed8ff}
 .pool-words li:nth-child(2n){animation-duration:4.2s;animation-delay:-1.6s}
 .pool-words li:nth-child(3n){animation-duration:3.8s;animation-delay:-2.7s}
-@keyframes pool-bob{to{translate:5px -4px}}
-@media(prefers-reduced-motion:reduce){.pool-reflections path,.pool-words li{animation:none}}
+@keyframes pool-bob{to{translate:4px -5px}}
+@media(max-width:650px){.about-intro{overflow-x:clip}.hobby-pool{width:200%;margin:0 0 0 -52.5%}}
+@media(prefers-reduced-motion:reduce){.pool-plane i,.pool-words li{animation:none}}
