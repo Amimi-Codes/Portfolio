@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Projects — Amy Cui</title>
-    <link rel="stylesheet" href="styles.css?v=12" />
-    <script src="script.js?v=11" defer></script>
+    <link rel="stylesheet" href="styles.css?v=29" />
+    <script src="script.js?v=29" defer></script>
   </head>
   <body>
     <header class="site-nav">
@@ -20,7 +20,45 @@
       <section class="page-hero">
         <div class="wrap">
           <p class="eyebrow">
-            <span class="pulse"></span> ALL PROJECTS
+            <svg class="sparkle" viewBox="0 0 40 40" aria-hidden="true">
+              <defs>
+                <linearGradient
+                  id="sparkle-metal"
+                  x1="0"
+                  y1="0"
+                  x2=".6"
+                  y2=".6"
+                  spreadMethod="reflect"
+                >
+                  <stop offset="0" stop-color="#c4822f" />
+                  <stop offset=".4" stop-color="#ffd77f" />
+                  <stop offset=".55" stop-color="#fffdf0" />
+                  <stop offset=".7" stop-color="#ffc659" />
+                  <stop offset="1" stop-color="#d08c33" />
+                  <animateTransform
+                    attributeName="gradientTransform"
+                    type="translate"
+                    values="0 0;1.2 1.2"
+                    dur="2.4s"
+                    repeatCount="indefinite"
+                  />
+                </linearGradient>
+              </defs>
+              <path
+                fill="url(#sparkle-metal)"
+                d="M17 4C18 14 20 17 30 19 20 21 18 24 17 36 16 24 14 21 4 19 14 17 16 14 17 4Z"
+              />
+              <path
+                class="s-small"
+                fill="url(#sparkle-metal)"
+                d="M32 1C32.5 5 33.5 6 37 6.5 33.5 7 32.5 8 32 12 31.5 8 30.5 7 27 6.5 30.5 6 31.5 5 32 1Z"
+              />
+              <path
+                class="s-small"
+                fill="url(#sparkle-metal)"
+                d="M33 28C33.4 31 34 31.6 36.5 32 34 32.4 33.4 33 33 36 32.6 33 32 32.4 29.5 32 32 31.6 32.6 31 33 28Z"
+              />
+            </svg> ALL PROJECTS
           </p>
           <h1><em>Drift</em> through <br>my projects</h1>
           <p>
@@ -95,8 +133,9 @@
       </section>
     </main>
     <footer class="footer wrap">
-      <span>© <span id="year"></span> AMY CUI</span
-      ><a href="contact.html">LET’S CONNECT ↗</a>
+      <span>© <span id="year">2026</span> AMY CUI</span
+      ><span>MADE WITH A LITTLE SALT WATER</span
+      ><a href="#top">BACK TO SURFACE ↑</a>
     </footer>
   </body>
 </html>

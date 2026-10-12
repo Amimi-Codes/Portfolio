@@ -7,6 +7,10 @@
   --aqua: #9aefe2;
   --paper: #f2f5ef;
   --muted: #a6bec2;
+  /* accent trio: tags, highlights, illustrations */
+  --mint: #a8e8d6;
+  --pink: #ffabf9;
+  --orange: #ffbf5f;
 }
 * {
   box-sizing: border-box;
@@ -618,6 +622,9 @@ button {
   font-size: 1.15rem;
   line-height: 1.7;
   color: #c6e7df;
+}
+.page-hero .eyebrow {
+  font-size: 0.72rem;
 }
 .project-page-grid .project {
   min-height: 530px;
