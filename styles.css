@@ -563,7 +563,7 @@ button {
   color: var(--aqua);
 }
 .about-section h2 em {
-  color: #a8e8d6;
+  color: var(--mint);
 }
 .about-grid > div > p {
   font-size: 1.22rem;
@@ -648,13 +648,6 @@ button {
 .about-page {
   background: #eef3ee;
 }
-.about-intro {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 3rem;
-  padding: 6rem 0;
-}
-.about-intro h2,
 .journey-intro h2,
 .contact-grid h2 {
   font:
@@ -663,7 +656,6 @@ button {
   letter-spacing: -0.08em;
   margin: 0;
 }
-.about-intro p,
 .journey-intro p {
   font-size: 1.15rem;
   line-height: 1.75;
@@ -836,8 +828,7 @@ button {
   .project-tags b {
     font-size: 0.56rem;
   }
-  .about-grid,
-  .about-intro {
+  .about-grid {
     display: block;
   }
   .about-section {
@@ -1173,8 +1164,8 @@ button {
 .word-cycle{display:inline-block;vertical-align:-.22em;height:1.2em;overflow:hidden;transition:width .45s cubic-bezier(.3,.7,.3,1)}
 .word-cycle>span{display:grid;justify-items:start;transform:translateY(calc(var(--i, 0) * -1.2em));transition:transform .55s cubic-bezier(.5,1.4,.5,1)}
 .word-cycle em{display:block;width:max-content;line-height:1.2em}
-.about-section .word-cycle em:nth-child(2){color:#ffabf9}
-.about-section .word-cycle em:nth-child(3){color:#ffbf5f}
+.about-section .word-cycle em:nth-child(2){color:var(--pink)}
+.about-section .word-cycle em:nth-child(3){color:var(--orange)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 /* keep "A developer with" on one line on narrow screens so the cycle never reflows */
 .about-section h2{font-size:min(clamp(3.4rem,6.8vw,7.2rem),11.4vw)}
@@ -1246,7 +1237,7 @@ button {
 
 /* about header pool: static scene + animated caustics + glass word floats.
    Words lie on the water: in-plane 45deg on the 2:1 dimetric surface is a plain horizontal squash. */
-.hobby-pool{grid-column:1/-1;position:relative;container-type:inline-size;margin-top:-1rem}
+.hobby-pool{position:relative;container-type:inline-size;margin-top:2rem}
 .pool-scene{display:block;width:100%;height:auto}
 .pool-water,.pool-water>div{position:absolute;inset:0}
 .pool-plane{position:absolute;transform-origin:0 0;transform:matrix(1,.5,-1,.5,0,0);overflow:hidden}
@@ -1274,5 +1265,5 @@ button {
 .pool-words li:nth-child(2n){animation-duration:4.2s;animation-delay:-1.6s}
 .pool-words li:nth-child(3n){animation-duration:3.8s;animation-delay:-2.7s}
 @keyframes pool-bob{to{translate:4px -5px}}
-@media(max-width:650px){.about-intro{overflow-x:clip}.hobby-pool{width:200%;margin:0 0 0 -52.5%}}
+@media(max-width:650px){.about-hero{overflow-x:clip}.hobby-pool{width:200%;margin:0 0 0 -52.5%}}
 @media(prefers-reduced-motion:reduce){.pool-plane i,.pool-words li{animation:none}}
