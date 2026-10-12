@@ -341,3 +341,139 @@ if (journeySvg) {
     requestAnimationFrame(tick);
   })();
 }
+
+// About page: hobby deck-builder. The <li> list in about.html is the only data;
+// slots are generated from its length, so adding a hobby needs no code changes.
+const hobbyGame = document.querySelector(".hobby-game");
+if (hobbyGame) {
+  const items = [...hobbyGame.querySelectorAll(".hobby-deck li")],
+    board = hobbyGame.querySelector(".game-board"),
+    map = board.querySelector(".board-map"),
+    wide = matchMedia("(min-width: 701px)"),
+    n = items.length;
+
+  // Offset hex grid roughly twice as wide as tall, with 3+ spare slots for future hobbies.
+  const rows = Math.max(2, Math.round(Math.sqrt((n + 3) / 2.2))),
+    cols = Math.ceil((n + 3) / rows),
+    S3 = Math.sqrt(3),
+    W = cols * S3 + S3 / 2 + 0.8,
+    H = rows * 1.5 + 0.5 + 0.8;
+  const slots = [];
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++) {
+      const x = 0.4 + S3 / 2 + c * S3 + (r % 2) * (S3 / 2), y = 0.4 + 1 + r * 1.5;
+      slots.push({ x: (x / W) * 100, y: (y / H) * 100, d: Math.hypot(x - W / 2, (y - H / 2) * 1.4) });
+    }
+  slots.sort((a, b) => a.d - b.d); // hobbies fill from the centre outwards
+  map.style.aspectRatio = `${W} / ${H}`;
+  const hexW = `${((S3 * 0.94) / W) * 100}%`;
+  const shades = ["#f4ebd5", "#efe3c6", "#f7f0de"];
+  slots.forEach((s, i) => {
+    const el = document.createElement("div");
+    el.className = "board-slot" + (i >= n ? " is-spare" : "");
+    el.style.cssText = `left:${s.x}%;top:${s.y}%;width:${hexW};--t:${shades[i % 3]}`;
+    map.append(el);
+  });
+
+  // score track around the frame, Ticket to Ride style
+  const pawn = document.createElement("i");
+  pawn.className = "track-pawn";
+  let cells = [];
+  const layTrack = () => {
+    board.querySelectorAll(".track-cell").forEach((c) => c.remove());
+    const w = board.clientWidth, h = board.clientHeight, f = 17, gap = 30,
+      nx = Math.max(2, Math.round((w - 2 * f) / gap)), ny = Math.max(2, Math.round((h - 2 * f) / gap));
+    cells = [];
+    for (let i = 0; i < nx; i++) cells.push([f + (i * (w - 2 * f)) / nx, f]);
+    for (let i = 0; i < ny; i++) cells.push([w - f, f + (i * (h - 2 * f)) / ny]);
+    for (let i = 0; i < nx; i++) cells.push([w - f - (i * (w - 2 * f)) / nx, h - f]);
+    for (let i = 0; i < ny; i++) cells.push([f, h - f - (i * (h - 2 * f)) / ny]);
+    board.prepend(...cells.map(([x, y], i) => {
+      const c = document.createElement("span");
+      c.className = "track-cell";
+      c.style.cssText = `left:${x}px;top:${y}px`;
+      c.textContent = i;
+      return c;
+    }));
+    movePawn();
+  };
+  const movePawn = () => {
+    const [x, y] = cells[played.size % cells.length] || [0, 0];
+    pawn.style.left = x + "px";
+    pawn.style.top = y + "px";
+  };
+  board.append(pawn);
+
+  const bar = document.createElement("div");
+  bar.className = "game-bar";
+  bar.innerHTML = `<b>SIDEQUESTS <span>0</span> / ${n}</b><p>Pick a card to place its tile on the board.</p><button type="button" data-all>Play all</button><button type="button" data-reset>Reset</button><span class="sr-only" aria-live="polite"></span>`;
+  board.after(bar);
+  const live = bar.querySelector("[aria-live]"), tally = bar.querySelector("b span");
+
+  const played = new Set();
+  const tiles = items.map((li, i) => {
+    const name = li.textContent.trim(), icon = li.dataset.icon || name[0];
+    li.innerHTML = `<button class="hobby-card" type="button" aria-pressed="false"><span class="card-cat">${li.dataset.cat || ""}</span><span class="card-art"><span>${icon}</span></span><span class="card-name">${name}</span><span class="card-no">#${String(i + 1).padStart(2, "0")} · +1 SIDEQUEST</span></button>`;
+    li.firstChild.style.setProperty("--tilt", `${((i * 7) % 5) - 2}deg`);
+    const tile = document.createElement("div");
+    tile.className = "board-tile";
+    tile.dataset.cat = li.dataset.cat || "";
+    tile.style.cssText = `left:${slots[i].x}%;top:${slots[i].y}%;width:${hexW}`;
+    tile.innerHTML = `<div class="tile-face"><span class="tile-icon">${icon}</span><span class="tile-name">${name}</span></div>`;
+    return tile;
+  });
+
+  const motion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const update = (msg) => {
+    tally.textContent = played.size;
+    movePawn();
+    live.textContent = msg;
+  };
+  const play = (i) => {
+    if (played.has(i)) return;
+    played.add(i);
+    const card = items[i].firstChild, tile = tiles[i];
+    card.setAttribute("aria-pressed", "true");
+    tile.style.visibility = "hidden";
+    map.append(tile);
+    const land = () => {
+      tile.style.visibility = "";
+      tile.classList.remove("is-landed");
+      void tile.offsetWidth;
+      tile.classList.add("is-landed");
+    };
+    if (motion) {
+      // fly a copy of the tile from the card art to its slot
+      const from = card.querySelector(".card-art span").getBoundingClientRect(), to = tile.getBoundingClientRect(),
+        fly = tile.cloneNode(true);
+      fly.classList.add("tile-flyer");
+      fly.style.cssText = `left:${to.left}px;top:${to.top}px;width:${to.width}px;translate:none;visibility:visible`;
+      document.body.append(fly);
+      const dx = from.left + from.width / 2 - (to.left + to.width / 2), dy = from.top + from.height / 2 - (to.top + to.height / 2), k = from.width / to.width;
+      fly.animate([
+        { transform: `translate(${dx}px,${dy}px) scale(${k})` },
+        { transform: `translate(${dx * 0.45}px,${dy * 0.45 - 90}px) scale(1.15) rotate(-8deg)`, offset: 0.55 },
+        { transform: "none" },
+      ], { duration: 650, easing: "cubic-bezier(.4,0,.3,1)" }).finished.then(() => { fly.remove(); land(); });
+    } else land();
+    update(`${items[i].querySelector(".card-name").textContent} placed on the board`);
+  };
+  const unplay = (i) => {
+    if (!played.delete(i)) return;
+    items[i].firstChild.setAttribute("aria-pressed", "false");
+    const tile = tiles[i];
+    tile.classList.remove("is-landed");
+    tile.classList.add("is-leaving");
+    setTimeout(() => { tile.remove(); tile.classList.remove("is-leaving"); }, motion ? 250 : 0);
+    update(`${items[i].querySelector(".card-name").textContent} returned to the deck`);
+  };
+  items.forEach((li, i) => li.firstChild.addEventListener("click", () => {
+    if (wide.matches) played.has(i) ? unplay(i) : play(i);
+  }));
+  bar.querySelector("[data-all]").addEventListener("click", () =>
+    items.forEach((_, i) => setTimeout(() => play(i), motion ? i * 140 : 0)));
+  bar.querySelector("[data-reset]").addEventListener("click", () => items.forEach((_, i) => unplay(i)));
+
+  hobbyGame.classList.add("is-ready");
+  new ResizeObserver(() => wide.matches && layTrack()).observe(board);
+}
