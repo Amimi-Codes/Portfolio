@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="618" height="655" viewBox="0 0 618 655" fill="none">
-  <!-- Plain half-cover (inside of the front cover / back cover), matching book-home.svg -->
-  <path d="M0 20H584C602.78 20 618 35.22 618 54V620.14C618 639.25 602.25 654.6 583.15 654.13L0 639.5Z" fill="#8A6230"/>
-  <path d="M0 0H584C602.78 0 618 15.22 618 34V609.61C618 628.54 602.54 643.83 583.61 643.61L0 637Z" fill="#B88742"/>
-  <path d="M618 46V18C618 6 612 0 600 0H572L584 12H596C602.67 12 606 15.33 606 22V34L618 46Z" fill="#F2D189"/>
-  <path d="M618 598V626C618 638 612 644 600 644H572L584 632H596C602.67 632 606 628.67 606 622V610L618 598Z" fill="#F2D189"/>
-</svg>
