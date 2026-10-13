@@ -209,19 +209,19 @@ if (wordCycle) {
 const scrollBook=document.querySelector("[data-storybook]");
 if(scrollBook){
   if(reducedMotion){
-    scrollBook.classList.add("is-opened","is-ready");
+    scrollBook.classList.add("is-opened");
   }else if("IntersectionObserver" in window){
     const bookObserver=new IntersectionObserver((entries)=>{
       if(entries.some(entry=>entry.isIntersecting)){
         bookObserver.unobserve(scrollBook);
         requestAnimationFrame(()=>{
-          requestAnimationFrame(()=>{scrollBook.classList.add("is-opened");scrollBook.dispatchEvent(new Event("bookopen"));});
+          requestAnimationFrame(()=>scrollBook.classList.add("is-opened"));
         });
       }
     },{threshold:.12,rootMargin:"0px 0px -12% 0px"});
     bookObserver.observe(scrollBook);
   }else{
-    scrollBook.classList.add("is-opened","is-ready");
+    scrollBook.classList.add("is-opened");
   }
 }
 
@@ -265,22 +265,6 @@ if (storybook) {
   const show = (f, mirror) => { art.src = frames[f]; art.classList.toggle("is-mirrored", mirror); };
   const pause = () => new Promise((r) => setTimeout(r, FRAME_MS));
   let turning = false;
-  // opening, after the cover has swung open (CSS, ~1.35s): riffle through 3 pages quickly,
-  // then show the first spread (.is-ready fades it in)
-  storybook.addEventListener("bookopen", async () => {
-    if (reducedMotion) return storybook.classList.add("is-ready");
-    turning = true;
-    await new Promise((r) => setTimeout(r, 1350));
-    const INTRO_MS = 28; // per frame, so each page takes ~0.22s
-    for (let k = 0; k < 3; k++)
-      for (const [f, mir] of [[1, false], [2, false], [3, false], [4, false], [3, true], [2, true], [1, true], [0, false]]) {
-        show(f, mir);
-        await new Promise((r) => setTimeout(r, INTRO_MS));
-      }
-    storybook.dataset.pagesFlipped = 3;
-    storybook.classList.add("is-ready");
-    turning = false;
-  });
   const turn = async (dir) => {
     if (turning) return;
     turning = true;
