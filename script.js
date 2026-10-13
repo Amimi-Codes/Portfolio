@@ -372,7 +372,7 @@ if (tarot) {
   dotsEl.innerHTML = cards.map(() => "<i></i>").join("");
   const dots = [...dotsEl.children];
 
-  let offset = 0, pending = 0, picked = null, hover = null, busy = false;
+  let offset = 0, pending = 0, picked = null, hover = null, busy = false, returning = 0;
   const set = (b, [x, y, r, sc], o) => {
     b.style.setProperty("--x", x.toFixed(2)); b.style.setProperty("--y", y.toFixed(2));
     b.style.setProperty("--r", r.toFixed(2) + "deg"); b.style.setProperty("--sc", sc.toFixed(3)); b.style.setProperty("--o", o.toFixed(3));
@@ -401,7 +401,8 @@ if (tarot) {
   let last = performance.now();
   const frame = (now) => {
     const dt = Math.min(now - last, 100); last = now;
-    if (!hover && !document.hidden) offset += still ? 0 : dt / SLOT_MS;
+    // the deck holds still while a card is hovered, open, or gliding back to its place
+    if (!hover && !picked && !returning && !document.hidden) offset += still ? 0 : dt / SLOT_MS;
     if (pending) { const m = pending * Math.min(1, dt / 180); offset += m; pending -= m; if (Math.abs(pending) < 0.001) pending = 0; }
     layout();
     requestAnimationFrame(frame);
@@ -433,6 +434,7 @@ if (tarot) {
   const putBack = () => {
     const b = picked; if (!b || busy) return;
     glide(b); b.classList.remove("is-picked"); picked = null;
+    clearTimeout(returning); returning = setTimeout(() => (returning = 0), still ? 0 : 750);
     b.setAttribute("aria-label", b.dataset.name); // stays face up
   };
   cards.forEach((b) => {
