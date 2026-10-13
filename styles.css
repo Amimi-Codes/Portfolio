@@ -1232,7 +1232,9 @@ button {
 .tarot-deck li{display:contents}
 .tarot-card{--x:50;--y:48;--r:0deg;--sc:1;--o:0;position:absolute;z-index:1;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:15.5%;aspect-ratio:2/3;padding:0;border:0;background:none;cursor:pointer;
   translate:-50% -50%;rotate:var(--r);scale:var(--sc);opacity:var(--o);perspective:1200px;
-  transition:left .8s cubic-bezier(.45,0,.2,1),top .8s cubic-bezier(.45,0,.2,1),rotate .8s,scale .8s cubic-bezier(.3,1.2,.5,1),opacity .6s,translate .25s}
+  transition:translate .25s,filter .3s}
+/* only the lift to and from the centre is eased; the drift is set every frame by script.js */
+.tarot-card.is-moving{transition:left .7s cubic-bezier(.45,0,.2,1),top .7s cubic-bezier(.45,0,.2,1),rotate .7s,scale .7s cubic-bezier(.3,1.2,.5,1),opacity .4s,translate .25s}
 .tarot-card[data-hidden]{pointer-events:none}
 .tarot-card:not(.is-picked):hover,.tarot-card:not(.is-picked):focus-visible{translate:-50% calc(-50% - 16px);rotate:0deg;outline:none;z-index:2}
 .tarot-card:focus-visible .tc-inner{box-shadow:0 0 0 3px var(--aqua),0 18px 30px #0008}

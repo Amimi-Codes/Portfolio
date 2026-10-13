@@ -343,19 +343,21 @@ if (journeySvg) {
 }
 
 // About page: hobby tarot. The <li> list in about.html is the only data, so the deck works for
-// any number of cards. Face-down cards cycle through the slots on the book; hovering a card pauses
-// the cycle; picking one lifts it to the centre and plays glow -> radiate -> flash -> flip.
+// any number of cards. The cards drift continuously along a path across the book and only stop
+// while the pointer is on a card. Picking one lifts it to the centre and plays glow -> radiate ->
+// flash -> flip; revealed cards stay face up when they go back into the deck.
 const tarot = document.querySelector(".tarot-stage");
 if (tarot) {
   const items = [...tarot.querySelectorAll(".tarot-deck li")],
     dotsEl = tarot.querySelector(".tarot-dots"),
     phone = matchMedia("(max-width: 700px)"),
     still = matchMedia("(prefers-reduced-motion: reduce)").matches,
-    n = items.length;
-  // slot positions (x/y in % of the stage, rotation, scale) taken from the Figma book
-  const SLOTS = {
-    wide: { show: [[20.75, 49.7, -6.8, 1], [40.2, 47, 0, 1], [60.5, 46.8, 0, 1], [79.25, 49.5, 6.8, 1]], left: [4, 49, -12, 0.85], right: [96, 49, 12, 0.85], pick: [50, 52, 0, 1.45] },
-    phone: { show: [[-6, 53, -8, 0.82], [50, 54, 0, 1], [106, 53, 8, 0.82]], left: [-40, 53, -12, 0.8], right: [140, 53, 12, 0.8], pick: [50, 54, 0, 1.08] },
+    n = items.length,
+    SLOT_MS = 3000; // time for a card to move one slot
+  // path points (x/y in % of the stage, rotation, scale): off-left, the visible slots, off-right
+  const PATHS = {
+    wide: { pts: [[3, 51, -12, 0.9], [20.75, 49.7, -6.8, 1], [40.2, 47, 0, 1], [60.5, 46.8, 0, 1], [79.25, 49.5, 6.8, 1], [97, 51, 12, 0.9]], pick: [50, 52, 0, 1.45] },
+    phone: { pts: [[-60, 53, -12, 0.8], [-6, 53, -8, 0.82], [50, 54, 0, 1], [106, 53, 8, 0.82], [160, 53, 12, 0.8]], pick: [50, 54, 0, 1.08] },
   };
   const cards = items.map((li, i) => {
     const name = li.textContent.trim();
@@ -370,74 +372,89 @@ if (tarot) {
   dotsEl.innerHTML = cards.map(() => "<i></i>").join("");
   const dots = [...dotsEl.children];
 
-  let offset = 0, picked = null, hover = false, timer = 0;
+  let offset = 0, pending = 0, picked = null, hover = null, busy = false;
   const set = (b, [x, y, r, sc], o) => {
-    b.style.setProperty("--x", x); b.style.setProperty("--y", y);
-    b.style.setProperty("--r", r + "deg"); b.style.setProperty("--sc", sc); b.style.setProperty("--o", o);
+    b.style.setProperty("--x", x.toFixed(2)); b.style.setProperty("--y", y.toFixed(2));
+    b.style.setProperty("--r", r.toFixed(2) + "deg"); b.style.setProperty("--sc", sc.toFixed(3)); b.style.setProperty("--o", o.toFixed(3));
+  };
+  // position p along the path: -1 = off left, 0..k-1 = visible slots, k = off right
+  const at = (pts, p) => {
+    const u = Math.min(Math.max(p + 1, 0), pts.length - 1), i = Math.min(Math.floor(u), pts.length - 2), t = u - i;
+    return pts[i].map((v, j) => v + (pts[i + 1][j] - v) * t);
   };
   const layout = () => {
-    const S = phone.matches ? SLOTS.phone : SLOTS.wide, k = S.show.length;
+    const P = phone.matches ? PATHS.phone : PATHS.wide, k = P.pts.length - 2;
     cards.forEach((b, i) => {
-      if (b === picked) return set(b, S.pick, 1);
-      const p = (i - offset + n * 99) % n; // position in the queue
-      const hidden = p >= k;
+      b.classList.toggle("is-dim", !!picked && b !== picked);
+      if (b === picked) return set(b, P.pick, 1);
+      let p = (((i - offset) % n) + n) % n;
+      if (p > n - 1) p -= n; // the card just leaving is in [-1, 0)
+      const o = Math.max(0, Math.min(1, p + 1, k - p));
+      set(b, at(P.pts, p), o);
+      const hidden = o < 0.5;
       b.toggleAttribute("data-hidden", hidden);
       b.tabIndex = hidden ? -1 : 0;
-      b.classList.toggle("is-dim", !!picked);
-      // the card that just left goes out to the left; everything waiting sits off to the right
-      set(b, hidden ? (p === n - 1 ? S.left : S.right) : S.show[p], hidden ? 0 : 1);
     });
-    dots.forEach((d, i) => d.classList.toggle("on", i === ((offset % n) + n) % n));
+    const on = ((Math.round(offset) % n) + n) % n;
+    dots.forEach((d, i) => d.classList.toggle("on", i === on));
   };
-  const step = (d) => { offset += d; layout(); };
-  const tick = () => { if (!picked && !hover && !document.hidden) step(1); };
-  const start = () => { if (!still) { clearInterval(timer); timer = setInterval(tick, 3000); } };
+  let last = performance.now();
+  const frame = (now) => {
+    const dt = Math.min(now - last, 100); last = now;
+    if (!hover && !document.hidden) offset += still ? 0 : dt / SLOT_MS;
+    if (pending) { const m = pending * Math.min(1, dt / 180); offset += m; pending -= m; if (Math.abs(pending) < 0.001) pending = 0; }
+    layout();
+    requestAnimationFrame(frame);
+  };
 
   const wait = (ms) => new Promise((r) => setTimeout(r, still ? 0 : ms));
-  let busy = false;
+  // the lift to/from the centre is the only eased move; the drift is set every frame
+  const glide = (b) => { b.classList.add("is-moving"); setTimeout(() => b.classList.remove("is-moving"), 800); };
   const reveal = async (b) => {
-    busy = true; picked = b; b.classList.add("is-picked"); layout();
-    await wait(650);   // lift to the centre
-    b.classList.add("is-glow"); await wait(330);     // light blooms on the jellyfish
-    b.classList.add("is-radiate"); await wait(420);  // ...and spreads across the card
-    b.classList.add("is-flash"); await wait(160);    // white out
-    b.classList.add("is-flipped"); await wait(300);  // flip; the white fades as the front turns in
-    b.classList.remove("is-flash", "is-radiate", "is-glow");
-    if (!still) for (let k = 0; k < 10; k++) {
-      const a = (k / 10) * Math.PI * 2, d = 90 + (k % 3) * 30, s = document.createElement("i");
-      s.className = "tc-spark";
-      const w = b.offsetWidth / 100; // burst distance scales with the card
-      s.style.cssText = `--dx:${Math.cos(a) * d * w}px;--dy:${Math.sin(a) * d * w * 0.8}px;--d:${(k % 4) * 60}ms`;
-      b.append(s); setTimeout(() => s.remove(), 1400);
+    busy = true; picked = b; glide(b); b.classList.add("is-picked");
+    await wait(650);
+    if (!b.classList.contains("is-flipped")) {
+      b.classList.add("is-glow"); await wait(330);     // light blooms on the jellyfish
+      b.classList.add("is-radiate"); await wait(420);  // ...and spreads across the card
+      b.classList.add("is-flash"); await wait(160);    // white out
+      b.classList.add("is-flipped"); await wait(300);  // flip; the white fades as the front turns in
+      b.classList.remove("is-flash", "is-radiate", "is-glow");
+      if (!still) for (let k = 0; k < 10; k++) {
+        const a = (k / 10) * Math.PI * 2, d = 90 + (k % 3) * 30, s = document.createElement("i"), w = b.offsetWidth / 100;
+        s.className = "tc-spark";
+        s.style.cssText = `--dx:${Math.cos(a) * d * w}px;--dy:${Math.sin(a) * d * w * 0.8}px;--d:${(k % 4) * 60}ms`;
+        b.append(s); setTimeout(() => s.remove(), 1400);
+      }
     }
     live.textContent = `You drew ${b.dataset.name}`;
     b.setAttribute("aria-label", `${b.dataset.name}. Tap to put the card back`);
     busy = false;
   };
-  const putBack = async () => {
+  const putBack = () => {
     const b = picked; if (!b || busy) return;
-    busy = true; b.classList.remove("is-flipped"); await wait(450);
-    b.classList.remove("is-picked"); picked = null; layout();
-    b.setAttribute("aria-label", "Draw a card");
-    busy = false; start();
+    glide(b); b.classList.remove("is-picked"); picked = null;
+    b.setAttribute("aria-label", b.dataset.name); // stays face up
   };
   cards.forEach((b) => {
-    b.addEventListener("click", (e) => { e.stopPropagation(); if (busy) return; picked === b ? putBack() : picked ? null : reveal(b); });
-    b.addEventListener("pointerenter", () => (hover = true));
-    b.addEventListener("pointerleave", () => (hover = false));
-    b.addEventListener("focus", () => (hover = true));
-    b.addEventListener("blur", () => (hover = false));
+    b.addEventListener("click", (e) => {
+      e.stopPropagation(); if (busy) return;
+      if (picked === b) putBack(); else if (picked) putBack(); else reveal(b);
+    });
+    b.addEventListener("pointerenter", () => (hover = b));
+    b.addEventListener("pointerleave", () => hover === b && (hover = null));
+    b.addEventListener("focus", () => (hover = b));
+    b.addEventListener("blur", () => hover === b && (hover = null));
   });
   document.addEventListener("click", () => picked && putBack());
   document.addEventListener("keydown", (e) => e.key === "Escape" && putBack());
-  // swipe on phones
+  // swipe on phones: nudge the deck one card
   let x0 = null;
   tarot.addEventListener("pointerdown", (e) => (x0 = e.clientX));
   tarot.addEventListener("pointerup", (e) => {
     if (x0 === null || picked) return;
     const dx = e.clientX - x0; x0 = null;
-    if (Math.abs(dx) > 40) { step(dx < 0 ? 1 : -1); start(); }
+    if (Math.abs(dx) > 40) pending += dx < 0 ? 1 : -1;
   });
-  phone.addEventListener("change", layout);
-  layout(); start();
+  layout();
+  requestAnimationFrame(frame);
 }
