@@ -1238,7 +1238,7 @@ button {
 .tarot-card[data-hidden]{pointer-events:none}
 .tarot-card:not(.is-picked):hover,.tarot-card:not(.is-picked):focus-visible{translate:-50% calc(-50% - 16px);rotate:0deg;outline:none;z-index:2}
 .tarot-card:focus-visible .tc-inner{box-shadow:0 0 0 3px var(--aqua),0 18px 30px #0008}
-.tc-inner{position:absolute;inset:0;border-radius:9%/6%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1),box-shadow .4s;box-shadow:0 16px 24px #0007}
+.tc-inner{position:absolute;inset:0;border-radius:16.667%/11.111%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1),box-shadow .4s;box-shadow:0 16px 24px #0007}
 .tc-back,.tc-front{position:absolute;inset:0;border-radius:inherit;backface-visibility:hidden;overflow:hidden}
 .tc-back{background:url(assets/about/tarot/back.webp) center/cover;box-shadow:inset 0 0 0 1.5px #ffffff45}
 .tc-front{transform:rotateY(180deg)}
