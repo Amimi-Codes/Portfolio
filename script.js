@@ -238,6 +238,11 @@ if (storybook) {
   };
   fit();
   addEventListener("resize", fit, { passive: true });
+  // page dots: light brown, the current spread dark brown
+  const dotsEl = storybook.querySelector(".book-dots");
+  dotsEl.innerHTML = [...carousel.children].map(() => "<i></i>").join("");
+  const dots = [...dotsEl.children], markDot = (k) => dots.forEach((d, i) => d.classList.toggle("is-current", i === k));
+  markDot(0);
   let current = 0;
   carousel.addEventListener(
     "scroll",
@@ -247,6 +252,7 @@ if (storybook) {
       const next = Math.round(carousel.scrollLeft / carousel.clientWidth);
       if (next === current) return;
       current = next;
+      markDot(current);
       // the phones pop out of the HabitU page again each time it comes back
       if (current === 1 && !reducedMotion) {
         popup.classList.remove("is-revealing");

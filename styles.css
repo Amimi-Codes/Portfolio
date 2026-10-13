@@ -993,7 +993,7 @@ button {
 }
 
 /* Pixel jellyfish and pop-up storybook */
-.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;grid-template-columns:1fr 2.5fr 1fr;align-items:end;gap:2rem;margin-bottom:4rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 4.8rem 3.6rem}.book-arrow{position:absolute;z-index:10;top:50%;width:4rem;aspect-ratio:1;display:grid;place-items:center;padding:0;border:1.5px solid #ffffffd0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 26%,#ffffffa0,#e8f1f540 40%,#b9cdd866 75%,#9fb8c680);-webkit-backdrop-filter:blur(10px) saturate(1.3);backdrop-filter:blur(10px) saturate(1.3);box-shadow:inset 0 2px 4px #fffd,inset 0 -6px 12px #5a7d8c1f,0 6px 16px #0a3b5a24;transform:translateY(-50%);transition:transform .2s,background .2s}.book-arrow svg{width:46%;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1.5px #0a3b5a66)}.book-arrow:hover,.book-arrow:focus-visible{transform:translateY(-50%) scale(1.07);outline:none;background:radial-gradient(circle at 32% 26%,#ffffffd0,#ffffff60 40%,#dbe8ee60 75%,#c7d9e270)}.book-arrow-prev{left:0}.book-arrow-next{right:0}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}@media(max-width:560px){.storybook{padding-inline:2.4rem}.book-arrow{width:3rem;font-size:1.5rem}}
+.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;gap:1.4rem;margin-bottom:3.5rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{margin:0;max-width:620px;font-size:1.15rem;line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 0 3.6rem}.book-nav{display:flex;align-items:center;justify-content:center;gap:1.4rem;margin-top:1.6rem}.book-arrow{display:grid;place-items:center;width:2.6rem;height:2.6rem;padding:0;border:0;border-radius:50%;background:none;color:#b88742;cursor:pointer;transition:color .2s,background .2s,transform .2s}.book-arrow svg{width:70%;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}.book-arrow:hover,.book-arrow:focus-visible{color:#8a6230;background:#b887421f;outline:none;transform:scale(1.08)}.book-arrow:focus-visible{box-shadow:0 0 0 2px #8a6230}.book-dots{display:flex;gap:.7rem}.book-dots i{width:.7rem;height:.7rem;border-radius:50%;background:#dcc39c;transition:background .25s,transform .25s}.book-dots i.is-current{background:#8a6230;transform:scale(1.15)}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}
 
 
 /* Scrollable scrapbook journey */
@@ -1046,7 +1046,7 @@ button {
 
 /* Storybook: Amy's open-book art (assets/book-home.svg) with the project spreads scrolling over its pages,
    plus a cover-and-pages opening */
-.storybook{padding:1rem 4.8rem 3.6rem}
+.storybook{padding:1rem 0 3.6rem}
 .pixel-book{
   /* The element is the book's cover box: 1236x654 at (102,86) in the 1440x825 art.
      --s (px per art unit) is set by script.js. */
@@ -1101,8 +1101,8 @@ button {
 /* Opening: script.js plays Amy's book-open frames on .book-art, then adds .is-ready */
 @keyframes book-fade-out{to{opacity:0;visibility:hidden}}
 @keyframes book-fade-in{from{opacity:0}}
-.storybook:not(.is-ready) :is(.book-carousel,.book-arrow){opacity:0}
-.storybook.is-ready :is(.book-carousel,.book-arrow){animation:book-fade-in .5s both}
+.storybook:not(.is-ready) :is(.book-carousel,.book-nav){opacity:0}
+.storybook.is-ready :is(.book-carousel,.book-nav){animation:book-fade-in .5s both}
 
 /* Popup phones: sit over the first spread's left page and pop out of it after the book has opened.
    Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
@@ -1135,13 +1135,11 @@ button {
   .book-right{padding:0 1rem 2.6rem}
   .book-popup{left:-2%;top:6px;width:104%;translate:none}
   .book-carousel{position:relative;inset:auto}
-  .book-arrow{top:auto;bottom:0;transform:none}
-  .book-arrow:hover{transform:scale(1.07)}
-  .storybook :is(.book-art,.book-carousel,.book-arrow),.storybook .book-popup img{opacity:1!important;animation:none!important;transition:none}
+  .storybook :is(.book-art,.book-carousel,.book-nav),.storybook .book-popup img{opacity:1!important;animation:none!important;transition:none}
 }
 @media(prefers-reduced-motion:reduce){
-  .storybook :is(.book-art,.book-carousel,.book-arrow),.book-popup img{opacity:1!important;transition:none}
-  .storybook :is(.book-carousel,.book-arrow),.book-popup img{animation:none!important}
+  .storybook :is(.book-art,.book-carousel,.book-nav),.book-popup img{opacity:1!important;transition:none}
+  .storybook :is(.book-carousel,.book-nav),.book-popup img{animation:none!important}
 }
 
 /* Resume popup on the contact page */

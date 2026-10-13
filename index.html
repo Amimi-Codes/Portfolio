@@ -9,8 +9,8 @@
       content="Amy Cui — designer, researcher, and frontend developer."
     />
     <title>Amy Cui — Design in motion</title>
-    <link rel="stylesheet" href="styles.css?v=45" />
-    <script src="script.js?v=45" defer></script>
+    <link rel="stylesheet" href="styles.css?v=46" />
+    <script src="script.js?v=46" defer></script>
   </head>
   <body class="home-page">
     <a class="skip-link" href="#featured">Skip to featured projects</a>
@@ -145,7 +145,6 @@
         aria-labelledby="work-title"
       >
         <div class="story-heading reveal">
-          <p class="label">HIGHLIGHTED STORIES</p>
           <h2 id="work-title">Stories I’ve <em>told</em></h2>
           <p>
             A selection of case studies and interactive experiences that
@@ -153,11 +152,6 @@
           </p>
         </div>
         <div class="storybook reveal" data-storybook>
-          <button
-            class="book-arrow book-arrow-prev"
-            type="button"
-            aria-label="Previous story"
-          ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg></button>
           <div class="pixel-book">
             <img class="book-art" src="assets/book-open/0.svg" alt="" aria-hidden="true" width="1440" height="825" />
             <div
@@ -187,7 +181,7 @@
                       ><b>#Frontend</b><b>#Interaction Design</b><b>#Passion Project</b></span
                     ><a class="book-cta" href="dndcreation.html">View Story <span>↗</span></a>
                   </div>
-                </div>
+        </div>
               </section>
               <section class="book-scene" data-story="1">
                 <div class="page-container">
@@ -248,16 +242,15 @@
               />
             </div>
           </div>
-          <button
-            class="book-arrow book-arrow-next"
-            type="button"
-            aria-label="Next story"
-          ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5l7 7-7 7"/></svg></button>
+          <nav class="book-nav" aria-label="Highlighted stories">
+            <button class="book-arrow book-arrow-prev" type="button" aria-label="Previous story"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg></button>
+            <span class="book-dots" aria-hidden="true"></span>
+            <button class="book-arrow book-arrow-next" type="button" aria-label="Next story"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5l7 7-7 7"/></svg></button>
+          </nav>
         </div>
       </section>
       <section class="about-section" id="about" aria-labelledby="about-title">
         <div class="wrap about-grid">
-          <p class="label">ABOUT ME</p>
           <div>
             <h2 id="about-title">
               <span class="word-article" aria-hidden="true">A</span> <span class="word-cycle" aria-hidden="true"><span><em>creator</em><em data-article="An">artist</em><em>developer</em></span></span><span class="sr-only">A creator, artist and developer</span> with<br />an eye for <em>possibility.</em>
