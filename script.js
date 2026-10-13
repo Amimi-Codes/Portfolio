@@ -265,19 +265,19 @@ if (storybook) {
   const show = (f, mirror) => { art.src = frames[f]; art.classList.toggle("is-mirrored", mirror); };
   const pause = () => new Promise((r) => setTimeout(r, FRAME_MS));
   let turning = false;
-  // opening, after the cover has swung open (CSS, ~1.35s): riffle through 7 pages quickly,
+  // opening, after the cover has swung open (CSS, ~1.35s): riffle through 3 pages quickly,
   // then show the first spread (.is-ready fades it in)
   storybook.addEventListener("bookopen", async () => {
     if (reducedMotion) return storybook.classList.add("is-ready");
     turning = true;
     await new Promise((r) => setTimeout(r, 1350));
     const INTRO_MS = 28; // per frame, so each page takes ~0.22s
-    for (let k = 0; k < 7; k++)
+    for (let k = 0; k < 3; k++)
       for (const [f, mir] of [[1, false], [2, false], [3, false], [4, false], [3, true], [2, true], [1, true], [0, false]]) {
         show(f, mir);
         await new Promise((r) => setTimeout(r, INTRO_MS));
       }
-    storybook.dataset.pagesFlipped = 7;
+    storybook.dataset.pagesFlipped = 3;
     storybook.classList.add("is-ready");
     turning = false;
   });
