@@ -209,19 +209,19 @@ if (wordCycle) {
 const scrollBook=document.querySelector("[data-storybook]");
 if(scrollBook){
   if(reducedMotion){
-    scrollBook.classList.add("is-opened");
+    scrollBook.classList.add("is-opened","is-ready");
   }else if("IntersectionObserver" in window){
     const bookObserver=new IntersectionObserver((entries)=>{
       if(entries.some(entry=>entry.isIntersecting)){
         bookObserver.unobserve(scrollBook);
         requestAnimationFrame(()=>{
-          requestAnimationFrame(()=>scrollBook.classList.add("is-opened"));
+          requestAnimationFrame(()=>{scrollBook.classList.add("is-opened");scrollBook.dispatchEvent(new Event("bookopen"));});
         });
       }
     },{threshold:.12,rootMargin:"0px 0px -12% 0px"});
     bookObserver.observe(scrollBook);
   }else{
-    scrollBook.classList.add("is-opened");
+    scrollBook.classList.add("is-opened","is-ready");
   }
 }
 
@@ -258,13 +258,29 @@ if (storybook) {
   );
   // Page turn: Amy's frames of the right page lifting over (book-turn-1..4), then the same frames
   // mirrored as it lands on the left. Previous plays the mirror image. The deck loops both ways.
-  const art = book.querySelector(".book-art"), rest = art.getAttribute("src"),
+  const art = book.querySelector(".book-art"), rest = "assets/book-home.svg",
     frames = [rest, 1, 2, 3, 4].map((f) => (f === rest ? f : `assets/book-turn-${f}.svg`)),
     spreads = carousel.children.length, FRAME_MS = 65;
   frames.forEach((f) => (new Image().src = f));
   const show = (f, mirror) => { art.src = frames[f]; art.classList.toggle("is-mirrored", mirror); };
   const pause = () => new Promise((r) => setTimeout(r, FRAME_MS));
+  // Opening: Amy's frames (assets/book-open/0..10.svg, aligned to the open book) from the closed
+  // cover to the open spread, then the first case study fades in (.is-ready)
+  const OPEN_FRAMES = 11, OPEN_MS = 95;
+  for (let f = 1; f < OPEN_FRAMES; f++) new Image().src = `assets/book-open/${f}.svg`;
   let turning = false;
+  const opened = () => { art.src = rest; storybook.classList.add("is-ready"); };
+  if (reducedMotion || storybook.classList.contains("is-ready")) opened();
+  storybook.addEventListener("bookopen", async () => {
+    turning = true;
+    await new Promise((r) => setTimeout(r, 250)); // a beat on the closed cover
+    for (let f = 1; f < OPEN_FRAMES; f++) {
+      art.src = `assets/book-open/${f}.svg`;
+      await new Promise((r) => setTimeout(r, OPEN_MS));
+    }
+    opened();
+    turning = false;
+  });
   const turn = async (dir) => {
     if (turning) return;
     turning = true;
