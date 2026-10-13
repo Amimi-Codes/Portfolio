@@ -568,8 +568,11 @@ button {
   color: var(--aqua);
   box-shadow: inset 0 0 0 1.5px #a5f1df80;
 }
-.primary-cta.ghost-cta:hover {
-  background: #a5f1df1a;
+.primary-cta.ghost-cta:hover,
+.primary-cta.ghost-cta:focus-visible {
+  background: #a5f1df;
+  color: #062630;
+  box-shadow: 0 10px 24px #00000040;
 }
 .about-grid .label {
   color: var(--aqua);
@@ -593,6 +596,20 @@ button {
   background: #a5f1df;
   color: #062630;
   font-weight: 800;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.primary-cta span {
+  transition: transform 0.2s;
+}
+.primary-cta:hover,
+.primary-cta:focus-visible {
+  background: #d2fbf0;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px #00000040;
+}
+.primary-cta:hover span,
+.primary-cta:focus-visible span {
+  transform: translate(3px, -3px);
 }
 .footer {
   min-height: 110px;
@@ -976,7 +993,7 @@ button {
 }
 
 /* Pixel jellyfish and pop-up storybook */
-.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;grid-template-columns:1fr 2.5fr 1fr;align-items:end;gap:2rem;margin-bottom:4rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 4.8rem 3.6rem}.book-arrow{position:absolute;z-index:10;top:50%;width:4rem;aspect-ratio:1;display:grid;place-items:center;padding:0;border:1.5px solid #ffffffc0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 26%,#ffffffa0,#ffffff26 38%,#9fd6ff1f 70%,#5ab8ff33);-webkit-backdrop-filter:blur(10px) saturate(1.4);backdrop-filter:blur(10px) saturate(1.4);box-shadow:inset 0 2px 4px #fffc,inset 0 -8px 14px #2a8fd026,0 0 0 1px #7cc9ff40,0 0 18px #4cc3ff99,0 0 42px #2d9dff55,0 10px 20px #0a3b5a2e;transform:translateY(-50%);transition:transform .2s,box-shadow .2s}.book-arrow svg{width:46%;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px #2f9bff) drop-shadow(0 1px 1px #0a4a7a80)}.book-arrow:hover,.book-arrow:focus-visible{transform:translateY(-50%) scale(1.07);outline:none;box-shadow:inset 0 2px 4px #fffc,inset 0 -8px 14px #2a8fd026,0 0 0 1px #7cc9ff70,0 0 26px #4cc3ffcc,0 0 60px #2d9dff88,0 10px 20px #0a3b5a2e}.book-arrow-prev{left:0}.book-arrow-next{right:0}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}@media(max-width:560px){.storybook{padding-inline:2.4rem}.book-arrow{width:3rem;font-size:1.5rem}}
+.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;grid-template-columns:1fr 2.5fr 1fr;align-items:end;gap:2rem;margin-bottom:4rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 4.8rem 3.6rem}.book-arrow{position:absolute;z-index:10;top:50%;width:4rem;aspect-ratio:1;display:grid;place-items:center;padding:0;border:1.5px solid #ffffffd0;border-radius:50%;cursor:pointer;background:radial-gradient(circle at 32% 26%,#ffffffa0,#e8f1f540 40%,#b9cdd866 75%,#9fb8c680);-webkit-backdrop-filter:blur(10px) saturate(1.3);backdrop-filter:blur(10px) saturate(1.3);box-shadow:inset 0 2px 4px #fffd,inset 0 -6px 12px #5a7d8c1f,0 6px 16px #0a3b5a24;transform:translateY(-50%);transition:transform .2s,background .2s}.book-arrow svg{width:46%;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1.5px #0a3b5a66)}.book-arrow:hover,.book-arrow:focus-visible{transform:translateY(-50%) scale(1.07);outline:none;background:radial-gradient(circle at 32% 26%,#ffffffd0,#ffffff60 40%,#dbe8ee60 75%,#c7d9e270)}.book-arrow-prev{left:0}.book-arrow-next{right:0}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}@media(max-width:560px){.storybook{padding-inline:2.4rem}.book-arrow{width:3rem;font-size:1.5rem}}
 
 
 /* Scrollable scrapbook journey */
@@ -1052,8 +1069,13 @@ button {
 .book-scene{position:relative;scroll-snap-align:start;scroll-snap-stop:always}
 .page-container{display:flex;gap:3em;height:100%}
 .book-left,.book-right{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:1.4em 0 2.6em 1.4em}
-.book-right{padding:1.8em 2.2em 2.6em 1.4em}
+.book-right{padding:1.8em 2.2em 4em 1.4em}
 .book-page-placeholder{flex:1;width:100%}
+.book-posters{position:relative;flex:1;width:100%}
+.book-posters img{position:absolute;top:50%;left:50%;width:42%;border-radius:4px;box-shadow:0 14px 22px #173e4840;translate:-50% -50%}
+.book-posters img:nth-child(1){rotate:-9deg;margin-left:-22%}
+.book-posters img:nth-child(2){z-index:1;margin-top:-2%}
+.book-posters img:nth-child(3){rotate:8deg;margin-left:22%}
 .book-page-mockup{margin:auto -10% auto -2.5%;width:112%;max-width:none;height:auto;filter:drop-shadow(0 18px 16px #173e4840)}
 .book-index{font-size:.7em;font-weight:800;letter-spacing:.16em;color:#4c8c8a}
 .book-right h3{font:700 3.2em/.92 Manrope,sans-serif;letter-spacing:-.09em;margin:.35em 0 .4em;color:#184a55}
@@ -1076,33 +1098,12 @@ button {
   exit 100%{opacity:0;translate:100%;visibility:hidden}
 }
 
-/* Opening: the closed book sits on the right; its cover and pages swing over to the left */
-.book-intro{position:absolute;z-index:2;inset:0;perspective:220em;pointer-events:none}
-/* back cover and the page block resting on it stay on the right while the front cover and pages turn left */
-.book-intro:before,.book-intro:after{content:"";position:absolute;z-index:-1;left:50%;top:0;width:50%;height:100%;background:#b88742;border-radius:0 20px 20px 0;box-shadow:0 12px 24px #0003}
-.book-intro:after{top:1.5%;width:48.5%;height:97%;background:#fff9e9;border-radius:0 5px 5px 0;box-shadow:inset -3px 0 20px #0003,3px 0 0 #f1e6cc,5px 0 0 #fff9e9}
-.book-intro i,.intro-cover{position:absolute;left:50%;transform-origin:0 50%;border-radius:0 5px 5px 0;box-shadow:inset -3px 0 20px #0003,0 0 15px #0002}
-.book-intro i{top:1.5%;width:48.5%;height:97%;background:#fff9e9}
-.intro-cover{top:0;width:50%;height:100%;background:#b88742;border-radius:0 20px 20px 0;box-shadow:0 12px 24px #0003}
-.storybook.is-opened .intro-cover{animation:intro-cover 1.6s forwards}
-.storybook.is-opened .book-intro i{animation:intro-page 1.6s forwards}
-.storybook.is-opened .book-intro i:nth-of-type(1){animation-delay:.05s}
-.storybook.is-opened .book-intro i:nth-of-type(2){animation-delay:.22s}
-.storybook.is-opened .book-intro i:nth-of-type(3){animation-delay:.44s}
-.storybook.is-opened .book-intro i:nth-of-type(4){animation-name:intro-page-150;animation-delay:.66s}
-.storybook.is-opened .book-intro i:nth-of-type(5){animation-name:intro-page-30;animation-delay:.8s}
-.storybook.is-opened .book-intro i:nth-of-type(6){animation-name:intro-page-55;animation-delay:.84s}
-.storybook.is-opened .book-intro{animation:book-fade-out .45s 2.15s forwards}
-@keyframes intro-cover{30%{z-index:999}100%{transform:rotateY(-180deg);z-index:1}}
-@keyframes intro-page{30%{z-index:999}100%{transform:rotateY(-180deg);z-index:999}}
-@keyframes intro-page-150{30%{z-index:999}100%{transform:rotateY(-150deg);z-index:999}}
-@keyframes intro-page-30{50%{z-index:999}100%{transform:rotateY(-30deg);z-index:999}}
-@keyframes intro-page-55{30%{z-index:999}100%{transform:rotateY(-55deg);z-index:999}}
+/* Opening: the book flips through a few pages (script.js) before the first spread fades in */
 @keyframes book-fade-out{to{opacity:0;visibility:hidden}}
 @keyframes book-fade-in{from{opacity:0}}
 .storybook:not(.is-opened) :is(.book-art,.book-carousel,.book-arrow){opacity:0}
-.storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 1.9s both}
-.storybook.is-opened .book-art{transition:opacity .5s 1.9s}
+.storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 1.3s both}
+.storybook.is-opened .book-art{transition:opacity .4s}
 
 /* Popup phones: sit over the first spread's left page and pop out of it after the book has opened.
    Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
@@ -1113,7 +1114,7 @@ button {
 .book-popup .popup-phone-2{left:25.37%;top:0;width:51.16%;--d:.15s}
 .book-popup .popup-phone-3{left:46.52%;top:13.35%;width:53.52%;--d:.3s}
 /* short pause after the book finishes opening (~2.6s) before the phones rise */
-.storybook.is-opened .book-popup img{animation:book-phone-pop .9s cubic-bezier(.3,1.35,.5,1) calc(3s + var(--d)) both}
+.storybook.is-opened .book-popup img{animation:book-phone-pop .9s cubic-bezier(.3,1.35,.5,1) calc(2.2s + var(--d)) both}
 .storybook .book-popup.is-revealing img{animation:book-phone-pop .8s cubic-bezier(.3,1.35,.5,1) calc(.15s + var(--d)) both}
 @keyframes book-phone-pop{
   0%{opacity:0;transform:translateY(35%) scale(.45)}
@@ -1125,7 +1126,7 @@ button {
 @media(max-width:700px){
   .storybook{padding:0 0 5rem}
   .pixel-book{width:100%;height:auto;font-size:15px}
-  .book-art,.book-intro{display:none}
+  .book-art{display:none}
   .book-carousel{height:auto}
   .page-container{flex-direction:column;gap:0;height:100%;background:#fff9e9;border:8px solid #b88742;border-radius:8px;animation:none!important}
   .book-left{flex:none;min-height:0;aspect-ratio:1.3;padding:1rem}
@@ -1140,7 +1141,6 @@ button {
   .storybook :is(.book-art,.book-carousel,.book-arrow),.storybook .book-popup img{opacity:1!important;animation:none!important;transition:none}
 }
 @media(prefers-reduced-motion:reduce){
-  .book-intro{display:none}
   .storybook :is(.book-art,.book-carousel,.book-arrow),.book-popup img{opacity:1!important;transition:none}
   .storybook :is(.book-carousel,.book-arrow),.book-popup img{animation:none!important}
 }
