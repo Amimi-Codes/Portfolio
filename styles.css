@@ -1117,7 +1117,7 @@ button {
 @keyframes book-fade-out{to{opacity:0;visibility:hidden}}
 @keyframes book-fade-in{from{opacity:0}}
 .storybook:not(.is-opened) :is(.book-carousel,.book-arrow){opacity:0}
-.storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 1.35s both}
+.storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 2.45s both}
 
 /* Popup phones: sit over the first spread's left page and pop out of it after the book has opened.
    Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
@@ -1128,7 +1128,7 @@ button {
 .book-popup .popup-phone-2{left:25.37%;top:0;width:51.16%;--d:.15s}
 .book-popup .popup-phone-3{left:46.52%;top:13.35%;width:53.52%;--d:.3s}
 /* short pause after the book finishes opening (~2.6s) before the phones rise */
-.storybook.is-opened .book-popup img{animation:book-phone-pop .9s cubic-bezier(.3,1.35,.5,1) calc(2.2s + var(--d)) both}
+.storybook.is-opened .book-popup img{animation:book-phone-pop .9s cubic-bezier(.3,1.35,.5,1) calc(3.2s + var(--d)) both}
 .storybook .book-popup.is-revealing img{animation:book-phone-pop .8s cubic-bezier(.3,1.35,.5,1) calc(.15s + var(--d)) both}
 @keyframes book-phone-pop{
   0%{opacity:0;transform:translateY(35%) scale(.45)}
