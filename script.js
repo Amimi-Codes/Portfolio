@@ -230,11 +230,12 @@ if (storybook) {
   const book = storybook.querySelector(".pixel-book"),
     carousel = storybook.querySelector(".book-carousel"),
     popup = storybook.querySelector(".book-popup");
-  // book size: up to 560px / 50vw tall, never wider than the space between the arrows
+  // book size: up to 560px / 50vw tall, the whole 1440x825 art inside the viewport height
+  // and inside the width left over by the pixel arrows at its sides
   const fit = () => {
-    const pad = parseFloat(getComputedStyle(storybook).paddingLeft) * 2;
-    const coverH = Math.min(560, innerWidth * 0.5, ((storybook.clientWidth - pad) * 654) / 1236);
-    book.style.setProperty("--s", coverH / 654);
+    const side = 2 * (storybook.querySelector(".book-arrow").offsetWidth + 8);
+    const s = Math.min(560 / 654, innerWidth * 0.5 / 654, (innerHeight - 64) / 825, (storybook.clientWidth - side) / 1440);
+    storybook.style.setProperty("--s", s);
   };
   fit();
   addEventListener("resize", fit, { passive: true });

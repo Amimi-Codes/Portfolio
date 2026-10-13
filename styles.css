@@ -993,7 +993,7 @@ button {
 }
 
 /* Pixel jellyfish and pop-up storybook */
-.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;gap:1.4rem;justify-items:center;text-align:center;margin-bottom:3.5rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{margin:0;max-width:620px;font-size:1.15rem;line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 0 3.6rem}.book-nav{display:flex;align-items:center;justify-content:center;gap:1.4rem;margin-top:1.6rem}.book-arrow{display:grid;place-items:center;width:2.6rem;height:2.6rem;padding:0;border:0;border-radius:50%;background:none;color:#b88742;cursor:pointer;transition:color .2s,background .2s,transform .2s}.book-arrow svg{width:70%;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}.book-arrow:hover,.book-arrow:focus-visible{color:#8a6230;background:#b887421f;outline:none;transform:scale(1.08)}.book-arrow:focus-visible{box-shadow:0 0 0 2px #8a6230}.book-dots{display:flex;gap:.7rem}.book-dots i{width:.7rem;height:.7rem;border-radius:50%;background:#dcc39c;transition:background .25s,transform .25s}.book-dots i.is-current{background:#8a6230;transform:scale(1.15)}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}
+.hero .jellyfish{display:none}.book-stories{padding-block:8rem;background:linear-gradient(180deg,#eaf8f3 0%,#f6f3e9 100%)}.story-heading{display:grid;gap:1.4rem;justify-items:center;text-align:center;margin-bottom:3.5rem}.story-heading h2{font:600 clamp(3.4rem,7vw,7.6rem)/.95 Manrope,sans-serif;letter-spacing:-.09em;margin:0;color:#113f4c}.story-heading h2 em{font-style:normal;color:#5c9d9b}.story-heading>p:last-child{margin:0;max-width:620px;font-size:1.15rem;line-height:1.7;color:#526b6e}.storybook{position:relative;padding:1.25rem 0 3.6rem}.book-nav{display:flex;align-items:center;justify-content:center;gap:1.4rem;margin-top:1.6rem}.book-arrow{position:absolute;z-index:3;top:calc(1rem + 327px * var(--s));translate:0 -50%;width:3.25rem;padding:.3rem;border:0;background:none;cursor:pointer;transition:transform .15s steps(2)}.book-arrow-prev{right:calc(50% + 720px * var(--s) + .4rem)}.book-arrow-next{left:calc(50% + 720px * var(--s) + .4rem)}.book-arrow svg{display:block;width:100%;filter:drop-shadow(3px 3px 0 #5a3a1740)}.book-arrow-next svg{scale:-1 1}.book-arrow-prev:hover,.book-arrow-prev:focus-visible{transform:translateX(-4px)}.book-arrow-next:hover,.book-arrow-next:focus-visible{transform:translateX(4px)}.book-arrow:active{transform:scale(.92)}.book-arrow:focus-visible{outline:2px solid #8a6230;outline-offset:2px}.book-dots{display:flex;gap:.7rem}.book-dots i{width:.7rem;height:.7rem;border-radius:50%;background:#dcc39c;transition:background .25s,transform .25s}.book-dots i.is-current{background:#8a6230;transform:scale(1.15)}@media(max-width:850px){.story-heading{display:block}.story-heading h2{margin:1rem 0}.book-stories{padding-block:5rem}}
 
 
 /* Scrollable scrapbook journey */
@@ -1046,11 +1046,10 @@ button {
 
 /* Storybook: Amy's open-book art (assets/book-home.svg) with the project spreads scrolling over its pages,
    plus a cover-and-pages opening */
-.storybook{padding:1rem 0 3.6rem}
+.storybook{--s:.8;padding:1rem 0 3.6rem}
 .pixel-book{
   /* The element is the book's cover box: 1236x654 at (102,86) in the 1440x825 art.
      --s (px per art unit) is set by script.js. */
-  --s:.8;
   position:relative;isolation:isolate;margin:0 auto;
   width:calc(1236px * var(--s));height:calc(654px * var(--s));
   font:calc(var(--s) * 15.6px)/1.6 "DM Sans",sans-serif;
@@ -1124,6 +1123,7 @@ button {
 /* Phones: one page per card instead of the open-book spread */
 @media(max-width:700px){
   .storybook{padding:0 0 5rem}
+  .book-arrow{position:static;translate:none;width:2.75rem}
   .pixel-book{width:100%;height:auto;font-size:15px}
   .book-art{display:none}
   .book-carousel{height:auto}
