@@ -225,11 +225,11 @@ if (storybook) {
   const book = storybook.querySelector(".pixel-book"),
     carousel = storybook.querySelector(".book-carousel"),
     popup = storybook.querySelector(".book-popup");
-  // original book size: up to 37rem (592px) / 55vw tall, never wider than the space between the arrows
+  // book size: up to 560px / 50vw tall, never wider than the space between the arrows
   const fit = () => {
     const pad = parseFloat(getComputedStyle(storybook).paddingLeft) * 2;
-    const coverH = Math.min(592, innerWidth * 0.55, ((storybook.clientWidth - pad) * 628) / 933);
-    book.style.setProperty("--s", coverH / 628);
+    const coverH = Math.min(560, innerWidth * 0.5, ((storybook.clientWidth - pad) * 654) / 1236);
+    book.style.setProperty("--s", coverH / 654);
   };
   fit();
   addEventListener("resize", fit, { passive: true });
@@ -342,162 +342,102 @@ if (journeySvg) {
   })();
 }
 
-// About page: hobby deck-builder, Ticket to Ride style. The <li> list in about.html is the
-// only data: stops and routes are generated from its length, so a new hobby needs no code.
-const hobbyGame = document.querySelector(".hobby-game");
-if (hobbyGame) {
-  const items = [...hobbyGame.querySelectorAll(".hobby-deck li")],
-    board = hobbyGame.querySelector(".game-board"),
-    map = board.querySelector(".board-map"),
-    wide = matchMedia("(min-width: 701px)"),
-    motion = !matchMedia("(prefers-reduced-motion: reduce)").matches,
-    n = items.length,
-    rand = (i) => Math.abs(Math.sin(i * 12.9898 + 4.1) * 43758.5453) % 1; // stable jitter
+// About page: hobby tarot. The <li> list in about.html is the only data, so the deck works for
+// any number of cards. Face-down cards cycle through the slots on the book; hovering a card pauses
+// the cycle; picking one lifts it to the centre and plays glow -> radiate -> flash -> flip.
+const tarot = document.querySelector(".tarot-stage");
+if (tarot) {
+  const items = [...tarot.querySelectorAll(".tarot-deck li")],
+    dotsEl = tarot.querySelector(".tarot-dots"),
+    phone = matchMedia("(max-width: 700px)"),
+    still = matchMedia("(prefers-reduced-motion: reduce)").matches,
+    n = items.length;
+  // slot positions (x/y in % of the stage, rotation, scale) taken from the Figma book
+  const SLOTS = {
+    wide: { show: [[20.75, 49.7, -6.8, 1], [40.2, 47, 0, 1], [60.5, 46.8, 0, 1], [79.25, 49.5, 6.8, 1]], left: [4, 49, -12, 0.85], right: [96, 49, 12, 0.85], pick: [50, 52, 0, 1.45] },
+    phone: { show: [[-6, 53, -8, 0.82], [50, 54, 0, 1], [106, 53, 8, 0.82]], left: [-40, 53, -12, 0.8], right: [140, 53, 12, 0.8], pick: [50, 54, 0, 1.08] },
+  };
+  const cards = items.map((li, i) => {
+    const name = li.textContent.trim();
+    li.innerHTML = `<button class="tarot-card" type="button" aria-label="Draw a card (${i + 1} of ${n})"><span class="tc-inner"><span class="tc-back"></span><span class="tc-front"><img src="${li.dataset.front}" alt="${name}" loading="lazy" /></span></span></button>`;
+    const b = li.firstChild;
+    b.dataset.name = name;
+    return b;
+  });
+  const live = Object.assign(document.createElement("p"), { className: "sr-only" });
+  live.setAttribute("aria-live", "polite");
+  tarot.append(live);
+  dotsEl.innerHTML = cards.map(() => "<i></i>").join("");
+  const dots = [...dotsEl.children];
 
-  // stops on an offset grid (about twice as wide as tall) with 3+ spare "?" stops
-  const rows = Math.max(2, Math.round(Math.sqrt((n + 3) / 2.2))),
-    cols = Math.ceil((n + 3) / rows),
-    VW = 1000, px = VW / (cols + 0.5), py = px * 0.82, VH = py * rows + 90;
-  const stops = [];
-  for (let r = 0; r < rows; r++)
-    for (let c = 0; c < cols; c++) {
-      const i = r * cols + c;
-      stops.push({ r, c,
-        x: px * (c + 0.5 + (r % 2) * 0.5) + (rand(i) - 0.5) * px * 0.3,
-        y: py * (r + 0.5) + 40 + (rand(i + 99) - 0.5) * py * 0.3 });
+  let offset = 0, picked = null, hover = false, timer = 0;
+  const set = (b, [x, y, r, sc], o) => {
+    b.style.setProperty("--x", x); b.style.setProperty("--y", y);
+    b.style.setProperty("--r", r + "deg"); b.style.setProperty("--sc", sc); b.style.setProperty("--o", o);
+  };
+  const layout = () => {
+    const S = phone.matches ? SLOTS.phone : SLOTS.wide, k = S.show.length;
+    cards.forEach((b, i) => {
+      if (b === picked) return set(b, S.pick, 1);
+      const p = (i - offset + n * 99) % n; // position in the queue
+      const hidden = p >= k;
+      b.toggleAttribute("data-hidden", hidden);
+      b.tabIndex = hidden ? -1 : 0;
+      b.classList.toggle("is-dim", !!picked);
+      // the card that just left goes out to the left; everything waiting sits off to the right
+      set(b, hidden ? (p === n - 1 ? S.left : S.right) : S.show[p], hidden ? 0 : 1);
+    });
+    dots.forEach((d, i) => d.classList.toggle("on", i === ((offset % n) + n) % n));
+  };
+  const step = (d) => { offset += d; layout(); };
+  const tick = () => { if (!picked && !hover && !document.hidden) step(1); };
+  const start = () => { if (!still) { clearInterval(timer); timer = setInterval(tick, 3000); } };
+
+  const wait = (ms) => new Promise((r) => setTimeout(r, still ? 0 : ms));
+  let busy = false;
+  const reveal = async (b) => {
+    busy = true; picked = b; b.classList.add("is-picked"); layout();
+    await wait(650);   // lift to the centre
+    b.classList.add("is-glow"); await wait(330);     // light blooms on the jellyfish
+    b.classList.add("is-radiate"); await wait(420);  // ...and spreads across the card
+    b.classList.add("is-flash"); await wait(160);    // white out
+    b.classList.add("is-flipped"); await wait(300);  // flip; the white fades as the front turns in
+    b.classList.remove("is-flash", "is-radiate", "is-glow");
+    if (!still) for (let k = 0; k < 10; k++) {
+      const a = (k / 10) * Math.PI * 2, d = 90 + (k % 3) * 30, s = document.createElement("i");
+      s.className = "tc-spark";
+      const w = b.offsetWidth / 100; // burst distance scales with the card
+      s.style.cssText = `--dx:${Math.cos(a) * d * w}px;--dy:${Math.sin(a) * d * w * 0.8}px;--d:${(k % 4) * 60}ms`;
+      b.append(s); setTimeout(() => s.remove(), 1400);
     }
-  // hobbies claim the stops closest to the centre first
-  const order = stops.map((s, i) => i).sort((a, b) =>
-    Math.hypot(stops[a].x - VW / 2, (stops[a].y - VH / 2) * 1.5) - Math.hypot(stops[b].x - VW / 2, (stops[b].y - VH / 2) * 1.5));
-  const hobbyAt = new Map(order.slice(0, n).map((s, k) => [s, k])); // stop index -> hobby index
-
-  // routes: right neighbour always, the two lower neighbours most of the time (never crossing)
-  const at = (r, c) => (r < rows && c >= 0 && c < cols ? r * cols + c : -1), routes = [];
-  stops.forEach((s, i) => {
-    const down = s.r % 2 ? [s.c, s.c + 1] : [s.c - 1, s.c];
-    [[at(s.r, s.c + 1), true], ...down.map((c) => [at(s.r + 1, c), false])].forEach(([j, keep], k) => {
-      if (j >= 0 && (keep || rand(i * 3 + k) > 0.3)) routes.push([i, j]);
-    });
+    live.textContent = `You drew ${b.dataset.name}`;
+    b.setAttribute("aria-label", `${b.dataset.name}. Tap to put the card back`);
+    busy = false;
+  };
+  const putBack = async () => {
+    const b = picked; if (!b || busy) return;
+    busy = true; b.classList.remove("is-flipped"); await wait(450);
+    b.classList.remove("is-picked"); picked = null; layout();
+    b.setAttribute("aria-label", "Draw a card");
+    busy = false; start();
+  };
+  cards.forEach((b) => {
+    b.addEventListener("click", (e) => { e.stopPropagation(); if (busy) return; picked === b ? putBack() : picked ? null : reveal(b); });
+    b.addEventListener("pointerenter", () => (hover = true));
+    b.addEventListener("pointerleave", () => (hover = false));
+    b.addEventListener("focus", () => (hover = true));
+    b.addEventListener("blur", () => (hover = false));
   });
-  const colours = ["var(--mint)", "var(--pink)", "var(--orange)", "#c9b6ff", "#9ed8ff", "#e7dcc4"];
-  const svg = `<svg class="board-routes" viewBox="0 0 ${VW} ${VH}">${routes.map(([a, b], k) => {
-    const A = stops[a], B = stops[b], len = Math.hypot(B.x - A.x, B.y - A.y), ang = (Math.atan2(B.y - A.y, B.x - A.x) * 180) / Math.PI,
-      run = len - 64, cars = Math.max(2, Math.round(run / 44)), step = run / cars;
-    let rects = "";
-    for (let j = 0; j < cars; j++)
-      rects += `<rect x="${32 + j * step + 2}" y="-8" width="${step - 4}" height="16" rx="3" style="--d:${j * 70}ms"/>`;
-    return `<g class="route" data-a="${a}" data-b="${b}" style="--rc:${colours[k % colours.length]}" transform="translate(${A.x} ${A.y}) rotate(${ang})">${rects}</g>`;
-  }).join("")}</svg>`;
-  map.style.aspectRatio = `${VW} / ${VH}`;
-  map.innerHTML = svg + stops.map((s, i) => {
-    const k = hobbyAt.get(i), li = items[k];
-    return `<div class="stop${k === undefined ? " is-spare" : ""}" style="left:${(s.x / VW) * 100}%;top:${(s.y / VH) * 100}%"${li ? ` data-cat="${li.dataset.cat || ""}"` : ""}><i class="stop-dot"></i><span class="stop-name">${li ? li.textContent.trim() : "?"}</span></div>`;
-  }).join("");
-  const stopEls = [...map.querySelectorAll(".stop")], routeEls = [...map.querySelectorAll(".route")];
-
-  // cumulative score: every card played, kept per visitor across visits
-  let plays = 0;
-  try { plays = +localStorage.getItem("hobbyPlays") || 0; } catch {}
-  const chip = document.createElement("i");
-  chip.className = "track-chip";
-  let cells = [];
-  const layTrack = () => {
-    board.querySelectorAll(".track-cell").forEach((c) => c.remove());
-    const w = board.clientWidth, h = board.clientHeight, f = 17, iw = w - 2 * f, ih = h - 2 * f,
-      nx = Math.round((50 * iw) / (iw + ih)), ny = 50 - nx; // 100 spaces: 0..99
-    cells = [];
-    for (let i = 0; i < nx; i++) cells.push([f + (i * iw) / nx, f]);
-    for (let i = 0; i < ny; i++) cells.push([w - f, f + (i * ih) / ny]);
-    for (let i = 0; i < nx; i++) cells.push([w - f - (i * iw) / nx, h - f]);
-    for (let i = 0; i < ny; i++) cells.push([f, h - f - (i * ih) / ny]);
-    board.prepend(...cells.map(([x, y], i) => {
-      const c = document.createElement("span");
-      c.className = "track-cell";
-      c.style.cssText = `left:${x}px;top:${y}px`;
-      c.textContent = i;
-      return c;
-    }));
-    moveChip();
-  };
-  const moveChip = () => {
-    const [x, y] = cells[plays % 100] || [0, 0];
-    chip.style.left = x + "px";
-    chip.style.top = y + "px";
-    chip.textContent = plays >= 100 ? Math.floor(plays / 100) * 100 : "";
-  };
-  board.append(chip);
-
-  const bar = document.createElement("div");
-  bar.className = "game-bar";
-  bar.innerHTML = `<b>STOPS <span>0</span> / ${n}</b><p>Play a card to claim its stop.</p><button type="button" data-all>Play all</button><button type="button" data-reset>Reset</button><span class="sr-only" aria-live="polite"></span>`;
-  board.after(bar);
-  const live = bar.querySelector("[aria-live]"), tally = bar.querySelector("b span");
-
-  const tokens = items.map((li, i) => {
-    const name = li.textContent.trim(), icon = li.dataset.icon || name[0];
-    li.innerHTML = `<button class="hobby-card" type="button" aria-pressed="false"><span class="card-cat">${li.dataset.cat || ""}</span><span class="card-art"><span>${icon}</span></span><span class="card-name">${name}</span><span class="card-no">#${String(i + 1).padStart(2, "0")} · +1 SIDEQUEST</span></button>`;
-    li.firstChild.style.setProperty("--tilt", `${((i * 7) % 5) - 2}deg`);
-    const t = document.createElement("i");
-    t.className = "stop-token";
-    t.dataset.cat = li.dataset.cat || "";
-    t.textContent = icon;
-    return t;
+  document.addEventListener("click", () => picked && putBack());
+  document.addEventListener("keydown", (e) => e.key === "Escape" && putBack());
+  // swipe on phones
+  let x0 = null;
+  tarot.addEventListener("pointerdown", (e) => (x0 = e.clientX));
+  tarot.addEventListener("pointerup", (e) => {
+    if (x0 === null || picked) return;
+    const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) { step(dx < 0 ? 1 : -1); start(); }
   });
-  const stopOf = (k) => stopEls[order[k]], name = (k) => items[k].querySelector(".card-name").textContent;
-
-  const played = new Set();
-  const refresh = (msg) => {
-    routeEls.forEach((g) => {
-      const a = hobbyAt.get(+g.dataset.a), b = hobbyAt.get(+g.dataset.b);
-      g.classList.toggle("is-claimed", played.has(a) && played.has(b));
-    });
-    tally.textContent = played.size;
-    moveChip();
-    live.textContent = msg;
-  };
-  const play = (k) => {
-    if (played.has(k)) return;
-    played.add(k);
-    plays++;
-    try { localStorage.setItem("hobbyPlays", plays); } catch {}
-    const card = items[k].firstChild, stop = stopOf(k), tok = tokens[k];
-    card.setAttribute("aria-pressed", "true");
-    tok.style.visibility = "hidden";
-    stop.classList.add("is-claimed");
-    stop.prepend(tok);
-    const land = () => {
-      tok.style.visibility = "";
-      tok.classList.remove("is-landed");
-      void tok.offsetWidth;
-      tok.classList.add("is-landed");
-      refresh(`${name(k)} claimed`);
-    };
-    if (!motion) return land();
-    const from = card.querySelector(".card-art span").getBoundingClientRect(), to = tok.getBoundingClientRect(), fly = tok.cloneNode(true);
-    fly.classList.add("token-flyer");
-    fly.style.cssText = `left:${to.left}px;top:${to.top}px;width:${to.width}px;height:${to.height}px;visibility:visible`;
-    document.body.append(fly);
-    const dx = from.left + from.width / 2 - (to.left + to.width / 2), dy = from.top + from.height / 2 - (to.top + to.height / 2);
-    fly.animate([
-      { transform: `translate(${dx}px,${dy}px) scale(1.4)` },
-      { transform: `translate(${dx * 0.45}px,${dy * 0.45 - 90}px) scale(1.6) rotate(-12deg)`, offset: 0.55 },
-      { transform: "none" },
-    ], { duration: 650, easing: "cubic-bezier(.4,0,.3,1)" }).finished.then(() => { fly.remove(); land(); });
-  };
-  const unplay = (k) => {
-    if (!played.delete(k)) return;
-    items[k].firstChild.setAttribute("aria-pressed", "false");
-    stopOf(k).classList.remove("is-claimed");
-    tokens[k].remove();
-    refresh(`${name(k)} returned to the deck`);
-  };
-  items.forEach((li, k) => li.firstChild.addEventListener("click", () => {
-    if (wide.matches) played.has(k) ? unplay(k) : play(k);
-  }));
-  bar.querySelector("[data-all]").addEventListener("click", () =>
-    items.forEach((_, k) => setTimeout(() => play(k), motion ? k * 140 : 0)));
-  bar.querySelector("[data-reset]").addEventListener("click", () => items.forEach((_, k) => unplay(k)));
-
-  hobbyGame.classList.add("is-ready");
-  new ResizeObserver(() => wide.matches && layTrack()).observe(board);
+  phone.addEventListener("change", layout);
+  layout(); start();
 }

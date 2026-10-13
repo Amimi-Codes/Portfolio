@@ -1018,31 +1018,21 @@ button {
 }
 @keyframes jelly-bolts{0%{opacity:1}100%{opacity:.15;transform:scale(1.08)}}
 
-/* Pixel storybook: CodePen sprite page flip driven by the carousel's scroll, plus a cover-and-pages opening */
-@property --sprite-fs{syntax:"<integer>";initial-value:0;inherits:true}
+/* Storybook: Amy's open-book art (assets/book-home.svg) with the project spreads scrolling over its pages,
+   plus a cover-and-pages opening */
 .storybook{padding:1rem 4.8rem 3.6rem}
 .pixel-book{
-  /* assets/book.webp: Amy's 7 vector frames rendered at 2x into a 5 x 2 grid of 933x673 frames,
-     the 933x628 cover at y=45 in every frame. The element is the cover; --s (px per frame unit)
-     is set by script.js so the book keeps its original size. */
-  --s:.94;--slides:3;--sprite-f:7;--sprite-fr:12;
-  --sprite-as:calc(var(--sprite-f) / var(--sprite-fr) * 1s);
-  position:relative;isolation:isolate;margin:0 auto;timeline-scope:--book-timeline;
-  width:calc(933px * var(--s));height:calc(628px * var(--s));
+  /* The element is the book's cover box: 1236x654 at (102,86) in the 1440x825 art.
+     --s (px per art unit) is set by script.js. */
+  --s:.8;
+  position:relative;isolation:isolate;margin:0 auto;
+  width:calc(1236px * var(--s));height:calc(654px * var(--s));
   font:calc(var(--s) * 15.6px)/1.6 "DM Sans",sans-serif;
   color:#333;
 }
-.book-sprite{
-  position:absolute;z-index:0;left:0;top:calc(-45px * var(--s));pointer-events:none;
-  width:calc(933px * var(--s));height:calc(673px * var(--s));
-  background:url(assets/book.webp) no-repeat;
-  background-size:calc(4665px * var(--s)) calc(1346px * var(--s));
-  --sprite-fe:calc(var(--sprite-f) * (var(--slides) - 1));
-  --n:mod(var(--sprite-fs), var(--sprite-f));
-  background-position:calc(-933px * var(--s) * mod(var(--n), 5)) calc(-673px * var(--s) * round(down, var(--n) / 5, 1));
-}
+.book-art{position:absolute;z-index:0;left:-8.252%;top:-13.15%;width:116.5%;height:126.15%;max-width:none;pointer-events:none}
 .book-carousel{
-  position:absolute;z-index:1;inset:2.2% 2.4% 2.1% 2.5%;display:grid;grid:1fr / auto-flow 100%;
+  position:absolute;z-index:1;inset:1.2% 2.4% 7.8% 2.4%;display:grid;grid:1fr / auto-flow 100%;
   overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
   scroll-behavior:smooth;scrollbar-width:none;outline:none
 }
@@ -1050,7 +1040,7 @@ button {
 .book-scene{position:relative;scroll-snap-align:start;scroll-snap-stop:always}
 .page-container{display:flex;gap:3em;height:100%}
 .book-left,.book-right{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;align-items:flex-start;padding:1.4em 0 2.6em 1.4em}
-.book-right{padding:1.4em 1.4em 2.6em 0}
+.book-right{padding:1.8em 2.2em 2.6em 1.4em}
 .book-page-placeholder{flex:1;width:100%}
 .book-page-mockup{margin:auto -10% auto -2.5%;width:112%;max-width:none;height:auto;filter:drop-shadow(0 18px 16px #173e4840)}
 .book-index{font-size:.7em;font-weight:800;letter-spacing:.16em;color:#4c8c8a}
@@ -1061,12 +1051,9 @@ button {
 .book-right a{margin-top:auto;display:flex;gap:1.2em;font-weight:800;color:#155866;border-bottom:2px solid #83b7ad;padding-bottom:.2em}
 .book-right a:hover{color:#50a99f}
 @supports (animation-timeline:scroll()){
-  .book-carousel{scroll-timeline:--book-timeline x}
-  .book-sprite{animation:sprite-frame var(--sprite-as) linear both;animation-timeline:--book-timeline}
   .page-container{animation:stay-centered linear both;animation-timeline:view(x)}
 }
-@keyframes sprite-frame{to{--sprite-fs:var(--sprite-fe)}}
-/* keep the spread still while the sprite turns the page, fading the old spread out and the new one in.
+/* keep the spread still while the page turns, fading the old spread out and the new one in.
    Faded-out spreads overlap the visible one, so they are hidden too, or they would catch its clicks. */
 @keyframes stay-centered{
   entry 0%{opacity:0;translate:-100%;visibility:hidden}
@@ -1101,14 +1088,13 @@ button {
 @keyframes intro-page-55{30%{z-index:999}100%{transform:rotateY(-55deg);z-index:999}}
 @keyframes book-fade-out{to{opacity:0;visibility:hidden}}
 @keyframes book-fade-in{from{opacity:0}}
-.storybook:not(.is-opened) :is(.book-sprite,.book-carousel,.book-arrow){opacity:0}
+.storybook:not(.is-opened) :is(.book-art,.book-carousel,.book-arrow){opacity:0}
 .storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 1.9s both}
-/* the sprite's animation slot is taken by the page flip, so it fades in with a transition */
-.storybook.is-opened .book-sprite{transition:opacity .5s 1.9s}
+.storybook.is-opened .book-art{transition:opacity .5s 1.9s}
 
 /* Popup phones: sit over the first spread's left page and pop out of it after the book has opened.
    Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
-.book-popup{position:absolute;z-index:3;left:26.2%;top:50%;width:66%;aspect-ratio:819/555;translate:-50% -50%;pointer-events:none;transition:opacity .2s}
+.book-popup{position:absolute;z-index:3;left:26.1%;top:50%;width:52%;aspect-ratio:819/555;translate:-50% -50%;pointer-events:none;transition:opacity .2s}
 .book-popup.is-hidden{opacity:0}
 .book-popup img{position:absolute;height:auto;max-width:none;opacity:0;transform-origin:50% 100%;filter:drop-shadow(0 30px 24px #173e4855) drop-shadow(0 8px 6px #173e4830)}
 .book-popup .popup-phone-1{left:0;top:24.14%;width:57.8%;--d:0s}
@@ -1123,11 +1109,11 @@ button {
   100%{opacity:1;transform:none}
 }
 
-/* Phones: one page per card instead of the sprite spread */
+/* Phones: one page per card instead of the open-book spread */
 @media(max-width:700px){
   .storybook{padding:0 0 5rem}
   .pixel-book{width:100%;height:auto;font-size:15px}
-  .book-sprite,.book-intro{display:none}
+  .book-art,.book-intro{display:none}
   .book-carousel{height:auto}
   .page-container{flex-direction:column;gap:0;height:100%;background:#fff9e9;border:8px solid #b88742;border-radius:8px;animation:none!important}
   .book-left{flex:none;min-height:0;aspect-ratio:1.3;padding:1rem}
@@ -1139,11 +1125,11 @@ button {
   .book-carousel{position:relative;inset:auto}
   .book-arrow{top:auto;bottom:0;transform:none}
   .book-arrow:hover{transform:scale(1.07)}
-  .storybook :is(.book-sprite,.book-carousel,.book-arrow),.storybook .book-popup img{opacity:1!important;animation:none!important;transition:none}
+  .storybook :is(.book-art,.book-carousel,.book-arrow),.storybook .book-popup img{opacity:1!important;animation:none!important;transition:none}
 }
 @media(prefers-reduced-motion:reduce){
   .book-intro{display:none}
-  .storybook :is(.book-sprite,.book-carousel,.book-arrow),.book-popup img{opacity:1!important;transition:none}
+  .storybook :is(.book-art,.book-carousel,.book-arrow),.book-popup img{opacity:1!important;transition:none}
   .storybook :is(.book-carousel,.book-arrow),.book-popup img{animation:none!important}
 }
 
@@ -1235,68 +1221,59 @@ button {
 .memory-ux .scrap-photos{align-self:center;width:auto}
 @media(prefers-reduced-motion:reduce){.speech-bubble{opacity:1!important;transform:none!important}}
 
-/* Hobby board game (about hero). Phones: the list shows as glass bubbles.
-   Desktop + JS (.is-ready): list items become cards; playing one drops its tile on the board. */
-.hobby-game{margin-top:3rem}
-.hobby-deck{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.6rem}
-.hobby-deck li,.hobby-card{display:inline-flex;gap:.45em;align-items:center;padding:.7em 1.1em;border-radius:30px;color:#fff;font:600 .9rem/1 "DM Sans",sans-serif;letter-spacing:.5px;
-  background:#ffffff0d;border:0;border-top:1px solid #ffffff1f;border-bottom:1px solid #ffffff1f;box-shadow:0 12px 14px #0000004d;-webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px)}
-.hobby-game:not(.is-ready) .hobby-deck li::before{content:attr(data-icon)}
-.is-ready .hobby-deck li{display:contents}
-.hobby-card{cursor:default}
-.hobby-card :is(.card-cat,.card-no){display:none}
-.card-art{display:contents}
-.game-board,.game-bar{display:none}
-[data-cat]{--c:#9ed8ff;--c2:#5aa9d6}
-[data-cat="Creative"]{--c:#ffabf9;--c2:#d77fd0}
-[data-cat="Stories"]{--c:#ffbf5f;--c2:#d9952c}
-[data-cat="Social"]{--c:#a8e8d6;--c2:#6cc3ab}
-[data-cat="Games"]{--c:#c9b6ff;--c2:#9b84e6}
-[data-cat="Active"]{--c:#9ed8ff;--c2:#5aa9d6}
+/* Hobby tarot (about hero): a deck of face-down cards cycles across the book; picking one
+   lifts it to the centre, light blooms from the jellyfish, flashes white and flips to the hobby.
+   Card positions come from script.js (--x/--y in % of the stage, --r rotation, --sc scale, --o opacity). */
+.tarot{margin-top:2.5rem}
+.tarot-stage{position:relative;max-width:1440px;margin:0 auto;aspect-ratio:1440/820;container-type:inline-size}
+.tarot-book{position:absolute;inset:0;width:100%;height:100%}
+.tarot-title,.tarot-sub{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);margin:0}
+.tarot-deck{list-style:none;margin:0;padding:0}
+.tarot-deck li{display:contents}
+.tarot-card{--x:50;--y:48;--r:0deg;--sc:1;--o:0;position:absolute;z-index:1;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:15.5%;aspect-ratio:2/3;padding:0;border:0;background:none;cursor:pointer;
+  translate:-50% -50%;rotate:var(--r);scale:var(--sc);opacity:var(--o);perspective:1200px;
+  transition:left .8s cubic-bezier(.45,0,.2,1),top .8s cubic-bezier(.45,0,.2,1),rotate .8s,scale .8s cubic-bezier(.3,1.2,.5,1),opacity .6s,translate .25s}
+.tarot-card[data-hidden]{pointer-events:none}
+.tarot-card:not(.is-picked):hover,.tarot-card:not(.is-picked):focus-visible{translate:-50% calc(-50% - 16px);rotate:0deg;outline:none;z-index:2}
+.tarot-card:focus-visible .tc-inner{box-shadow:0 0 0 3px var(--aqua),0 18px 30px #0008}
+.tc-inner{position:absolute;inset:0;border-radius:9%/6%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,0,.2,1),box-shadow .4s;box-shadow:0 16px 24px #0007}
+.tc-back,.tc-front{position:absolute;inset:0;border-radius:inherit;backface-visibility:hidden;overflow:hidden}
+.tc-back{background:url(assets/about/tarot/back.webp) center/cover;box-shadow:inset 0 0 0 1.5px #ffffff45}
+.tc-front{transform:rotateY(180deg)}
+.tc-front img{width:100%;height:100%;display:block}
+/* light: blooms from the jellyfish, then spreads to fill the card, then washes it out to white */
+.tc-back::before,.tc-back::after{content:"";position:absolute;pointer-events:none;opacity:0}
+.tc-back::before{left:53%;top:57%;width:60%;aspect-ratio:1;translate:-50% -50%;scale:0;border-radius:50%;
+  background:radial-gradient(circle,#fff 0,#e4fbff 14%,#9aefe2b0 36%,#9aefe240 55%,#9aefe200 72%);transition:scale .35s cubic-bezier(.3,0,.4,1),opacity .2s}
+.tc-back::after{inset:0;background:#fff;transition:opacity .18s}
+.is-glow .tc-back::before{opacity:1;scale:1}
+.is-glow .tc-inner{box-shadow:0 0 30px 4px #9aefe2aa,0 16px 24px #0007}
+.is-radiate .tc-back::before{scale:3.4;opacity:.92;transition-duration:.45s}
+.is-radiate .tc-inner{box-shadow:0 0 50px 12px #9aefe2,0 0 16px 2px #fff}
+.is-flash .tc-back::after{opacity:1}
+.is-flash .tc-inner{box-shadow:0 0 40px 14px #fff,0 0 100px 30px #9aefe2cc}
+.is-flipped .tc-inner{transform:rotateY(180deg);box-shadow:0 0 34px 4px #9aefe288,0 18px 30px #0008}
+.tarot-card.is-picked{z-index:20;cursor:zoom-out}
+.tarot-card.is-dim:not([data-hidden]){filter:brightness(.55) saturate(.6)}
+.tc-spark{position:absolute;left:50%;top:50%;width:14%;aspect-ratio:1;pointer-events:none;translate:-50% -50%;
+  background:radial-gradient(circle,#fff6d8 0 18%,#f2c46a 30%,transparent 62%);clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);
+  animation:tc-spark .9s cubic-bezier(.2,.7,.3,1) var(--d,0s) both}
+@keyframes tc-spark{0%{opacity:0;transform:translate(0,0) scale(.2)}20%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1) rotate(90deg)}}
+.tarot-dots{display:none}
 
-@media(min-width:701px){
-  .is-ready .game-board{display:block;position:relative;max-width:920px;margin:0 auto;padding:34px;border-radius:18px;
-    background:linear-gradient(145deg,#125a66,#0b3b47);box-shadow:0 34px 60px #00000080,inset 0 0 0 2px #ffffff14,inset 0 0 0 9px #0d4954}
-  .board-map{position:relative;border-radius:8px;background:radial-gradient(120% 90% at 50% 40%,#f8f1df,#eadfc3 70%,#dccca6);box-shadow:inset 0 0 50px #b49a6a70,0 0 0 2px #5c4a2a33}
-  .game-bar b{margin-right:.6rem;padding:.3rem .7rem;border-radius:99px;background:var(--mint);color:#0b3340;font:800 .68rem "DM Sans",sans-serif;letter-spacing:.14em}
-  .track-cell{position:absolute;width:24px;height:24px;translate:-50% -50%;display:grid;place-items:center;border-radius:5px;background:#efe5cc;color:#0d4954;font:800 9px "DM Sans",sans-serif;box-shadow:inset 0 -2px #0000001f}
-  .track-cell:nth-child(5n+1){background:var(--mint)}
-  .track-chip{position:absolute;z-index:2;width:26px;height:26px;translate:-50% -50%;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffd796,var(--orange) 60%);color:#5a3a06;font:800 8.5px "DM Sans",sans-serif;letter-spacing:-.02em;box-shadow:inset 0 0 0 2px #fff6,0 3px 0 #a86f17,0 6px 8px #0007;transition:left .45s cubic-bezier(.3,1.4,.6,1),top .45s cubic-bezier(.3,1.4,.6,1)}
-  .board-routes{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-  .route rect{fill:color-mix(in srgb,var(--rc) 35%,#f3ead3);stroke:#5c4a2a;stroke-opacity:.35;stroke-width:1.5}
-  .route.is-claimed rect{fill:var(--rc);stroke-opacity:.7;animation:car-in .35s var(--d) both}
-  @keyframes car-in{from{opacity:0;transform:translateY(-14px)}}
-  .stop{position:absolute;z-index:1;translate:-50% -50%;display:grid;justify-items:center;width:0}
-  .stop-dot{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a76,#c8452b);box-shadow:inset 0 0 0 3px #f4ebd5,0 0 0 2px #7a3a24,0 3px 4px #0005}
-  .stop.is-spare .stop-dot{background:#d9cba8;box-shadow:inset 0 0 0 3px #f4ebd5,0 0 0 2px #a8946a}
-  .stop-name{position:absolute;top:calc(100% + 4px);left:50%;translate:-50% 0;white-space:nowrap;padding:.15rem .45rem;border-radius:4px;background:#f6eedb;color:#3d2f16;font:800 .6rem "DM Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 0 0 1px #5c4a2a40}
-  .stop.is-spare .stop-name{color:#a8946a}
-  .stop-token{position:absolute;top:50%;left:50%;translate:-50% -55%;z-index:1;display:grid;place-items:center;width:46px;height:46px;border-radius:50%;font-size:1.4rem;font-style:normal;
-    background:radial-gradient(circle at 35% 30%,#ffffffb0,transparent 50%),var(--c);box-shadow:inset 0 0 0 3px #ffffff90,0 0 0 2px var(--c2),0 5px 0 var(--c2),0 9px 10px #0006}
-  .stop-token.is-landed{animation:token-land .45s cubic-bezier(.3,1.6,.5,1)}
-  @keyframes token-land{from{scale:1.4;opacity:.6}}
-  .stop.is-claimed .stop-name{top:calc(100% + 18px);background:var(--c);box-shadow:0 0 0 1px var(--c2)}
-
-  .is-ready .game-bar{display:flex;align-items:center;gap:.7rem;max-width:920px;margin:1.4rem auto 0;color:#c6e7df;font-size:.9rem}
-  .game-bar p{margin:0 auto 0 0}
-  .game-bar button{padding:.55rem 1rem;border-radius:99px;border:1px solid #ffffff40;background:none;color:#effdf5;font:800 .68rem "DM Sans",sans-serif;letter-spacing:.14em;text-transform:uppercase;cursor:pointer}
-  .game-bar button:hover{background:#ffffff14}
-
-  .is-ready .hobby-deck{flex-wrap:nowrap;gap:0;overflow-x:auto;padding:2.2rem 2rem 1.5rem;scrollbar-width:thin}
-  .is-ready .hobby-deck li:first-child .hobby-card{margin-left:auto}
-  .is-ready .hobby-deck li:last-child .hobby-card{margin-right:auto}
-  .is-ready .hobby-card{flex:none;position:relative;display:grid;grid-template-rows:auto 1fr auto auto;gap:0;align-items:stretch;width:7.6rem;height:10.6rem;margin-left:-1rem;padding:.35rem;border:0;border-radius:.7rem;
-    background:#fbf6ea;color:#173d4a;backdrop-filter:none;box-shadow:0 12px 22px #00000070,inset 0 0 0 1px #0000001a;cursor:pointer;text-align:center;
-    rotate:var(--tilt,0deg);transition:translate .25s,rotate .25s,filter .25s}
-  .is-ready .hobby-card:hover,.is-ready .hobby-card:focus-visible{translate:0 -16px;rotate:0deg;z-index:2;outline:none}
-  .is-ready .hobby-card:focus-visible{box-shadow:0 0 0 3px var(--aqua),0 12px 22px #00000070}
-  .is-ready .hobby-card .card-cat{display:block;padding:.38rem .5rem;border-radius:.45rem .45rem .2rem .2rem;background:var(--c);color:#0b3340;font:800 .55rem "DM Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase;text-align:left}
-  .is-ready .card-art{display:grid;place-items:center;margin:.35rem 0 .2rem;border-radius:.3rem;background:repeating-linear-gradient(135deg,#ffffff26 0 6px,transparent 6px 12px),radial-gradient(circle at 50% 45%,#fff8,transparent 60%),var(--c)}
-  .is-ready .card-art span{display:grid;place-items:center;width:3.4rem;aspect-ratio:.866;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:#fbf6ea;font-size:1.7rem}
-  .is-ready .card-name{display:grid;place-items:center;min-height:2.3em;font:700 .8rem/1.1 Manrope,sans-serif;letter-spacing:-.02em}
-  .is-ready .hobby-card .card-no{display:block;font:800 .5rem "DM Sans",sans-serif;letter-spacing:.14em;color:#7a8f93}
-  .is-ready .hobby-card[aria-pressed="true"]{translate:0 14px;filter:saturate(.35) brightness(.7)}
-  .is-ready .hobby-card[aria-pressed="true"]::after{content:"PLAYED";position:absolute;left:50%;top:46%;translate:-50% -50%;rotate:-14deg;padding:.2rem .5rem;border:2px solid #0d4954;border-radius:4px;color:#0d4954;font:800 .7rem "DM Sans",sans-serif;letter-spacing:.2em;background:#fbf6eacc}
-  .token-flyer{position:fixed;z-index:50;pointer-events:none;translate:none}
+/* Phones: a single page book (drawn in CSS) with the centre card large and its neighbours peeking in */
+@media(max-width:700px){
+  .tarot{margin-top:2rem}
+  .tarot-stage{aspect-ratio:auto;height:520px;border-radius:22px;background:#fff9e9;overflow:hidden;
+    box-shadow:0 0 0 8px #c99a52,0 0 0 9px #8a6230,inset 0 0 0 1px #8a623055,inset -6px 0 0 -3px #efe3c4,0 14px 0 6px #8a6230,0 30px 40px #000a;margin:0 10px}
+  .tarot-book{display:none}
+  .tarot-title,.tarot-sub{position:static;width:auto;height:auto;clip-path:none;text-align:center}
+  .tarot-title{margin:26px 0 4px;font:800 30px/1 Manrope,sans-serif;letter-spacing:-.04em;color:#0d4954}
+  .tarot .tarot-sub{margin:0;font:800 10px "DM Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8a6230}
+  .tarot-card{width:52%}
+  .tarot-dots{display:flex;justify-content:center;gap:7px;position:absolute;left:0;right:0;bottom:22px}
+  .tarot-dots i{width:7px;height:7px;border-radius:50%;border:1.5px solid #8a6230;transition:background .3s}
+  .tarot-dots i.on{background:#8a6230}
+  .tarot-stage::after{content:"";position:absolute;left:12%;right:12%;bottom:46px;height:2px;background:#8a6230;opacity:.6}
 }
-@media(prefers-reduced-motion:reduce){.stop-token,.route rect,.track-chip,.hobby-card{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.tarot-card,.tc-inner,.tc-back::before,.tc-back::after{transition:none!important}.tc-spark{display:none}}
