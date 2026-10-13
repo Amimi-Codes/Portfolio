@@ -1098,12 +1098,26 @@ button {
   exit 100%{opacity:0;translate:100%;visibility:hidden}
 }
 
-/* Opening: the book flips through a few pages (script.js) before the first spread fades in */
+/* Opening: the book starts closed (only the front cover, over the right half), the cover swings
+   open on the spine, the left page appears once it passes upright, and the first spread fades in */
+.book-cover{position:absolute;z-index:3;left:50%;top:0;width:50%;height:100.15%;transform-origin:0 50%;transform-style:preserve-3d;pointer-events:none}
+.book-cover img,.book-cover i{position:absolute;inset:0;width:100%;height:100%}
+.book-cover img{filter:drop-shadow(0 18px 22px #173e4855)}
+.book-cover i{opacity:0;border-radius:6% 0 0 6%/3.5% 0 0 3.5%;background:linear-gradient(90deg,#7a5528,#8a6230 12%,#9b7037)}
+.storybook:not(.is-opened) .book-art{clip-path:inset(0 0 0 50%)}
+.storybook.is-opened .book-art{animation:book-reveal-left 1.1s .25s both}
+.storybook.is-opened .book-cover{animation:book-cover-open 1.1s .25s cubic-bezier(.45,.05,.3,1) forwards,book-fade-out .3s 1.35s forwards}
+/* front face until the cover passes upright, then its inside lining */
+.storybook.is-opened .book-cover img{animation:book-face-out 1.1s .25s cubic-bezier(.45,.05,.3,1) forwards}
+.storybook.is-opened .book-cover i{animation:book-face-in 1.1s .25s cubic-bezier(.45,.05,.3,1) forwards}
+@keyframes book-face-out{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes book-face-in{0%,49%{opacity:0}50%,100%{opacity:1}}
+@keyframes book-cover-open{from{transform:perspective(2600px) rotateY(0)}to{transform:perspective(2600px) rotateY(-180deg)}}
+@keyframes book-reveal-left{0%,48%{clip-path:inset(0 0 0 50%)}49%,100%{clip-path:inset(0)}}
 @keyframes book-fade-out{to{opacity:0;visibility:hidden}}
 @keyframes book-fade-in{from{opacity:0}}
-.storybook:not(.is-opened) :is(.book-art,.book-carousel,.book-arrow){opacity:0}
-.storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 1.3s both}
-.storybook.is-opened .book-art{transition:opacity .4s}
+.storybook:not(.is-opened) :is(.book-carousel,.book-arrow){opacity:0}
+.storybook.is-opened :is(.book-carousel,.book-arrow){animation:book-fade-in .5s 1.35s both}
 
 /* Popup phones: sit over the first spread's left page and pop out of it after the book has opened.
    Phone offsets come from habitu-popup.svg, cropped to the phones' bounding box (819x555). */
@@ -1126,7 +1140,7 @@ button {
 @media(max-width:700px){
   .storybook{padding:0 0 5rem}
   .pixel-book{width:100%;height:auto;font-size:15px}
-  .book-art{display:none}
+  .book-art,.book-cover{display:none}
   .book-carousel{height:auto}
   .page-container{flex-direction:column;gap:0;height:100%;background:#fff9e9;border:8px solid #b88742;border-radius:8px;animation:none!important}
   .book-left{flex:none;min-height:0;aspect-ratio:1.3;padding:1rem}
@@ -1141,6 +1155,8 @@ button {
   .storybook :is(.book-art,.book-carousel,.book-arrow),.storybook .book-popup img{opacity:1!important;animation:none!important;transition:none}
 }
 @media(prefers-reduced-motion:reduce){
+  .book-cover{display:none}
+  .storybook .book-art{clip-path:none!important;animation:none!important}
   .storybook :is(.book-art,.book-carousel,.book-arrow),.book-popup img{opacity:1!important;transition:none}
   .storybook :is(.book-carousel,.book-arrow),.book-popup img{animation:none!important}
 }

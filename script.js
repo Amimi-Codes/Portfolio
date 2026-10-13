@@ -215,7 +215,7 @@ if(scrollBook){
       if(entries.some(entry=>entry.isIntersecting)){
         bookObserver.unobserve(scrollBook);
         requestAnimationFrame(()=>{
-          requestAnimationFrame(()=>{scrollBook.classList.add("is-opened");scrollBook.dispatchEvent(new Event("bookopen"));});
+          requestAnimationFrame(()=>scrollBook.classList.add("is-opened"));
         });
       }
     },{threshold:.12,rootMargin:"0px 0px -12% 0px"});
@@ -265,17 +265,6 @@ if (storybook) {
   const show = (f, mirror) => { art.src = frames[f]; art.classList.toggle("is-mirrored", mirror); };
   const pause = () => new Promise((r) => setTimeout(r, FRAME_MS));
   let turning = false;
-  // opening: flip through a few pages before the first spread fades in (CSS delay ~1.3s)
-  storybook.addEventListener("bookopen", async () => {
-    if (reducedMotion || turning) return;
-    turning = true;
-    for (let k = 0; k < 2; k++)
-      for (const [f, mir] of [[1, false], [2, false], [3, false], [4, false], [3, true], [2, true], [1, true], [0, false]]) {
-        show(f, mir);
-        await pause();
-      }
-    turning = false;
-  });
   const turn = async (dir) => {
     if (turning) return;
     turning = true;
