@@ -9,8 +9,8 @@
       content="Amy Cui — designer, researcher, and frontend developer."
     />
     <title>Amy Cui — Design in motion</title>
-    <link rel="stylesheet" href="styles.css?v=33" />
-    <script src="script.js?v=33" defer></script>
+    <link rel="stylesheet" href="styles.css?v=36" />
+    <script src="script.js?v=36" defer></script>
   </head>
   <body class="home-page">
     <a class="skip-link" href="#featured">Skip to featured projects</a>
@@ -138,9 +138,6 @@
             >
           </div>
         </div>
-        <div class="hero-side-note" aria-hidden="true">
-          MOVE · CLICK · CREATE A CURRENT
-        </div>
       </section>
       <section
         class="book-stories wrap"
@@ -148,7 +145,7 @@
         aria-labelledby="work-title"
       >
         <div class="story-heading reveal">
-          <p class="label">01 / HIGHLIGHTED STORIES</p>
+          <p class="label">HIGHLIGHTED STORIES</p>
           <h2 id="work-title">Stories I’ve <em>told</em></h2>
           <p>
             A selection of case studies and interactive experiences that
@@ -160,9 +157,7 @@
             class="book-arrow book-arrow-prev"
             type="button"
             aria-label="Previous story"
-          >
-            ←
-          </button>
+          ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg></button>
           <div class="pixel-book">
             <img class="book-art" src="assets/book-home.svg" alt="" aria-hidden="true" width="1440" height="825" />
             <div class="book-intro" aria-hidden="true">
@@ -186,7 +181,6 @@
                     />
                   </div>
                   <div class="book-right">
-                    <span class="book-index">01 / INTERACTIVE WEB</span>
                     <h3>Origin</h3>
                     <p>
                       An interactive web experience that allows users to easily create
@@ -195,7 +189,7 @@
                     </p>
                     <span class="book-tags"
                       ><b>#Frontend</b><b>#Interaction Design</b><b>#Passion Project</b></span
-                    ><a href="dndcreation.html">Open story <span>↗</span></a>
+                    ><a class="book-cta" href="dndcreation.html">View Story <span>↗</span></a>
                   </div>
                 </div>
               </section>
@@ -203,7 +197,6 @@
                 <div class="page-container">
                   <div class="book-left"></div>
                   <div class="book-right">
-                    <span class="book-index">02 / CASE STUDY</span>
                     <h3>HabitU</h3>
                     <p>
                       A conceptual mobile app that helps users build healthy habits through
@@ -213,7 +206,7 @@
                     <span class="book-tags"
                       ><b>#UX Research</b><b>#Product Design</b
                       ><b>#Student Project</b></span
-                    ><a href="habitu.html">Open story <span>↗</span></a>
+                    ><a class="book-cta" href="habitu.html">View Story <span>↗</span></a>
                   </div>
                 </div>
               </section>
@@ -227,14 +220,13 @@
                     ></div>
                   </div>
                   <div class="book-right">
-                    <span class="book-index">03 / NEXT CHAPTER</span>
                     <h3>Under construction</h3>
                     <p>
                       The next case study is taking shape. Check back soon for a
                       new story from the studio.
                     </p>
                     <span class="book-tags"><b>#Coming Soon</b></span
-                    ><a href="projects.html">See all projects <span>↗</span></a>
+                    ><a class="book-cta" href="event-graphics.html">View Story <span>↗</span></a>
                   </div>
                 </div>
               </section>
@@ -263,14 +255,12 @@
             class="book-arrow book-arrow-next"
             type="button"
             aria-label="Next story"
-          >
-            →
-          </button>
+          ><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5l7 7-7 7"/></svg></button>
         </div>
       </section>
       <section class="about-section" id="about" aria-labelledby="about-title">
         <div class="wrap about-grid">
-          <p class="label">02 / ABOUT ME</p>
+          <p class="label">ABOUT ME</p>
           <div>
             <h2 id="about-title">
               <span class="word-article" aria-hidden="true">A</span> <span class="word-cycle" aria-hidden="true"><span><em>creator</em><em data-article="An">artist</em><em>developer</em></span></span><span class="sr-only">A creator, artist and developer</span> with<br />an eye for <em>possibility.</em>
@@ -280,9 +270,13 @@
               development, UX research, and event logistics. I bring systems
               thinking, visual curiosity, and a creative lens to my work
             </p>
-            <a class="primary-cta" href="about.html"
-              >More about me <span>↗</span></a
-            >
+            <div class="about-ctas">
+              <a class="primary-cta" href="about.html"
+                >More about me <span>↗</span></a
+              ><a class="primary-cta ghost-cta" href="assets/resume.pdf" target="_blank" rel="noopener"
+                >View my resume <span>↗</span></a
+              >
+            </div>
           </div>
         </div>
       </section>

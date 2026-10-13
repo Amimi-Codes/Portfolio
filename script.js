@@ -158,14 +158,16 @@ if (heroJelly) {
       pointer.inside = true;
     });
     hero.addEventListener("pointerleave", () => (pointer.inside = false));
-    let shockTimer;
-    hero.addEventListener("click", (e) => {
-      if (e.target.closest("a")) return;
+    let shockTimer, caught = false;
+    const shock = () => {
       heroJelly.classList.remove("is-shocked");
       void heroJelly.offsetWidth;
       heroJelly.classList.add("is-shocked");
       clearTimeout(shockTimer);
       shockTimer = setTimeout(() => heroJelly.classList.remove("is-shocked"), 1000);
+    };
+    hero.addEventListener("click", (e) => {
+      if (!e.target.closest("a")) shock();
     });
     (function swim(t) {
       const w = hero.clientWidth, h = hero.clientHeight, size = heroJelly.offsetWidth;
@@ -179,6 +181,9 @@ if (heroJelly) {
         x += (dx / dist) * step;
         y += (dy / dist) * step;
       }
+      // shock once on reaching the cursor; re-arm after the cursor moves away
+      if (pointer.inside && dist < 3 && !caught) { caught = true; shock(); }
+      else if (!pointer.inside || dist > size * 0.35) caught = false;
       // lean into the direction of travel
       angle += ((dist > 2 ? (dx / dist) * 15 : 0) - angle) * 0.05;
       place();
@@ -251,7 +256,32 @@ if (storybook) {
     },
     { passive: true },
   );
-  const turn = (dir) => carousel.scrollBy({ left: dir * carousel.clientWidth });
+  // Page turn: Amy's frames of the right page lifting over (book-turn-1..4), then the same frames
+  // mirrored as it lands on the left. Previous plays the mirror image. The deck loops both ways.
+  const art = book.querySelector(".book-art"), rest = art.getAttribute("src"),
+    frames = [rest, 1, 2, 3, 4].map((f) => (f === rest ? f : `assets/book-turn-${f}.svg`)),
+    spreads = carousel.children.length, FRAME_MS = 65;
+  frames.forEach((f) => (new Image().src = f));
+  const show = (f, mirror) => { art.src = frames[f]; art.classList.toggle("is-mirrored", mirror); };
+  let turning = false;
+  const turn = async (dir) => {
+    if (turning) return;
+    turning = true;
+    const target = (Math.round(carousel.scrollLeft / carousel.clientWidth) + dir + spreads) % spreads;
+    const jump = () => carousel.scrollTo({ left: target * carousel.clientWidth, behavior: "instant" });
+    if (reducedMotion) { jump(); turning = false; return; }
+    const m = dir < 0; // previous turns the other way
+    const seq = [[1, m], [2, m], [3, m], [4, m], [3, !m], [2, !m], [1, !m], [0, false]];
+    storybook.classList.add("is-turning");
+    popup.classList.add("is-hidden");
+    for (const [i, [f, mir]] of seq.entries()) {
+      show(f, mir);
+      if (i === 4) jump(); // swap spreads while the page is upright
+      if (i === 7) storybook.classList.remove("is-turning"); // new spread fades in once the page has landed
+      await new Promise((r) => setTimeout(r, FRAME_MS));
+    }
+    turning = false;
+  };
   storybook.querySelector(".book-arrow-next").addEventListener("click", () => turn(1));
   storybook.querySelector(".book-arrow-prev").addEventListener("click", () => turn(-1));
 }
