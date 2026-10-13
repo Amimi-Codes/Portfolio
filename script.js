@@ -305,17 +305,6 @@ if (storybook) {
 
 const scrapbook=document.querySelector(".scrapbook");if(scrapbook&&!reducedMotion){const memories=[...scrapbook.querySelectorAll(".scrap-memory")];const tilt=()=>{const y=scrollY;memories.forEach((memory,index)=>memory.style.setProperty("--scrap-y",((y*.012+index*3)%8-4)+"px"));requestAnimationFrame(tilt)};tilt()}
 
-const resumeAirplane=document.querySelector(".resume-airplane");
-const resumeDialog=document.querySelector(".resume-dialog");
-if(resumeAirplane&&resumeDialog){
-  resumeAirplane.addEventListener("click",e=>{
-    e.preventDefault();
-    resumeDialog.showModal();
-  });
-  // click on the dimmed backdrop closes it
-  resumeDialog.addEventListener("click",e=>{if(e.target===resumeDialog)resumeDialog.close()});
-}
-
 // About journey map: a dashed path through each chapter's year, drawn as you scroll;
 // each leg carries its doodle icon, which then rests beside the chapter it leads to.
 const journey = document.querySelector(".scrapbook");
