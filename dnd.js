@@ -118,9 +118,15 @@
   const status = { done: "Passed", current: "Current quest", locked: "Locked", boss: "Final level · Locked" };
   const list = document.getElementById("nodes");
   const info = document.getElementById("quest-info");
+  let cur = here;
+  // quest details pop up above the selected tile
   const show = (i) => {
-    const [, s, phase, title, text] = levels[i];
-    info.innerHTML = `<p class="px-label">Level ${i + 1} · ${phase}</p><h3>${title}</h3><p>${text}</p><p class="px-small status-${s}">${status[s]}</p>`;
+    cur = i;
+    const [, s, , title, text] = levels[i], li = nodes[i], x = parseFloat(li.style.left);
+    info.innerHTML = `<h3>Level ${i + 1}: ${title}</h3><p>${text}</p><p class="px-small status-${s}">${status[s]}</p>`;
+    info.style.left = li.style.left;
+    info.style.top = li.style.top;
+    info.dataset.align = x < 25 ? "left" : x > 75 ? "right" : "center"; // keep the popup on the map
     list.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", i === j));
   };
   const nodes = levels.map(([icon, s, , title], i) => {
@@ -169,7 +175,7 @@
       li.style.top = `${(pts[i][1] / H) * 100}%`;
     });
   };
-  narrow.addEventListener("change", layout);
+  narrow.addEventListener("change", () => (layout(), show(cur)));
   layout();
   show(here);
 })();
