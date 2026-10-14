@@ -9,7 +9,6 @@
     document.documentElement.classList.remove("intro-lock");
     setTimeout(() => intro.remove(), 1300);
   };
-  intro.querySelector(".intro-skip").addEventListener("click", finish);
   if (reduced || typeof DICE === "undefined") finish();
   else {
     document.documentElement.classList.add("intro-lock");
@@ -86,22 +85,34 @@
     update();
   }
 
-  /* ---- Quest map (levels from the DndCharacterCreation README) ---- */
+  /* ---- Quest map: what Origin has shipped, then what the survey asked for ---- */
   const levels = [
-    [90, 560, "done", "Phase 1 · Foundation", "Basic character creation interface", "The first screen a new adventurer sees."],
-    [110, 340, "done", "Phase 1 · Foundation", "Core D&D 5e rules", "The rules engine everything else stands on."],
-    [260, 400, "done", "Phase 1 · Foundation", "Species & class selection", "Pick who you are and what you do."],
-    [300, 590, "done", "Phase 1 · Foundation", "Sub-species", "Because not every elf is the same elf."],
-    [600, 360, "current", "Phase 1 · Foundation", "Images & icons", "Visual choices instead of walls of text. Promise there are no mimics (yet)."],
-    [720, 110, "locked", "Phase 2 · Enhancement", "Custom character portrait", "Upload your own art to the Character Summary."],
-    [900, 190, "locked", "Phase 2 · Enhancement", "Spell selection", "Choosing spells without a spreadsheet."],
-    [960, 410, "locked", "Phase 2 · Enhancement", "Feats & proficiencies", "The fine-tuning layer."],
-    [880, 590, "locked", "Phase 3 · Integration", "Character leveling", "Take your hero past level 1."],
-    [1090, 600, "locked", "Phase 3 · Integration", "Mobile-friendly version", "Build a character on the bus to session."],
-    [1150, 400, "locked", "Phase 4 · Exportation", "Character sheet export", "From builder to the table."],
-    [1140, 200, "locked", "Phase 4 · Exportation", "Google Docs template", "Export to a templated, shareable doc."],
-    [1020, 70, "boss", "Future plans", "Custom content & artwork", "Homebrew species, classes and character art."],
+    [70, 620, "done", "Foundation", "Basic character creation interface", "Where it all began: the first screens a new adventurer sees."],
+    [60, 420, "done", "Foundation", "Species, lineages & classes", "Pick who you are and what you do. Because not every elf is the same elf."],
+    [120, 230, "done", "5.5e rebuild", "Upgrade to D&D 5.5e", "Rebuilt on the 2024 rules so new players learn the current game."],
+    [260, 110, "done", "5.5e rebuild", "Backgrounds & ability scores", "Choose where your hero comes from and what they're good at."],
+    [300, 300, "done", "5.5e rebuild", "Levelling past level 1", "Take your hero beyond their first adventure."],
+    [200, 480, "done", "5.5e rebuild", "Spell selection", "Recommended picks, with a note on when each spell is actually useful."],
+    [330, 620, "done", "From the survey", "Guided skills & equipment", "Help where new players got stuck most: skills and starting gear."],
+    [470, 520, "done", "5.5e rebuild", "Mobile-friendly version", "Build a character on the bus to session."],
+    [450, 330, "done", "From the survey", "Ready-made characters", "Start from an example and tweak it instead of facing a blank sheet."],
+    [560, 180, "done", "From the survey", "Rules help & a summary that does the maths", "\"?\" tips explain terms in place, and the summary works out hit points, to-hit and saves."],
+    [700, 330, "current", "From the survey", "Name generator", "Stuck on a name? Roll one that fits your species and background."],
+    [840, 160, "locked", "From the survey", "Backstory generator", "Prompts built from your character concept and the world's lore."],
+    [1000, 250, "locked", "From the survey", "Character sheet export", "A printable sheet for in-person games, plus a Google Docs template."],
+    [930, 480, "locked", "Later", "Save your progress", "Come back to a character later. Saved for a later stage."],
+    [1110, 580, "boss", "Final boss", "Icons, species art & character customization", "Visual choices everywhere, and a hero that looks the part."],
   ];
+  // smooth dashed route through the node centres (Catmull-Rom as cubic Béziers)
+  const route = (pts) =>
+    pts.reduce((d, p, i) => {
+      if (!i) return `M${p[0]} ${p[1]}`;
+      const a = pts[i - 2] || pts[i - 1], b = pts[i - 1], c = pts[i + 1] || p;
+      return d + ` C${b[0] + (p[0] - a[0]) / 6} ${b[1] + (p[1] - a[1]) / 6} ${p[0] - (c[0] - b[0]) / 6} ${p[1] - (c[1] - b[1]) / 6} ${p[0]} ${p[1]}`;
+    }, "");
+  const here = levels.findIndex((l) => l[2] === "current");
+  document.getElementById("route-done").setAttribute("d", route(levels.slice(0, here + 1)));
+  document.getElementById("route-todo").setAttribute("d", route(levels.slice(here)));
   const status = { done: "Cleared ★★★", current: "Current quest", locked: "Locked", boss: "Final boss · Locked" };
   const list = document.getElementById("nodes");
   const info = document.getElementById("quest-info");
@@ -122,5 +133,5 @@
     btn.addEventListener("focus", () => show(i));
     list.append(li);
   });
-  show(4);
+  show(here);
 })();
