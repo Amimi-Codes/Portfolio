@@ -729,6 +729,20 @@ html.js-fall .overload:not(.drop) li {
     font-size: 0.85rem;
     line-height: 1.5;
   }
+  /* levels still to come: greyed out */
+  .quest-cards .ahead {
+    background: rgb(36 34 42 / 0.92);
+    color: #9a96a6;
+    box-shadow:
+      0 -4px #6e6a7c,
+      0 4px #6e6a7c,
+      -4px 0 #6e6a7c,
+      4px 0 #6e6a7c,
+      inset 0 0 0 4px #2a2832;
+  }
+  .quest-cards .ahead h3 {
+    color: #b8b4c4;
+  }
   .quest-cards h3 {
     font-size: 1.05rem;
     margin-bottom: 0.4rem;

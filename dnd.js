@@ -119,7 +119,7 @@
   const list = document.getElementById("nodes");
   const info = document.getElementById("quest-info");
   const cards = document.getElementById("quest-cards");
-  cards.innerHTML = levels.map(([, , , title, text], i) => `<li class="px-panel"><h3>Level ${i + 1}: ${title}</h3><p>${text}</p></li>`).join("");
+  cards.innerHTML = levels.map(([, s, , title, text], i) => `<li class="px-panel ${s === "locked" || s === "boss" ? "ahead" : ""}"><h3>Level ${i + 1}: ${title}</h3><p>${text}</p></li>`).join("");
   const mark = (i) => list.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", i === j));
   // desktop: details pop up centred above the tile; mobile: the carousel slides to its card
   const show = (i) => {
