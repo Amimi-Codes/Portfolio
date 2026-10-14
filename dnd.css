@@ -553,33 +553,44 @@ html.js-fall .overload:not(.drop) li {
   max-width: 760px;
   justify-self: center;
 }
+/* map + sticky info panel side by side on desktop, stacked on mobile */
+.quest-wrap {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+@media (min-width: 900px) {
+  .quest-wrap {
+    grid-template-columns: minmax(0, 560px) minmax(260px, 360px);
+    justify-content: center;
+  }
+}
 .quest-map {
   position: relative;
+  width: 100%;
+  max-width: 560px;
+  justify-self: center;
 }
 .quest-map svg {
-  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   overflow: visible;
 }
 .route {
   fill: none;
-  stroke-width: 6;
-  stroke-dasharray: 22 16;
-  stroke-linecap: square;
+  stroke-width: 14;
+  stroke-linecap: round;
 }
 .route.done {
-  stroke: #b6e35a;
+  stroke: #c9923a;
+  filter: drop-shadow(0 0 6px #f3c26b66);
 }
 .route.todo {
-  stroke: #ffd5b8;
-  filter: drop-shadow(0 0 6px #ff5a2a);
-  animation: march 1.6s linear infinite;
-}
-@keyframes march {
-  to {
-    stroke-dashoffset: -38;
-  }
+  stroke: #4a4654;
+  stroke-dasharray: 2 22;
+  stroke-width: 12;
 }
 .nodes {
   list-style: none;
@@ -587,57 +598,78 @@ html.js-fall .overload:not(.drop) li {
   padding: 0;
   position: absolute;
   inset: 0;
-  aspect-ratio: 12 / 7;
 }
+/* monochrome 3D stone tile: a hex face sitting on a darker hex "side" */
 .node {
   position: absolute;
   translate: -50% -50%;
-  display: grid;
-  justify-items: center;
-  --hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  --hex: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  --face: linear-gradient(#bdb9c8, #8f8a9e);
+  --side: #5a5666;
+  --ico-c: #5e5a6e;
 }
 .node button {
-  width: clamp(30px, 5vw, 62px);
-  aspect-ratio: 1 / 1.12;
-  border: 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(50px, 12vw, 68px);
+  aspect-ratio: 1.15 / 1;
   padding: 0;
-  clip-path: var(--hex);
-  font: clamp(0.8rem, 2vw, 1.5rem) "PixelPurl", "Pixelify Sans", monospace;
+  border: 0;
+  background: none;
   cursor: pointer;
-  background: #1c1c1e;
-  color: #a6a6a6;
-  transition: scale 0.15s;
+  transition: translate 0.15s;
+  filter: drop-shadow(0 6px 4px #0008);
 }
-.node {
-  filter: drop-shadow(0 0 2px #e8c9a0aa);
-}
-.node.done {
-  filter: drop-shadow(0 0 3px #ff9a5a);
-}
-.node.done button {
-  background: linear-gradient(#a01a2a, #6a0e18);
-  color: #fff1d0;
-}
-.node.current button {
-  width: clamp(40px, 7vw, 92px);
-  background: #fff;
-  color: #111;
-  font-size: clamp(1rem, 3vw, 2.2rem);
-}
-.node.current::before,
-.node.current::after {
+.node button::before,
+.node button::after {
   content: "";
   position: absolute;
-  inset: -40%;
+  inset: 0;
   clip-path: var(--hex);
-  background: #ff7a3a55;
-  z-index: -1;
+}
+.node button::before {
+  background: var(--side);
+  translate: 0 18%; /* the tile's thickness */
+}
+.node button::after {
+  background: var(--face);
+  box-shadow: inset 0 3px #fff6;
+}
+.node i {
+  position: relative;
+  z-index: 1;
+  width: 46%;
+  aspect-ratio: 1;
+  background: var(--ico-c);
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+}
+.node.done {
+  --ico-c: #f3c26b; /* passed: same icon, in gold */
+  --face: linear-gradient(#a9a5b6, #7e798e);
+}
+.node.current {
+  --face: linear-gradient(#fff3d6, #e8c88a);
+  --side: #9a7232;
+  --ico-c: #6a3a12;
+}
+.node.current button {
+  width: clamp(62px, 15vw, 86px);
+  animation: bob 1.6s ease-in-out infinite;
+}
+.node.current::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  background: radial-gradient(#ffcf7a88, #0000 70%);
   animation: pulse 2s ease-out infinite;
 }
-.node.current::after {
-  inset: -18%;
-  background: #ffb07a88;
-  animation-delay: 0.6s;
+@keyframes bob {
+  50% {
+    translate: 0 -6px;
+  }
 }
 @keyframes pulse {
   0% {
@@ -645,29 +677,28 @@ html.js-fall .overload:not(.drop) li {
     opacity: 1;
   }
   100% {
-    scale: 1.25;
+    scale: 1.3;
     opacity: 0;
   }
 }
-.node.boss button {
-  background: #2a0e0e;
-  color: #ff8a6a;
+.node.boss {
+  --side: #3e2a4a;
+  --ico-c: #8a5aa8;
 }
 .node button:hover,
 .node button[aria-pressed="true"] {
-  scale: 1.15;
-}
-.stars {
-  position: absolute;
-  bottom: 100%;
-  color: #ffd25a;
-  font-size: clamp(0.6rem, 1.4vw, 1rem);
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-  text-shadow: 0 0 4px #ff7a1a;
+  translate: 0 -4px;
 }
 .quest-info {
-  margin-top: 2rem;
+  position: sticky;
+  bottom: 1rem; /* mobile: rides along under the map */
+  z-index: 3;
+}
+@media (min-width: 900px) {
+  .quest-info {
+    top: 110px;
+    bottom: auto;
+  }
 }
 .quest-info h3 {
   margin-bottom: 0.4rem;
@@ -675,8 +706,33 @@ html.js-fall .overload:not(.drop) li {
 .quest-info p {
   margin: 0 0 0.5rem;
 }
+.launch {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.launch > span {
+  display: block;
+  padding: 0.55rem 0.8rem;
+  text-align: center;
+  font: 1.05rem/1.2 "PixelPurl", "Pixelify Sans", monospace;
+  color: #fff3d6;
+  background: var(--blood);
+  box-shadow:
+    0 -3px #2a0805,
+    0 3px #2a0805,
+    -3px 0 #2a0805,
+    3px 0 #2a0805,
+    inset 0 -4px #7a140e;
+}
+.launch small {
+  display: block;
+  font: 0.5rem "Press Start 2P", monospace;
+  opacity: 0.8;
+  margin-top: 0.2rem;
+}
 .status-done {
-  color: #b6e35a;
+  color: var(--gold);
 }
 .status-current {
   color: #ffb07a;
@@ -689,9 +745,8 @@ html.js-fall .overload:not(.drop) li {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .route.todo,
-  .node.current::before,
-  .node.current::after {
+  .node.current button,
+  .node.current::before {
     animation: none;
   }
 }

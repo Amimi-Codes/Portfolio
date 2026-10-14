@@ -392,17 +392,19 @@
             <p class="px-label">Chapter 04 · The Road Ahead</p>
             <h2 id="s4-title">Quest map</h2>
             <p>
-              Cleared levels earn their stars. Select any level to see what's on
-              it.
+              Gold tiles are levels Origin has passed. Select any tile to see
+              what's on it.
             </p>
           </article>
 
-          <div class="quest-map">
-            <svg viewBox="0 0 1200 700" role="group" aria-label="Project roadmap levels">
-              <path class="route done" id="route-done" />
-              <path class="route todo" id="route-todo" />
-            </svg>
-            <ol class="nodes" id="nodes"></ol>
+          <div class="quest-wrap">
+            <div class="quest-map" id="quest-map">
+              <svg id="quest-svg" aria-hidden="true">
+                <path class="route done" id="route-done" />
+                <path class="route todo" id="route-todo" />
+              </svg>
+              <ol class="nodes" id="nodes" aria-label="Project road map levels"></ol>
+            </div>
             <div class="quest-info px-panel" id="quest-info" aria-live="polite"></div>
           </div>
         </div>
