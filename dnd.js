@@ -100,7 +100,7 @@
     ["phone", "done", "5.5e rebuild", "Mobile-friendly version", "Build a character on the bus to session."],
     ["person", "done", "From the survey", "Ready-made characters", "Start from an example and tweak it instead of facing a blank sheet."],
     ["calculator", "done", "From the survey", "Rules help & a summary that does the maths", '"?" tips explain terms in place, and the summary works out hit points, to-hit and saves.'],
-    ["signpost", "current", "From the survey", "Origin launch page", 'A front door that lets every adventurer pick their own path in:<span class="launch"><span>Start from scratch</span><span>Use ready-made</span><span>Bardic Inspiration<small>quick build</small></span></span>'],
+    ["signpost", "current", "From the survey", "Origin launch page", "Adventurers choose their own path: Start from Scratch, Ready-Made, Quick Build."],
     ["tag", "locked", "From the survey", "Name generator", "Stuck on a name? Roll one that fits your species and background."],
     ["book", "locked", "From the survey", "Backstory generator", "Prompts built from your character concept and the world's lore."],
     ["sheet", "locked", "From the survey", "Character sheet export", "A printable sheet for in-person games, plus a Google Docs template."],
@@ -122,8 +122,8 @@
   // quest details pop up above the selected tile
   const show = (i) => {
     cur = i;
-    const [, s, , title, text] = levels[i], li = nodes[i], x = parseFloat(li.style.left);
-    info.innerHTML = `<h3>Level ${i + 1}: ${title}</h3><p>${text}</p><p class="px-small status-${s}">${status[s]}</p>`;
+    const [, , , title, text] = levels[i], li = nodes[i], x = parseFloat(li.style.left);
+    info.innerHTML = `<h3>Level ${i + 1}: ${title}</h3><p>${text}</p>`;
     info.style.left = li.style.left;
     info.style.top = li.style.top;
     info.dataset.align = x < 25 ? "left" : x > 75 ? "right" : "center"; // keep the popup on the map

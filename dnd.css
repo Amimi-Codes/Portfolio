@@ -687,11 +687,13 @@ html.js-fall .overload:not(.drop) li {
 .quest-info {
   position: absolute;
   z-index: 5;
-  width: min(320px, 82vw);
+  width: min(240px, 70vw);
+  padding: 0.9rem 1rem;
   --ax: -50%;
   translate: var(--ax) calc(-100% - clamp(40px, 6vw, 62px));
   pointer-events: none;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 .quest-info[data-align="left"] {
   --ax: -18%;
@@ -699,47 +701,13 @@ html.js-fall .overload:not(.drop) li {
 .quest-info[data-align="right"] {
   --ax: -82%;
 }
-.quest-info .launch {
-  pointer-events: auto;
-}
 .quest-info h3 {
   margin-bottom: 0.4rem;
+  font-size: 1.05rem;
 }
 .quest-info p {
   margin: 0 0 0.5rem;
 }
-.launch {
-  display: grid;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-}
-.launch > span {
-  display: block;
-  padding: 0.55rem 0.8rem;
-  text-align: center;
-  font: 1.05rem/1.2 "PixelPurl", "Pixelify Sans", monospace;
-  color: #fff3d6;
-  background: var(--blood);
-  box-shadow:
-    0 -3px #2a0805,
-    0 3px #2a0805,
-    -3px 0 #2a0805,
-    3px 0 #2a0805,
-    inset 0 -4px #7a140e;
-}
-.launch small {
-  display: block;
-  font: 0.5rem "Press Start 2P", monospace;
-  opacity: 0.8;
-  margin-top: 0.2rem;
-}
-.status-done {
-  color: var(--gold);
-}
-.status-current {
-  color: #ffb07a;
-}
-
 @media (max-width: 640px) {
   .sec-body {
     padding: 40vh 0 50vh;
