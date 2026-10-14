@@ -118,13 +118,11 @@
   const status = { done: "Passed", current: "Current quest", locked: "Locked", boss: "Final level · Locked" };
   const list = document.getElementById("nodes");
   const info = document.getElementById("quest-info");
-  let cur = here;
   const cards = document.getElementById("quest-cards");
   cards.innerHTML = levels.map(([, , , title, text], i) => `<li class="px-panel"><h3>Level ${i + 1}: ${title}</h3><p>${text}</p></li>`).join("");
   const mark = (i) => list.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", i === j));
   // desktop: details pop up centred above the tile; mobile: the carousel slides to its card
   const show = (i) => {
-    cur = i;
     const [, , , title, text] = levels[i];
     info.innerHTML = `<h3>Level ${i + 1}: ${title}</h3><p>${text}</p>`;
     info.style.left = nodes[i].style.left;
@@ -145,42 +143,24 @@
     return li;
   });
   // hand-placed trail: rows of different lengths joined by short climbs down the sides
+  // (desktop only; on mobile the map is hidden and the card carousel stands alone)
   // ponytail: tile positions are fixed for 18 levels; adding a level means adding a point here
-  const narrow = matchMedia("(max-width: 699px)");
-  const TRAILS = {
-    wide: [1200, 800, [
-      [110, 100], [320, 70], [530, 110], [740, 80], // across 4
-      [960, 130], [1090, 270], [1080, 430], // down 3 on the right
-      [880, 470], [670, 430], [460, 470], // back 3
-      [260, 420], [110, 525], // down 2 on the left
-      [150, 690], [360, 720], [570, 680], [780, 720], [990, 680], // across 5
-      [1110, 570], // final climb
-    ]],
-    narrow: [600, 1410, [
-      [100, 90], [300, 60], [500, 100], // across 3
-      [510, 260], [500, 420], // down 2
-      [300, 470], [100, 430], // back 2
-      [90, 600], // down 1
-      [280, 650], [480, 610], // across 2
-      [520, 770], [500, 930], [510, 1090], // down 3
-      [310, 1140], [110, 1100], // back 2
-      [95, 1270], // down 1
-      [290, 1320], [490, 1280], // across 2
-    ]],
-  };
-  const layout = () => {
-    const [W, H, pts] = TRAILS[narrow.matches ? "narrow" : "wide"];
-    document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
-    document.getElementById("quest-map").style.aspectRatio = `${W} / ${H}`;
-    document.getElementById("route-done").setAttribute("d", route(pts.slice(0, here + 1)));
-    document.getElementById("route-todo").setAttribute("d", route(pts.slice(here)));
-    nodes.forEach((li, i) => {
-      li.style.left = `${(pts[i][0] / W) * 100}%`;
-      li.style.top = `${(pts[i][1] / H) * 100}%`;
-    });
-  };
-  narrow.addEventListener("change", () => (layout(), show(cur)));
-  layout();
+  const W = 1200, H = 800, pts = [
+    [110, 100], [320, 70], [530, 110], [740, 80], // across 4
+    [960, 130], [1090, 270], [1080, 430], // down 3 on the right
+    [880, 470], [670, 430], [460, 470], // back 3
+    [260, 420], [110, 525], // down 2 on the left
+    [150, 690], [360, 720], [570, 680], [780, 720], [990, 680], // across 5
+    [1110, 570], // final climb
+  ];
+  document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
+  document.getElementById("quest-map").style.aspectRatio = `${W} / ${H}`;
+  document.getElementById("route-done").setAttribute("d", route(pts.slice(0, here + 1)));
+  document.getElementById("route-todo").setAttribute("d", route(pts.slice(here)));
+  nodes.forEach((li, i) => {
+    li.style.left = `${(pts[i][0] / W) * 100}%`;
+    li.style.top = `${(pts[i][1] / H) * 100}%`;
+  });
   show(here);
   // swiping the carousel highlights the matching tile
   const swipe = new IntersectionObserver(

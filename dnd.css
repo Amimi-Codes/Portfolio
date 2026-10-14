@@ -695,18 +695,21 @@ html.js-fall .overload:not(.drop) li {
   font-size: 0.85rem;
   line-height: 1.5;
 }
-/* mobile: a swipeable strip of level cards riding along the bottom of the screen */
-.quest-cards {
+/* mobile: the tile map is hidden; a swipeable strip of level cards takes its place */
+.quest-cards,
+.narrow-only {
   display: none;
 }
 @media (max-width: 699px) {
-  .quest-info {
+  .quest-map,
+  .quest-info,
+  .wide-only {
     display: none;
   }
+  .narrow-only {
+    display: inline;
+  }
   .quest-cards {
-    position: sticky;
-    bottom: 0.75rem;
-    z-index: 5;
     display: flex;
     gap: 0.75rem;
     margin: 0;
