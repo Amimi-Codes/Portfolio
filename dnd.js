@@ -107,14 +107,14 @@
     ["save", "locked", "Later", "Save your progress", "Come back to a character later. Saved for a later stage."],
     ["palette", "boss", "Final level", "Icons, species art & character customization", "Visual choices everywhere, and a hero that looks the part."],
   ];
-  const W = 600, STEP = 92, PAD = 70, H = PAD * 2 + STEP * (levels.length - 1);
-  const pts = levels.map((_, i) => [W / 2 + 170 * Math.sin(i * 0.95), PAD + i * STEP]);
+  const W = 600, STEP = 125, PAD = 80, H = PAD * 2 + STEP * (levels.length - 1);
+  const pts = levels.map((_, i) => [W / 2 + 200 * Math.sin(i * 1.25), PAD + i * STEP]);
   // smooth trail through the tile centres (Catmull-Rom as cubic Béziers)
   const route = (p) =>
     p.reduce((d, q, i) => {
       if (!i) return `M${q[0]} ${q[1]}`;
       const a = p[i - 2] || p[i - 1], b = p[i - 1], c = p[i + 1] || q;
-      return d + ` C${b[0] + (q[0] - a[0]) / 6} ${b[1] + (q[1] - a[1]) / 6} ${q[0] - (c[0] - b[0]) / 6} ${q[1] - (c[1] - b[1]) / 6} ${q[0]} ${q[1]}`;
+      return d + ` C${b[0] + (q[0] - a[0]) / 3.5} ${b[1] + (q[1] - a[1]) / 3.5} ${q[0] - (c[0] - b[0]) / 3.5} ${q[1] - (c[1] - b[1]) / 3.5} ${q[0]} ${q[1]}`;
     }, "");
   const here = levels.findIndex((l) => l[1] === "current");
   document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
