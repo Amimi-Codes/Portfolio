@@ -559,17 +559,9 @@ html.js-fall .overload:not(.drop) li {
   gap: 2rem;
   align-items: start;
 }
-@media (min-width: 900px) {
-  .quest-wrap {
-    grid-template-columns: minmax(0, 560px) minmax(260px, 360px);
-    justify-content: center;
-  }
-}
 .quest-map {
   position: relative;
   width: 100%;
-  max-width: 560px;
-  justify-self: center;
 }
 .quest-map svg {
   position: absolute;
@@ -612,7 +604,7 @@ html.js-fall .overload:not(.drop) li {
   position: relative;
   display: grid;
   place-items: center;
-  width: clamp(50px, 12vw, 68px);
+  width: clamp(54px, 7vw, 80px);
   aspect-ratio: 1.15 / 1;
   padding: 0;
   border: 0;
@@ -655,7 +647,7 @@ html.js-fall .overload:not(.drop) li {
   --ico-c: #6a3a12;
 }
 .node.current button {
-  width: clamp(62px, 15vw, 86px);
+  width: clamp(66px, 9vw, 100px);
   animation: bob 1.6s ease-in-out infinite;
 }
 .node.current::before {
@@ -694,10 +686,11 @@ html.js-fall .overload:not(.drop) li {
   bottom: 1rem; /* mobile: rides along under the map */
   z-index: 3;
 }
-@media (min-width: 900px) {
+@media (min-width: 700px) {
   .quest-info {
-    top: 110px;
-    bottom: auto;
+    position: static; /* the whole map fits on screen: details sit below it */
+    width: min(100%, 760px);
+    justify-self: center;
   }
 }
 .quest-info h3 {
@@ -878,9 +871,17 @@ html.js-fall .overload:not(.drop) li {
   background: none;
   cursor: pointer;
 }
+.map-sec .sec-body {
+  width: min(100% - 6rem, 1420px); /* same side margins as the site .wrap */
+}
 @media (min-width: 1180px) {
+  .map-sec .quest-map {
+    width: calc(100% - 11rem); /* stop short of the fixed plank ladder */
+  }
+}
+@media (max-width: 700px) {
   .map-sec .sec-body {
-    width: min(100% - 26rem, 1200px); /* clear the ladder */
+    width: min(100% - 2.25rem, 1420px);
   }
 }
 @media (max-width: 1179px) {

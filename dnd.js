@@ -107,8 +107,6 @@
     ["save", "locked", "Later", "Save your progress", "Come back to a character later. Saved for a later stage."],
     ["palette", "boss", "Final level", "Icons, species art & character customization", "Visual choices everywhere, and a hero that looks the part."],
   ];
-  const W = 600, STEP = 125, PAD = 80, H = PAD * 2 + STEP * (levels.length - 1);
-  const pts = levels.map((_, i) => [W / 2 + 200 * Math.sin(i * 1.25), PAD + i * STEP]);
   // smooth trail through the tile centres (Catmull-Rom as cubic Béziers)
   const route = (p) =>
     p.reduce((d, q, i) => {
@@ -117,10 +115,6 @@
       return d + ` C${b[0] + (q[0] - a[0]) / 3.5} ${b[1] + (q[1] - a[1]) / 3.5} ${q[0] - (c[0] - b[0]) / 3.5} ${q[1] - (c[1] - b[1]) / 3.5} ${q[0]} ${q[1]}`;
     }, "");
   const here = levels.findIndex((l) => l[1] === "current");
-  document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
-  document.getElementById("quest-map").style.aspectRatio = `${W} / ${H}`;
-  document.getElementById("route-done").setAttribute("d", route(pts.slice(0, here + 1)));
-  document.getElementById("route-todo").setAttribute("d", route(pts.slice(here)));
   const status = { done: "Passed", current: "Current quest", locked: "Locked", boss: "Final level · Locked" };
   const list = document.getElementById("nodes");
   const info = document.getElementById("quest-info");
@@ -129,17 +123,36 @@
     info.innerHTML = `<p class="px-label">Level ${i + 1} · ${phase}</p><h3>${title}</h3><p>${text}</p><p class="px-small status-${s}">${status[s]}</p>`;
     list.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", i === j));
   };
-  levels.forEach(([icon, s, , title], i) => {
+  const nodes = levels.map(([icon, s, , title], i) => {
     const li = document.createElement("li");
     li.className = `node ${s}`;
-    li.style.left = `${(pts[i][0] / W) * 100}%`;
-    li.style.top = `${(pts[i][1] / H) * 100}%`;
     li.innerHTML = `<button type="button" aria-label="Level ${i + 1}: ${title}, ${status[s]}"><i style="--ico: url(assets/dnd/icons/${icon}.svg)"></i></button>`;
     const btn = li.querySelector("button");
     btn.addEventListener("click", () => show(i));
     btn.addEventListener("mouseenter", () => show(i));
     btn.addEventListener("focus", () => show(i));
     list.append(li);
+    return li;
   });
+  // rows of tiles that snake left→right, then right→left, across the full width
+  const narrow = matchMedia("(max-width: 699px)");
+  const layout = () => {
+    const cols = narrow.matches ? 3 : 6, W = cols * 200, ROW = narrow.matches ? 230 : 210, PAD = 90;
+    const rows = Math.ceil(levels.length / cols), H = PAD * 2 + ROW * (rows - 1);
+    const pts = levels.map((_, i) => {
+      const r = Math.floor(i / cols), c = r % 2 ? cols - 1 - (i % cols) : i % cols;
+      return [100 + c * 200, PAD + r * ROW + 30 * Math.sin(c * 1.9 + r)];
+    });
+    document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
+    document.getElementById("quest-map").style.aspectRatio = `${W} / ${H}`;
+    document.getElementById("route-done").setAttribute("d", route(pts.slice(0, here + 1)));
+    document.getElementById("route-todo").setAttribute("d", route(pts.slice(here)));
+    nodes.forEach((li, i) => {
+      li.style.left = `${(pts[i][0] / W) * 100}%`;
+      li.style.top = `${(pts[i][1] / H) * 100}%`;
+    });
+  };
+  narrow.addEventListener("change", layout);
+  layout();
   show(here);
 })();
