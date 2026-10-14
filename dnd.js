@@ -119,15 +119,19 @@
   const list = document.getElementById("nodes");
   const info = document.getElementById("quest-info");
   let cur = here;
-  // quest details pop up above the selected tile
+  const cards = document.getElementById("quest-cards");
+  cards.innerHTML = levels.map(([, , , title, text], i) => `<li class="px-panel"><h3>Level ${i + 1}: ${title}</h3><p>${text}</p></li>`).join("");
+  const mark = (i) => list.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", i === j));
+  // desktop: details pop up centred above the tile; mobile: the carousel slides to its card
   const show = (i) => {
     cur = i;
-    const [, , , title, text] = levels[i], li = nodes[i], x = parseFloat(li.style.left);
+    const [, , , title, text] = levels[i];
     info.innerHTML = `<h3>Level ${i + 1}: ${title}</h3><p>${text}</p>`;
-    info.style.left = li.style.left;
-    info.style.top = li.style.top;
-    info.dataset.align = x < 25 ? "left" : x > 75 ? "right" : "center"; // keep the popup on the map
-    list.querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", i === j));
+    info.style.left = nodes[i].style.left;
+    info.style.top = nodes[i].style.top;
+    const card = cards.children[i];
+    cards.scrollTo({ left: card.offsetLeft - (cards.clientWidth - card.offsetWidth) / 2, behavior: reduced ? "auto" : "smooth" });
+    mark(i);
   };
   const nodes = levels.map(([icon, s, , title], i) => {
     const li = document.createElement("li");
@@ -178,4 +182,10 @@
   narrow.addEventListener("change", () => (layout(), show(cur)));
   layout();
   show(here);
+  // swiping the carousel highlights the matching tile
+  const swipe = new IntersectionObserver(
+    (es) => es.forEach((e) => e.isIntersecting && mark([...cards.children].indexOf(e.target))),
+    { root: cards, threshold: 0.6 },
+  );
+  [...cards.children].forEach((c) => swipe.observe(c));
 })();
