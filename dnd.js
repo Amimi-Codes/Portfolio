@@ -105,7 +105,9 @@
     ["book", "locked", "From the survey", "Backstory generator", "Prompts built from your character concept and the world's lore."],
     ["sheet", "locked", "From the survey", "Character sheet export", "A printable sheet for in-person games, plus a Google Docs template."],
     ["save", "locked", "Later", "Save your progress", "Come back to a character later. Saved for a later stage."],
-    ["palette", "boss", "Final level", "Icons, species art & character customization", "Visual choices everywhere, and a hero that looks the part."],
+    ["multiclass", "locked", "Future", "Multiclassing", "Mix two classes, with a clear look at what you gain and give up at each level."],
+    ["books", "locked", "Future", "Expanded species, classes & backgrounds", "More options from beyond the core rulebook, explained the same beginner-friendly way."],
+    ["palette", "boss", "Final level", "Picrew-style character customization", "Dress your hero up layer by layer, picrew-style, until they look the part."],
   ];
   // smooth trail through the tile centres (Catmull-Rom as cubic Béziers)
   const route = (p) =>
@@ -144,14 +146,14 @@
   });
   // hand-placed trail: rows of different lengths joined by short climbs down the sides
   // (desktop only; on mobile the map is hidden and the card carousel stands alone)
-  // ponytail: tile positions are fixed for 18 levels; adding a level means adding a point here
-  const W = 1200, H = 800, pts = [
+  // ponytail: tile positions are fixed for 20 levels; adding a level means adding a point here
+  const W = 1200, H = 860, pts = [
     [110, 100], [320, 70], [530, 110], [740, 80], // across 4
     [960, 130], [1090, 270], [1080, 430], // down 3 on the right
     [880, 470], [670, 430], [460, 470], // back 3
     [260, 420], [110, 525], // down 2 on the left
-    [150, 690], [360, 720], [570, 680], [780, 720], [990, 680], // across 5
-    [1110, 570], // final climb
+    [150, 710], [340, 750], [530, 710], [720, 750], [910, 710], [1100, 750], // across 6
+    [1110, 600], [940, 610], // climb and turn back
   ];
   document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
   document.getElementById("quest-map").style.aspectRatio = `${W} / ${H}`;
