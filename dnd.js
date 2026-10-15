@@ -101,6 +101,7 @@
     ["person", "done", "From the survey", "Ready-made characters", "Start from an example and tweak it instead of facing a blank sheet."],
     ["calculator", "done", "From the survey", "Rules help & a summary that does the maths", '"?" tips explain terms in place, and the summary works out hit points, to-hit and saves.'],
     ["signpost", "current", "From the survey", "Origin launch page", "Adventurers choose their own path: Start from Scratch, Ready-Made, Quick Build."],
+    ["random", "locked", "From the survey", "Randomized character", "One click rolls a complete, ready-to-play hero for when you just want to jump in."],
     ["tag", "locked", "From the survey", "Name generator", "Stuck on a name? Roll one that fits your species and background."],
     ["book", "locked", "From the survey", "Backstory generator", "Prompts built from your character concept and the world's lore."],
     ["sheet", "locked", "From the survey", "Character sheet export", "A printable sheet for in-person games, plus a Google Docs template."],
@@ -146,14 +147,16 @@
   });
   // hand-placed trail: rows of different lengths joined by short climbs down the sides
   // (desktop only; on mobile the map is hidden and the card carousel stands alone)
-  // ponytail: tile positions are fixed for 20 levels; adding a level means adding a point here
-  const W = 1200, H = 860, pts = [
-    [110, 100], [320, 70], [530, 110], [740, 80], // across 4
-    [960, 130], [1090, 270], [1080, 430], // down 3 on the right
-    [880, 470], [670, 430], [460, 470], // back 3
-    [260, 420], [110, 525], // down 2 on the left
-    [150, 710], [340, 750], [530, 710], [720, 750], [910, 710], [1100, 750], // across 6
-    [1110, 600], [940, 610], // climb and turn back
+  // ponytail: tile positions are fixed for 21 levels; adding a level means adding a point here
+  const W = 1200, H = 930, pts = [
+    // every step moves sideways or down, never back up
+    [110, 80], [320, 95], [530, 95], [740, 110], [950, 115], // across 5
+    [1100, 200], [1090, 340], // down 2 on the right
+    [890, 380], [680, 385], [470, 400], [260, 405], // back 4
+    [110, 480], [130, 610], // down 2 on the left
+    [330, 650], [520, 655], [710, 670], [900, 675], [1090, 690], // across 5
+    [1100, 800], // down 1
+    [900, 840], [700, 850], // back 2
   ];
   document.getElementById("quest-svg").setAttribute("viewBox", `0 0 ${W} ${H}`);
   document.getElementById("quest-map").style.aspectRatio = `${W} / ${H}`;
